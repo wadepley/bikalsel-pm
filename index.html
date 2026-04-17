@@ -288,30 +288,24 @@ tbody tr:hover td{background:#FAFBFE;}
     <div class="sb-sect hide" style="margin-top:8px;">
       <div class="sect-hd">Data &amp; Sumber</div>
       <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:9px;padding:10px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;color:#065F46;margin-bottom:5px;">⚡ LIVE — Google Sheets</div>
+        <div style="font-size:10px;font-weight:700;color:#065F46;margin-bottom:5px;">&#9889; LIVE &#8212; Google Sheets</div>
         <div style="font-size:10px;color:#047857;margin-bottom:7px;">Auto-load saat halaman dibuka</div>
-        <button onclick="fetchFromAppsScript()" style="width:100%;padding:7px;background:#059669;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;color:#fff;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-          Refresh dari Google Sheets
-        </button>
+        <button onclick="fetchFromAppsScript()" style="width:100%;padding:7px;background:#059669;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;color:#fff;font-family:inherit;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">&#8635; Refresh dari Google Sheets</button>
       </div>
-      <div id="upload-status" style="display:none;padding:7px 9px;border-radius:7px;font-size:11px;margin-bottom:8px;line-height:1.5;white-space:pre-line;"></div>
+      <div id="upload-status" style="display:none;padding:7px 9px;border-radius:7px;font-size:11px;margin-bottom:8px;line-height:1.5;"></div>
       <div style="background:#F8FAFC;border-radius:8px;padding:8px 10px;margin-bottom:10px;">
         <div style="font-size:10px;color:#94A3B8;margin-bottom:2px;">Sumber Data</div>
-        <div style="font-size:11px;font-weight:500;color:#334155;" id="data-source-name">Memuat dari Google Sheets...</div>
-        <div style="font-size:10px;color:#94A3B8;margin-top:2px;" id="data-source-date">—</div>
+        <div style="font-size:11px;font-weight:500;color:#334155;" id="data-source-name">Memuat...</div>
+        <div style="font-size:10px;color:#94A3B8;margin-top:2px;" id="data-source-date">&#8212;</div>
       </div>
       <div style="border-top:1px solid #F1F5F9;margin:0 0 10px;"></div>
-      <div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">📁 Upload Excel</div>
+      <div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">&#128193; Upload Excel</div>
       <div id="upload-zone" style="border:1.5px dashed #CBD5E1;border-radius:8px;padding:10px;text-align:center;cursor:pointer;background:#FAFBFC;margin-bottom:8px;" onclick="document.getElementById('excel-input').click()" ondragover="event.preventDefault();this.style.borderColor='#3B82F6'" ondragleave="this.style.borderColor='#CBD5E1'" ondrop="handleDrop(event)">
         <input type="file" id="excel-input" accept=".xlsx,.xls" style="display:none" onchange="handleFileUpload(this.files[0])"/>
-        <div style="font-size:18px;margin-bottom:2px;">📂</div>
+        <div style="font-size:18px;margin-bottom:2px;">&#128194;</div>
         <div style="font-size:10px;color:#94A3B8;">Klik atau drag &amp; drop .xlsx</div>
       </div>
-      <button onclick="downloadBackup()" style="width:100%;padding:7px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:#1D4ED8;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download HTML
-      </button>
+      <button onclick="downloadBackup()" style="width:100%;padding:7px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:#1D4ED8;font-family:inherit;">&#8659; Download HTML</button>
     </div>
 
   </div>
@@ -753,128 +747,88 @@ function renderOverview(){
 // ── PS Summary: Accelerated + Need Accelerate ──
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
-  const per=m.per;
-  const thr=m.bln/12;
-
-  const subRows=D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
-  const doneSub=subRows.filter(r=>r.prog>=1);
-  const naSub=subRows.filter(r=>r.prog<thr);
-  const ickRows=ICK_D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
-  const accICK=ickRows.filter(r=>r.st==='accelerated');
-  const naICK=ickRows.filter(r=>r.st==='need_accelerate');
-
-  txt('ps-acc-n',accICK.length); txt('ps-na-n',naICK.length);
+  const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const accRows=ickRows.filter(r=>r.st==='accelerated');
+  const naRows=ickRows.filter(r=>r.st==='need_accelerate');
+  txt('ps-acc-n',accRows.length); txt('ps-na-n',naRows.length);
   txt('ps-acc-sub','Progress ≥ 100% · '+m.lbl);
-  txt('ps-na-sub','Progress < '+pc(thr,1)+' · '+m.lbl);
+  txt('ps-na-sub','Progress < '+pc(m.bln/12,1)+' · '+m.lbl);
 
-  const uniq=arr=>[...new Set(arr.filter(Boolean))];
+  const groupByPS=rows=>{const map={};rows.forEach(r=>{map[r.ps]=map[r.ps]||[];map[r.ps].push(r);});return Object.entries(map).sort((a,b)=>+a[0]-+b[0]);};
+  const getNarasi=(uk,ick,per)=>[...new Set(D.filter(r=>r.per===per&&r.uk===uk&&r.ick===ick&&r.narasi).map(r=>r.narasi).filter(Boolean))].slice(0,3);
 
-  const groupByPS=rows=>{
-    const map={};
-    rows.forEach(r=>{
-      if(!map[r.ps]) map[r.ps]={ps:r.ps,count:0,uks:new Set(),progs:[],narasis:[],risks:[],mitis:[]};
-      const g=map[r.ps];
-      g.count++; g.uks.add(r.uk); g.progs.push(r.prog);
-      if(r.narasi) g.narasis.push(r.narasi);
-      if(r.risk)   g.risks.push(r.risk);
-      if(r.miti)   g.mitis.push(r.miti);
-    });
-    return Object.values(map).sort((a,b)=>a.ps-b.ps);
-  };
-
-  // ── ACCELERATED ──
-  const renderAcc=()=>{
-    if(!doneSub.length){
-      set('ps-acc-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Belum ada Sub-ICK yang mencapai 100%</div>');
+  const renderList=(rows,elId,isAcc)=>{
+    const groups=groupByPS(rows);
+    if(!groups.length){
+      set(elId,'<div style="padding:16px 0;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">'+(isAcc?'Belum ada ICK yang mencapai 100%':'Semua ICK on track! 🎉')+'</div>');
       return;
     }
-    const groups=groupByPS(doneSub);
-    const avgAll=doneSub.reduce((s,r)=>s+r.prog,0)/doneSub.length;
-    const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
-    const topPS=[...groups].sort((a,b)=>b.count-a.count)[0];
+    const color=isAcc?'#059669':'#DC2626';
+    const bg=isAcc?'#F0FDF4':'#FFF5F5';
+    const bd=isAcc?'#A7F3D0':'#FECACA';
+    const pillCls=isAcc?'p-done':'p-attn';
 
-    const narrative=`Hingga ${m.lbl}, terdapat <strong>${doneSub.length} Sub-ICK</strong> yang telah terselesaikan `+
-      `dengan rata-rata progress <strong>${pc(avgAll,1)}</strong>, tersebar di ${groups.length} Program Strategis `+
-      `(${psLabels}). `+
-      (topPS?`PS ${topPS.ps} memberikan kontribusi terbesar dengan <strong>${topPS.count} Sub-ICK</strong> selesai `+
-      `oleh unit kerja ${[...topPS.uks].join(' dan ')}.`:'');
+    set(elId, groups.map(([ps,items])=>{
+      const psName=PS_NAMES[String(ps)]||'PS '+ps;
+      const rows_html=items.map(r=>{
+        const narasis=getNarasi(r.uk,r.ick,m.per);
 
-    const bullets=groups.map((g,i)=>{
-      const avg=g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
-      const narasi=uniq(g.narasis).slice(0,2).map(n=>n.slice(0,130)+(n.length>130?'…':'')).join('; ');
-      const isLast=i===groups.length-1;
-      return`<div style="padding:10px 0;${isLast?'':'border-bottom:1px solid #E2E8F0;'}">
-        <div style="display:flex;gap:8px;align-items:flex-start;">
-          <span style="background:#059669;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px;">PS ${g.ps}</span>
-          <div style="font-size:11px;color:#374151;line-height:1.6;">
-            <strong>${[...g.uks].join(', ')}</strong> — ${g.count} Sub-ICK selesai, avg ${pc(avg,1)}.
-            ${narasi?`<span style="color:#6B7280;"> ${narasi}</span>`:''}
+        const narasi_html=narasis.length
+          ?`<div style="margin-bottom:6px;">
+              <div style="font-size:10px;font-weight:600;color:var(--s5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">🎯 Narasi Target ICK</div>
+              ${narasis.map(n=>`<div style="font-size:11px;color:var(--s3);line-height:1.5;padding:2px 0 2px 10px;">• ${n.slice(0,160)}${n.length>160?'…':''}</div>`).join('')}
+            </div>`:
+          '';
+
+        const pen_html=r.pen
+          ?`<div style="margin-bottom:6px;">
+              <div style="font-size:10px;font-weight:600;color:var(--s5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">📋 Penjelasan Progress</div>
+              <div style="font-size:11px;color:var(--s3);line-height:1.6;padding-left:10px;">${r.pen.slice(0,250)}${r.pen.length>250?'…':''}</div>
+            </div>`:
+          '';
+
+        const sdh_html=r.sdh
+          ?`<div style="margin-bottom:6px;">
+              <div style="font-size:10px;font-weight:600;color:#065F46;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">✅ Hal yang Telah Dilakukan</div>
+              <div style="font-size:11px;color:#064E3B;line-height:1.6;padding-left:10px;">${r.sdh.slice(0,250)}${r.sdh.length>250?'…':''}</div>
+            </div>`:
+          '';
+
+        const risk_html=(!isAcc&&r.risk)
+          ?`<div style="margin-bottom:6px;">
+              <div style="font-size:10px;font-weight:600;color:#991B1B;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">⚠️ Potensi Risiko & Kendala</div>
+              <div style="font-size:11px;color:#7F1D1D;line-height:1.6;padding-left:10px;">${r.risk.slice(0,220)}${r.risk.length>220?'…':''}</div>
+            </div>`:
+          '';
+
+        const miti_html=(!isAcc&&r.miti)
+          ?`<div>
+              <div style="font-size:10px;font-weight:600;color:#92400E;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">🔧 Langkah Mitigasi</div>
+              <div style="font-size:11px;color:#78350F;line-height:1.6;padding-left:10px;">${r.miti.slice(0,220)}${r.miti.length>220?'…':''}</div>
+            </div>`:
+          '';
+
+        return`<div style="padding:10px 0;border-top:1px solid ${bd};">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span style="font-size:13px;font-weight:700;color:${color};min-width:52px;">${pc(r.avg_prog)}</span>
+            <span class="uk-chip" style="background:${CFG.UK_COLOR[r.uk]||'#94A3B8'}22;color:${CFG.UK_COLOR[r.uk]||'#94A3B8'};font-size:9px;font-weight:700;">${r.uk}</span>
+            <span style="font-size:11px;color:var(--s2);font-weight:600;flex:1;">${r.ick_nm.slice(0,75)}${r.ick_nm.length>75?'…':''}</span>
           </div>
-        </div>
-      </div>`;
-    }).join('');
+          <div style="padding-left:12px;">${narasi_html}${pen_html}${sdh_html}${risk_html}${miti_html}</div>
+        </div>`;
+      }).join('');
 
-    set('ps-acc-list',`
-      <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;">
-        <div style="font-size:12px;color:#065F46;line-height:1.8;">${narrative}</div>
-      </div>
-      <div style="padding:0 2px;">${bullets}</div>
-    `);
+      return`<div style="margin-top:10px;padding:12px 14px;background:${bg};border-radius:10px;border-left:3px solid ${color};">
+        <div style="margin-bottom:8px;">
+          <span class="pill ${pillCls}" style="font-size:10px;font-weight:700;cursor:default;" title="${psName}">PS ${ps}</span>
+        </div>
+        ${rows_html}
+      </div>`;
+    }).join(''));
   };
 
-  // ── NEED ACCELERATE ──
-  const renderNA=()=>{
-    if(!naSub.length){
-      set('ps-na-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Semua Sub-ICK on track! 🎉</div>');
-      return;
-    }
-    const groups=groupByPS(naSub);
-    const avgAll=naSub.reduce((s,r)=>s+r.prog,0)/naSub.length;
-    const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
-    const sorted=[...groups].sort((a,b)=>{
-      const avgA=a.progs.reduce((s,x)=>s+x,0)/a.progs.length;
-      const avgB=b.progs.reduce((s,x)=>s+x,0)/b.progs.length;
-      return avgA-avgB;
-    });
-    const atRisk=sorted[0];
-    const atRiskAvg=atRisk.progs.reduce((s,x)=>s+x,0)/atRisk.progs.length;
-
-    const narrative=`Hingga ${m.lbl}, terdapat <strong>${naSub.length} Sub-ICK</strong> yang memerlukan akselerasi `+
-      `dengan rata-rata progress <strong>${pc(avgAll,1)}</strong> (di bawah threshold ${pc(thr,1)}), `+
-      `tersebar di ${groups.length} Program Strategis (${psLabels}). `+
-      `PS ${atRisk.ps} menjadi perhatian utama dengan progress rata-rata hanya <strong>${pc(atRiskAvg,1)}</strong>.`;
-
-    const bullets=groups.map((g,i)=>{
-      const avg=g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
-      const isHighRisk=avg<0.15;
-      const risk=uniq(g.risks).slice(0,1).map(r=>r.slice(0,150)+(r.length>150?'…':'')).join('');
-      const miti=uniq(g.mitis).slice(0,1).map(r=>r.slice(0,130)+(r.length>130?'…':'')).join('');
-      const isLast=i===groups.length-1;
-      return`<div style="padding:10px 0;${isLast?'':'border-bottom:1px solid #E2E8F0;}">
-        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:${(risk||miti)?'6px':'0'};">
-          <span style="background:${isHighRisk?'#DC2626':'#F59E0B'};color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px;">PS ${g.ps}</span>
-          <div style="font-size:11px;line-height:1.6;flex:1;">
-            <span style="font-weight:600;color:#374151;">${[...g.uks].join(', ')}</span>
-            <span style="color:#6B7280;"> — ${g.count} Sub-ICK, avg </span>
-            <span style="font-weight:700;color:${isHighRisk?'#DC2626':'#D97706'};">${pc(avg,1)}</span>
-            ${isHighRisk?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:1px 6px;border-radius:20px;font-weight:700;margin-left:4px;">⚠ Berisiko Tinggi</span>':''}
-          </div>
-        </div>
-        ${risk?`<div style="font-size:11px;color:#374151;line-height:1.5;padding-left:0;margin-bottom:3px;"><span style="font-weight:600;color:#991B1B;">Kendala:</span> ${risk}</div>`:''}
-        ${miti?`<div style="font-size:11px;color:#374151;line-height:1.5;"><span style="font-weight:600;color:#92400E;">Mitigasi:</span> ${miti}</div>`:''}
-      </div>`;
-    }).join('');
-
-    set('ps-na-list',`
-      <div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;">
-        <div style="font-size:12px;color:#991B1B;line-height:1.8;">${narrative}</div>
-      </div>
-      <div style="padding:0 2px;">${bullets}</div>
-    `);
-  };
-
-  renderAcc();
-  renderNA();
+  renderList(accRows,'ps-acc-list',true);
+  renderList(naRows,'ps-na-list',false);
 }
 
 
@@ -1485,33 +1439,40 @@ async function captureScreenshot(){
 // ══════════════════════════════════════════
 
 
-// ── Google Sheets Integration ──
+const APPS_URL='https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec';
+
 async function fetchFromAppsScript(){
-  const APPS_URL='https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec';
   showUploadStatus('loading','⏳ Memuat data dari Google Sheets...');
   try{
     const ctrl=new AbortController();
     setTimeout(()=>ctrl.abort(),15000);
     const r=await fetch(APPS_URL,{signal:ctrl.signal});
-    if(!r.ok)throw new Error('HTTP '+r.status);
+    if(!r.ok) throw new Error('HTTP '+r.status);
     const json=await r.json();
-    if(!json.ok)throw new Error(json.error||'Response tidak valid');
+    if(!json.ok) throw new Error(json.error||'Response tidak valid');
     const{D:nD,ICK_D:nI,rows,updated}=json.data;
-    if(!nD?.length)throw new Error('Data kosong');
-    D.length=0;nD.forEach(r=>D.push(r));
-    ICK_D.length=0;nI.forEach(r=>ICK_D.push(r));
+    if(!nD||!nD.length) throw new Error('Data kosong');
+    D.length=0; nD.forEach(x=>D.push(x));
+    ICK_D.length=0; nI.forEach(x=>ICK_D.push(x));
     txt('data-source-name','Google Sheets (Live)');
     txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
-    showUploadStatus('ok','✅ '+rows+' baris dimuat!');
+    showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat!');
     refreshAll();
   }catch(e){
+    txt('data-source-name','Data bawaan (offline)');
     showUploadStatus('error','❌ '+e.message);
   }
 }
 
-function handleDrop(e){e.preventDefault();document.getElementById('upload-zone').style.borderColor='#CBD5E1';const f=e.dataTransfer.files[0];if(f)handleFileUpload(f);}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('upload-zone').style.borderColor='#CBD5E1';
+  const f=e.dataTransfer.files[0];
+  if(f) handleFileUpload(f);
+}
+
 function handleFileUpload(file){
-  if(!file)return;
+  if(!file) return;
   if(!file.name.match(/\.xlsx?$/i)){showUploadStatus('error','❌ Gunakan .xlsx');return;}
   showUploadStatus('loading','⏳ Membaca '+file.name+'...');
   const reader=new FileReader();
@@ -1522,8 +1483,8 @@ function handleFileUpload(file){
       const raw=XLSX.utils.sheet_to_json(ws,{raw:true,defval:''});
       const result=parseExcelRows(raw);
       if(!result.ok){showUploadStatus('error','❌ '+result.err);return;}
-      D.length=0;result.D.forEach(r=>D.push(r));
-      ICK_D.length=0;result.ICK_D.forEach(r=>ICK_D.push(r));
+      D.length=0; result.D.forEach(x=>D.push(x));
+      ICK_D.length=0; result.ICK_D.forEach(x=>ICK_D.push(x));
       txt('data-source-name',file.name);
       txt('data-source-date',new Date().toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})+' ('+result.D.length+' baris)');
       showUploadStatus('ok','✅ '+result.D.length+' baris dimuat!');
@@ -1532,67 +1493,252 @@ function handleFileUpload(file){
   };
   reader.readAsArrayBuffer(file);
 }
+
 function parseExcelRows(raw){
-  if(!raw.length)return{ok:false,err:'File kosong'};
+  if(!raw.length) return {ok:false,err:'File kosong'};
   const MO={Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
-  const parsePer=v=>{if(!v&&v!==0)return'';if(typeof v==='number'){const d=new Date(Math.round((v-25569)*86400*1000));return`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}`;}const s=String(v).trim();const mm=s.match(/^([A-Za-z]{3})-(\d{2})$/);if(mm)return`20${mm[2]}-${MO[mm[1]]||'01'}`;const m1=s.match(/(\d{4})-(\d{1,2})/);if(m1)return`${m1[1]}-${m1[2].padStart(2,'0')}`;return'';};
-  const parseProg=v=>{const s=String(v).trim();if(s.endsWith('%'))return Math.round(parseFloat(s)/100*1e6)/1e6;const n=parseFloat(s.replace(',','.'));if(isNaN(n))return 0;return Math.round((n>1.5?n/100:n)*1e6)/1e6;};
+  const parsePer=v=>{
+    if(!v&&v!==0) return '';
+    if(typeof v==='number'){const d=new Date(Math.round((v-25569)*86400*1000));return d.getUTCFullYear()+'-'+String(d.getUTCMonth()+1).padStart(2,'0');}
+    const s=String(v).trim();
+    const mm=s.match(/^([A-Za-z]{3})-(\d{2})$/);if(mm) return '20'+mm[2]+'-'+(MO[mm[1]]||'01');
+    const m1=s.match(/(\d{4})-(\d{1,2})/);if(m1) return m1[1]+'-'+m1[2].padStart(2,'0');
+    return '';
+  };
+  const parseProg=v=>{
+    const s=String(v).trim();
+    if(s.endsWith('%')) return Math.round(parseFloat(s)/100*1e6)/1e6;
+    const n=parseFloat(s.replace(',','.'));
+    if(isNaN(n)) return 0;
+    return Math.round((n>1.5?n/100:n)*1e6)/1e6;
+  };
   const MTHS={'01':1/12,'02':2/12,'03':3/12,'04':4/12,'05':5/12,'06':6/12,'07':7/12,'08':8/12,'09':9/12,'10':10/12,'11':11/12,'12':12/12};
-  const cl=s=>{if(!s&&s!==0)return'';return String(s).replace(/[\u200b-\u200d\ufeff]/g,'').trim();};
+  const cl=s=>{if(!s&&s!==0)return '';return String(s).replace(/[\u200b-\u200d\ufeff]/g,'').trim();};
   const keys=Object.keys(raw[0]);
   const progCol=keys.find(k=>k==='Progress'||k==='Progres');
   const riskCol=keys.find(k=>k.includes('Risiko'));
   const sdhCol=keys.find(k=>k.includes('sudah dilakukan'));
   const mitiCol=keys.find(k=>k.includes('memitigasi'));
-  if(!progCol)return{ok:false,err:'Kolom Progress tidak ditemukan'};
-  const newD=[];const pers=new Set();
-  raw.forEach(r=>{const per=parsePer(r['Periode EKB']);if(!per)return;const mm=per.slice(5,7),thr=MTHS[mm]||0.25;const p=parseProg(r[progCol]);const real=typeof r['Realisasi']==='number'?r['Realisasi']:parseFloat(String(r['Realisasi']||'0').replace(',','.'))||0;pers.add(per);newD.push({per,ps:+r['PS']||0,ick:cl(r['Indikator ICK']),ick_nm:cl(r['Deskripsi Indikator ICK Satker']),sub:+r['No. Sub ICK']||0,sub_nm:cl(r['Produk Pokok ICK']),narasi:cl(r['Narasi Target ICK']),uk:cl(r['Unit Kerja']),tgt:cl(r['Target 2026']),real,prog:p,pen:cl(r['Penjelasan Realisasi']),sdh:cl(sdhCol?r[sdhCol]:''),miti:cl(mitiCol?r[mitiCol]:''),risk:cl(riskCol?r[riskCol]:''),st:p>=1?'done':(p>=thr?'on_track':'need_attention'),thr:Math.round(thr*1e6)/1e6});});
-  if(!newD.length)return{ok:false,err:'Tidak ada baris valid'};
+  if(!progCol) return {ok:false,err:'Kolom Progress tidak ditemukan'};
+  const newD=[]; const pers=new Set();
+  raw.forEach(r=>{
+    const per=parsePer(r['Periode EKB']);if(!per)return;
+    const mm=per.slice(5,7),thr=MTHS[mm]||0.25;
+    const p=parseProg(r[progCol]);
+    const real=typeof r['Realisasi']==='number'?r['Realisasi']:parseFloat(String(r['Realisasi']||'0').replace(',','.'))||0;
+    pers.add(per);
+    newD.push({per,ps:+r['PS']||0,ick:cl(r['Indikator ICK']),ick_nm:cl(r['Deskripsi Indikator ICK Satker']),
+      sub:+r['No. Sub ICK']||0,sub_nm:cl(r['Produk Pokok ICK']),narasi:cl(r['Narasi Target ICK']),
+      uk:cl(r['Unit Kerja']),tgt:cl(r['Target 2026']),real,prog:p,
+      pen:cl(r['Penjelasan Realisasi']),sdh:cl(sdhCol?r[sdhCol]:''),
+      miti:cl(mitiCol?r[mitiCol]:''),risk:cl(riskCol?r[riskCol]:''),
+      st:p>=1?'done':(p>=thr?'on_track':'need_attention'),thr:Math.round(thr*1e6)/1e6});
+  });
+  if(!newD.length) return {ok:false,err:'Tidak ada baris valid'};
   const ickMap={};
-  newD.forEach(r=>{const k=`${r.per}|${r.ick}|${r.uk}`;if(!ickMap[k])ickMap[k]={per:r.per,ps:r.ps,ick:r.ick,ick_nm:r.ick_nm,uk:r.uk,thr:r.thr,progs:[],pens:[],sdhs:[],mitis:[],risks:[]};const d=ickMap[k];d.progs.push(r.prog);if(r.pen)d.pens.push(r.pen);if(r.sdh)d.sdhs.push(r.sdh);if(r.miti)d.mitis.push(r.miti);if(r.risk)d.risks.push(r.risk);});
-  const newICK=Object.values(ickMap).map(v=>{const avg=v.progs.reduce((s,x)=>s+x,0)/v.progs.length;const st=avg>=1?'accelerated':(avg>=v.thr?'on_track':'need_accelerate');return{per:v.per,ps:v.ps,ick:v.ick,ick_nm:v.ick_nm,uk:v.uk,avg_prog:Math.round(avg*1e6)/1e6,st,thresh:v.thr,pen:[...new Set(v.pens)].slice(0,2).join(' | '),sdh:[...new Set(v.sdhs)].slice(0,2).join(' | '),miti:[...new Set(v.mitis)].slice(0,2).join(' | '),risk:[...new Set(v.risks)].slice(0,1).join('')};});
-  return{ok:true,D:newD,ICK_D:newICK,periods:[...pers].sort()};
+  newD.forEach(r=>{
+    const k=r.per+'|'+r.ick+'|'+r.uk;
+    if(!ickMap[k]) ickMap[k]={per:r.per,ps:r.ps,ick:r.ick,ick_nm:r.ick_nm,uk:r.uk,thr:r.thr,progs:[],pens:[],sdhs:[],mitis:[],risks:[]};
+    const d=ickMap[k];d.progs.push(r.prog);
+    if(r.pen)d.pens.push(r.pen);if(r.sdh)d.sdhs.push(r.sdh);
+    if(r.miti)d.mitis.push(r.miti);if(r.risk)d.risks.push(r.risk);
+  });
+  const newICK=Object.values(ickMap).map(v=>{
+    const avg=v.progs.reduce((s,x)=>s+x,0)/v.progs.length;
+    const st=avg>=1?'accelerated':(avg>=v.thr?'on_track':'need_accelerate');
+    return {per:v.per,ps:v.ps,ick:v.ick,ick_nm:v.ick_nm,uk:v.uk,
+      avg_prog:Math.round(avg*1e6)/1e6,st,thresh:v.thr,
+      pen:[...new Set(v.pens)].slice(0,2).join(' | '),
+      sdh:[...new Set(v.sdhs)].slice(0,2).join(' | '),
+      miti:[...new Set(v.mitis)].slice(0,2).join(' | '),
+      risk:[...new Set(v.risks)].slice(0,1).join('')};
+  });
+  return {ok:true,D:newD,ICK_D:newICK,periods:[...pers].sort()};
 }
+
 function showUploadStatus(type,msg){
   const el=document.getElementById('upload-status');if(!el)return;
   const s={loading:{bg:'#EFF6FF',bd:'#BFDBFE',c:'#1D4ED8'},ok:{bg:'#ECFDF5',bd:'#6EE7B7',c:'#065F46'},error:{bg:'#FEF2F2',bd:'#FECACA',c:'#991B1B'}};
   const st=s[type]||s.loading;
-  el.style.cssText=`display:block;padding:7px 9px;border-radius:7px;font-size:11px;background:${st.bg};border:1px solid ${st.bd};color:${st.c};line-height:1.5;white-space:pre-line;margin-bottom:8px;`;
-  el.textContent=msg;if(type==='ok')setTimeout(()=>{el.style.display='none';},5000);
+  el.style.cssText='display:block;padding:7px 9px;border-radius:7px;font-size:11px;background:'+st.bg+';border:1px solid '+st.bd+';color:'+st.c+';line-height:1.5;white-space:pre-line;margin-bottom:8px;';
+  el.textContent=msg;
+  if(type==='ok') setTimeout(()=>{el.style.display='none';},5000);
 }
-function downloadBackup(){const html=document.documentElement.outerHTML;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='EKB_Monitor_'+new Date().toISOString().slice(0,10)+'.html';a.click();URL.revokeObjectURL(a.href);}
+
+function downloadBackup(){
+  const html=document.documentElement.outerHTML;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
+  a.download='EKB_Monitor_'+new Date().toISOString().slice(0,10)+'.html';
+  a.click();URL.revokeObjectURL(a.href);
+}
+
+// ── Read More helper ──
+var _rmState={};
+function toggleReadMore(id){
+  _rmState[id]=!_rmState[id];
+  var sh=document.getElementById('rms-'+id);
+  var fl=document.getElementById('rmf-'+id);
+  var btn=document.querySelector('[data-rmid="'+id+'"]');
+  if(!sh||!fl)return;
+  sh.style.display=_rmState[id]?'none':'block';
+  fl.style.display=_rmState[id]?'block':'none';
+  if(btn) btn.textContent=_rmState[id]?'Sembunyikan ▲':'Baca selengkapnya ▼';
+}
+
+function mkReadMore(id,shortText,fullText,color){
+  var plain=fullText.replace(/<[^>]+>/g,'');
+  if(!fullText||plain.length<=150) return '<div style="font-size:11px;color:#374151;line-height:1.6;">'+fullText+'</div>';
+  return '<div id="rms-'+id+'" style="font-size:11px;color:#374151;line-height:1.6;">'+shortText+'</div>'
+    +'<div id="rmf-'+id+'" style="display:none;font-size:11px;color:#374151;line-height:1.6;">'+fullText+'</div>'
+    +'<button data-rmid="'+id+'" onclick="toggleReadMore(this.dataset.rmid)" style="font-size:10px;color:'+color+';background:none;border:none;cursor:pointer;padding:2px 0;font-weight:600;">Baca selengkapnya ▼</button>';
+}
+
+function renderPSSummary(){
+  const m=CFG.MODES[S.mode];
+  const per=m.per;
+  const thr=m.bln/12;
+
+  const subRows=D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const doneSub=subRows.filter(r=>r.prog>=1);
+  const naSub=subRows.filter(r=>r.prog<thr);
+  const ickRows=ICK_D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const accICK=ickRows.filter(r=>r.st==='accelerated');
+  const naICK=ickRows.filter(r=>r.st==='need_accelerate');
+
+  txt('ps-acc-n',accICK.length); txt('ps-na-n',naICK.length);
+  txt('ps-acc-sub','Progress \u2265 100% \u00b7 '+m.lbl);
+  txt('ps-na-sub','Progress < '+pc(thr,1)+' \u00b7 '+m.lbl);
+
+  const uniq=arr=>[...new Set(arr.filter(Boolean))];
+
+  const groupByPS=rows=>{
+    const map={};
+    rows.forEach(r=>{
+      if(!map[r.ps]) map[r.ps]={ps:r.ps,count:0,uks:new Set(),progs:[],narasis:[],pens:[],risks:[],mitis:[]};
+      const g=map[r.ps];
+      g.count++; g.uks.add(r.uk); g.progs.push(r.prog);
+      if(r.narasi) g.narasis.push(r.narasi);
+      if(r.pen)    g.pens.push(r.pen);
+      if(r.risk)   g.risks.push(r.risk);
+      if(r.miti)   g.mitis.push(r.miti);
+    });
+    return Object.values(map).sort((a,b)=>a.ps-b.ps);
+  };
+
+  const avgProgs=g=>g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
+
+  // Shared row renderer for both sections
+  const renderRow=(g,i,total,isAcc)=>{
+    const avg=avgProgs(g);
+    const isHigh=!isAcc&&avg<0.15;
+    const badgeColor=isAcc?'#059669':(isHigh?'#DC2626':'#F59E0B');
+    const sep=i<total-1?'border-bottom:1px solid #E2E8F0;':'';
+    const uid='ps'+g.ps+'_'+per.replace('-','')+'_'+(isAcc?'acc':'na');
+
+    // Narasi targets
+    const narasis=uniq(g.narasis).slice(0,4);
+    const narasisShort=narasis.slice(0,1).map(n=>n.slice(0,100)+(n.length>100?'\u2026':'')).join('');
+    const narasisFull=narasis.map((n,i)=>'<div style="margin-bottom:3px;">'+(narasis.length>1?'<span style="color:'+badgeColor+';font-weight:700;">'+(i+1)+'. </span>':'')+n+'</div>').join('');
+
+    // Extra detail (pen for acc, risk+miti for na)
+    let extraFull='';
+    if(isAcc){
+      const pens=uniq(g.pens).slice(0,2).join(' | ');
+      if(pens) extraFull+='<div style="margin-top:6px;"><span style="font-weight:600;color:#065F46;">Realisasi:</span> '+pens+'</div>';
+    } else {
+      const risk=uniq(g.risks).slice(0,1).join('');
+      const miti=uniq(g.mitis).slice(0,1).join('');
+      if(risk) extraFull+='<div style="margin-top:6px;"><span style="font-weight:600;color:#991B1B;">Kendala:</span> '+risk+'</div>';
+      if(miti) extraFull+='<div style="margin-top:4px;"><span style="font-weight:600;color:#92400E;">Mitigasi:</span> '+miti+'</div>';
+    }
+
+    const hasMore=(narasis.length>1)||(narasisShort!==narasisFull.replace(/<[^>]+>/g,''))||extraFull;
+
+    return '<div style="padding:10px 0;'+sep+'">'
+      // Header: badge + uk + count + avg
+      +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">'
+        +'<span style="background:'+badgeColor+';color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;">PS '+g.ps+'</span>'
+        +'<span style="font-size:11px;font-weight:600;color:#374151;">'
+          +[...g.uks].join(', ')
+          +' <span style="color:#6B7280;font-weight:400;">\u2014 '+g.count+' Sub-ICK, avg </span>'
+          +'<span style="font-weight:700;color:'+badgeColor+';">'+pc(avg,1)+'</span>'
+        +'</span>'
+        +(isHigh?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:1px 6px;border-radius:20px;font-weight:700;margin-left:2px;">\u26A0 Berisiko Tinggi</span>':'')
+      +'</div>'
+      // Narasi target label
+      +(narasis.length?'<div style="font-size:9px;font-weight:700;color:'+badgeColor+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'
+        +(isAcc?'\uD83C\uDFAF Narasi Target yang Tercapai':'\uD83C\uDFAF Narasi Target yang Perlu Diakselerasi')+'</div>':'')
+      // Short + read more
+      +(narasis.length||extraFull ? mkReadMore(uid, narasisShort, narasisFull+extraFull, badgeColor) : '')
+    +'</div>';
+  };
+
+  // ── ACCELERATED ──
+  const renderAcc=()=>{
+    if(!doneSub.length){
+      set('ps-acc-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Belum ada Sub-ICK yang mencapai 100%</div>');
+      return;
+    }
+    const groups=groupByPS(doneSub);
+    const avgAll=doneSub.reduce((s,r)=>s+r.prog,0)/doneSub.length;
+    const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
+    const topPS=[...groups].sort((a,b)=>b.count-a.count)[0];
+    const narrative='Hingga '+m.lbl+', terdapat <strong>'+doneSub.length+' Sub-ICK</strong> yang telah terselesaikan '
+      +'dengan rata-rata progress <strong>'+pc(avgAll,1)+'</strong>, tersebar di '+groups.length+' Program Strategis '
+      +'('+psLabels+'). '
+      +(topPS?'PS '+topPS.ps+' memberikan kontribusi terbesar dengan <strong>'+topPS.count+' Sub-ICK</strong> selesai oleh unit kerja '+[...topPS.uks].join(' dan ')+'.':'');
+
+    set('ps-acc-list',
+      '<div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
+        +'<div style="font-size:12px;color:#065F46;line-height:1.8;">'+narrative+'</div>'
+      +'</div>'
+      +'<div style="padding:0 2px;">'
+        +groups.map((g,i)=>renderRow(g,i,groups.length,true)).join('')
+      +'</div>'
+    );
+  };
+
+  // ── NEED ACCELERATE ──
+  const renderNA=()=>{
+    if(!naSub.length){
+      set('ps-na-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Semua Sub-ICK on track! \uD83C\uDF89</div>');
+      return;
+    }
+    const groups=groupByPS(naSub);
+    const sorted=[...groups].sort((a,b)=>avgProgs(a)-avgProgs(b));
+    const avgAll=naSub.reduce((s,r)=>s+r.prog,0)/naSub.length;
+    const psLabels=sorted.map(g=>'PS '+g.ps).join(', ');
+    const atRisk=sorted[0];
+    const narrative='Hingga '+m.lbl+', terdapat <strong>'+naSub.length+' Sub-ICK</strong> yang memerlukan akselerasi '
+      +'dengan rata-rata progress <strong>'+pc(avgAll,1)+'</strong> (di bawah threshold '+pc(thr,1)+'), '
+      +'tersebar di '+groups.length+' Program Strategis ('+psLabels+'). '
+      +'PS '+atRisk.ps+' menjadi perhatian utama dengan progress rata-rata hanya <strong>'+pc(avgProgs(atRisk),1)+'</strong>.';
+
+    set('ps-na-list',
+      '<div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
+        +'<div style="font-size:12px;color:#991B1B;line-height:1.8;">'+narrative+'</div>'
+      +'</div>'
+      +'<div style="padding:0 2px;">'
+        +sorted.map((g,i)=>renderRow(g,i,sorted.length,false)).join('')
+      +'</div>'
+    );
+  };
+
+  renderAcc();
+  renderNA();
+}
+
 function restoreSheetUrl(){
-  // Auto-fetch on every page load
   setTimeout(()=>fetchFromAppsScript(), 500);
 }
 
 
 
-// Fetch from Google Sheets first, then render
-(async ()=>{
+(function(){
   initDD();
-  // Show loading state while fetching
   txt('data-source-name','⏳ Memuat dari Google Sheets...');
   updateNavBadges(); renderOverview();
-  try{
-    const ctrl=new AbortController();
-    setTimeout(()=>ctrl.abort(),12000);
-    const r=await fetch('https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec',{signal:ctrl.signal});
-    if(r.ok){
-      const json=await r.json();
-      if(json.ok&&json.data?.D?.length){
-        const{D:nD,ICK_D:nI,rows,updated}=json.data;
-        D.length=0;nD.forEach(x=>D.push(x));
-        ICK_D.length=0;nI.forEach(x=>ICK_D.push(x));
-        txt('data-source-name','Google Sheets (Live)');
-        txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
-        updateNavBadges(); renderOverview();
-      }
-    }
-  }catch(e){
-    txt('data-source-name','Data bawaan (offline)');
-    console.log('GSheets:',e.message);
-  }
   restoreSheetUrl();
 })();
 
