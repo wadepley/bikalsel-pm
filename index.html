@@ -753,88 +753,132 @@ function renderOverview(){
 // ── PS Summary: Accelerated + Need Accelerate ──
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
-  const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
-  const accRows=ickRows.filter(r=>r.st==='accelerated');
-  const naRows=ickRows.filter(r=>r.st==='need_accelerate');
-  txt('ps-acc-n',accRows.length); txt('ps-na-n',naRows.length);
+  const per=m.per;
+  const thr=m.bln/12;
+
+  const subRows=D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const doneSub=subRows.filter(r=>r.prog>=1);
+  const naSub=subRows.filter(r=>r.prog<thr);
+  const ickRows=ICK_D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const accICK=ickRows.filter(r=>r.st==='accelerated');
+  const naICK=ickRows.filter(r=>r.st==='need_accelerate');
+
+  txt('ps-acc-n',accICK.length); txt('ps-na-n',naICK.length);
   txt('ps-acc-sub','Progress ≥ 100% · '+m.lbl);
-  txt('ps-na-sub','Progress < '+pc(m.bln/12,1)+' · '+m.lbl);
+  txt('ps-na-sub','Progress < '+pc(thr,1)+' · '+m.lbl);
 
-  const groupByPS=rows=>{const map={};rows.forEach(r=>{map[r.ps]=map[r.ps]||[];map[r.ps].push(r);});return Object.entries(map).sort((a,b)=>+a[0]-+b[0]);};
-  const getNarasi=(uk,ick,per)=>[...new Set(D.filter(r=>r.per===per&&r.uk===uk&&r.ick===ick&&r.narasi).map(r=>r.narasi).filter(Boolean))].slice(0,3);
+  const uniq=arr=>[...new Set(arr.filter(Boolean))];
 
-  const renderList=(rows,elId,isAcc)=>{
-    const groups=groupByPS(rows);
-    if(!groups.length){
-      set(elId,'<div style="padding:16px 0;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">'+(isAcc?'Belum ada ICK yang mencapai 100%':'Semua ICK on track! 🎉')+'</div>');
-      return;
-    }
-    const color=isAcc?'#059669':'#DC2626';
-    const bg=isAcc?'#F0FDF4':'#FFF5F5';
-    const bd=isAcc?'#A7F3D0':'#FECACA';
-    const pillCls=isAcc?'p-done':'p-attn';
-
-    set(elId, groups.map(([ps,items])=>{
-      const psName=PS_NAMES[String(ps)]||'PS '+ps;
-      const rows_html=items.map(r=>{
-        const narasis=getNarasi(r.uk,r.ick,m.per);
-
-        const narasi_html=narasis.length
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:var(--s5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">🎯 Narasi Target ICK</div>
-              ${narasis.map(n=>`<div style="font-size:11px;color:var(--s3);line-height:1.5;padding:2px 0 2px 10px;">• ${n.slice(0,160)}${n.length>160?'…':''}</div>`).join('')}
-            </div>`:
-          '';
-
-        const pen_html=r.pen
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:var(--s5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">📋 Penjelasan Progress</div>
-              <div style="font-size:11px;color:var(--s3);line-height:1.6;padding-left:10px;">${r.pen.slice(0,250)}${r.pen.length>250?'…':''}</div>
-            </div>`:
-          '';
-
-        const sdh_html=r.sdh
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:#065F46;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">✅ Hal yang Telah Dilakukan</div>
-              <div style="font-size:11px;color:#064E3B;line-height:1.6;padding-left:10px;">${r.sdh.slice(0,250)}${r.sdh.length>250?'…':''}</div>
-            </div>`:
-          '';
-
-        const risk_html=(!isAcc&&r.risk)
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:#991B1B;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">⚠️ Potensi Risiko & Kendala</div>
-              <div style="font-size:11px;color:#7F1D1D;line-height:1.6;padding-left:10px;">${r.risk.slice(0,220)}${r.risk.length>220?'…':''}</div>
-            </div>`:
-          '';
-
-        const miti_html=(!isAcc&&r.miti)
-          ?`<div>
-              <div style="font-size:10px;font-weight:600;color:#92400E;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">🔧 Langkah Mitigasi</div>
-              <div style="font-size:11px;color:#78350F;line-height:1.6;padding-left:10px;">${r.miti.slice(0,220)}${r.miti.length>220?'…':''}</div>
-            </div>`:
-          '';
-
-        return`<div style="padding:10px 0;border-top:1px solid ${bd};">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <span style="font-size:13px;font-weight:700;color:${color};min-width:52px;">${pc(r.avg_prog)}</span>
-            <span class="uk-chip" style="background:${CFG.UK_COLOR[r.uk]||'#94A3B8'}22;color:${CFG.UK_COLOR[r.uk]||'#94A3B8'};font-size:9px;font-weight:700;">${r.uk}</span>
-            <span style="font-size:11px;color:var(--s2);font-weight:600;flex:1;">${r.ick_nm.slice(0,75)}${r.ick_nm.length>75?'…':''}</span>
-          </div>
-          <div style="padding-left:12px;">${narasi_html}${pen_html}${sdh_html}${risk_html}${miti_html}</div>
-        </div>`;
-      }).join('');
-
-      return`<div style="margin-top:10px;padding:12px 14px;background:${bg};border-radius:10px;border-left:3px solid ${color};">
-        <div style="margin-bottom:8px;">
-          <span class="pill ${pillCls}" style="font-size:10px;font-weight:700;cursor:default;" title="${psName}">PS ${ps}</span>
-        </div>
-        ${rows_html}
-      </div>`;
-    }).join(''));
+  // Group sub-ICK by PS
+  const groupByPS=rows=>{
+    const map={};
+    rows.forEach(r=>{
+      if(!map[r.ps]) map[r.ps]={ps:r.ps,count:0,uks:new Set(),progs:[],narasis:[],risks:[],mitis:[]};
+      const g=map[r.ps];
+      g.count++;
+      g.uks.add(r.uk);
+      g.progs.push(r.prog);
+      if(r.narasi) g.narasis.push(r.narasi);
+      if(r.risk)   g.risks.push(r.risk);
+      if(r.miti)   g.mitis.push(r.miti);
+    });
+    return Object.values(map).sort((a,b)=>a.ps-b.ps);
   };
 
-  renderList(accRows,'ps-acc-list',true);
-  renderList(naRows,'ps-na-list',false);
+  // ── ACCELERATED ──
+  const renderAcc=()=>{
+    if(!doneSub.length){
+      set('ps-acc-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Belum ada Sub-ICK yang mencapai 100%</div>');
+      return;
+    }
+    const groups=groupByPS(doneSub);
+    const avgAll=doneSub.reduce((s,r)=>s+r.prog,0)/doneSub.length;
+    const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
+    const topPS=groups.sort((a,b)=>b.count-a.count)[0];
+
+    // Narrative paragraph
+    const narrative=`Hingga ${m.lbl}, terdapat <strong>${doneSub.length} Sub-ICK</strong> yang telah terselesaikan `+
+      `dengan rata-rata progress <strong>${pc(avgAll,1)}</strong>, tersebar di ${groups.length} Program Strategis `+
+      `(${psLabels}). `+
+      (topPS?`PS ${topPS.ps} memberikan kontribusi terbesar dengan <strong>${topPS.count} Sub-ICK</strong> selesai `+
+      `oleh unit kerja ${[...topPS.uks].join(' dan ')}.`:'');
+
+    // Per-PS bullets
+    const bullets=groups.map(g=>{
+      const avg=g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
+      const narasi=uniq(g.narasis).slice(0,2).map(n=>n.slice(0,120)+(n.length>120?'…':'')).join('; ');
+      return`<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">
+        <span style="background:#059669;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:1px;">PS ${g.ps}</span>
+        <div style="font-size:11px;color:#374151;line-height:1.6;">
+          <strong>${[...g.uks].join(', ')}</strong> — ${g.count} Sub-ICK selesai, avg ${pc(avg,1)}.
+          ${narasi?`<span style="color:#6B7280;"> ${narasi}</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+
+    set('ps-acc-list',`
+      <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;">
+        <div style="font-size:12px;color:#065F46;line-height:1.8;">${narrative}</div>
+      </div>
+      <div style="padding:4px 2px;">${bullets}</div>
+    `);
+  };
+
+  // ── NEED ACCELERATE ──
+  const renderNA=()=>{
+    if(!naSub.length){
+      set('ps-na-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Semua Sub-ICK on track! 🎉</div>');
+      return;
+    }
+    const groups=groupByPS(naSub);
+    const avgAll=naSub.reduce((s,r)=>s+r.prog,0)/naSub.length;
+    const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
+
+    // Find most at-risk: lowest avg progress
+    const sorted=[...groups].sort((a,b)=>{
+      const avgA=a.progs.reduce((s,x)=>s+x,0)/a.progs.length;
+      const avgB=b.progs.reduce((s,x)=>s+x,0)/b.progs.length;
+      return avgA-avgB;
+    });
+    const atRisk=sorted[0];
+    const atRiskAvg=atRisk.progs.reduce((s,x)=>s+x,0)/atRisk.progs.length;
+
+    const narrative=`Hingga ${m.lbl}, terdapat <strong>${naSub.length} Sub-ICK</strong> yang memerlukan akselerasi `+
+      `dengan rata-rata progress <strong>${pc(avgAll,1)}</strong> (di bawah threshold ${pc(thr,1)}), `+
+      `tersebar di ${groups.length} Program Strategis (${psLabels}). `+
+      `PS ${atRisk.ps} menjadi perhatian utama dengan progress rata-rata hanya <strong>${pc(atRiskAvg,1)}</strong>.`;
+
+    const bullets=sorted.map(g=>{
+      const avg=g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
+      const isHighRisk=avg<0.15;
+      const risk=uniq(g.risks).slice(0,1).map(r=>r.slice(0,130)+(r.length>130?'…':'')).join('');
+      const miti=uniq(g.mitis).slice(0,1).map(r=>r.slice(0,120)+(r.length>120?'…':'')).join('');
+
+      return`<div style="margin-bottom:10px;padding:10px 12px;border-radius:8px;border-left:3px solid ${isHighRisk?'#DC2626':'#F59E0B'};background:${isHighRisk?'#FFF5F5':'#FFFBEB'};">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <span style="background:${isHighRisk?'#DC2626':'#F59E0B'};color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">PS ${g.ps}</span>
+          <span style="font-size:11px;font-weight:600;color:${isHighRisk?'#991B1B':'#92400E'};">${[...g.uks].join(', ')} — ${g.count} Sub-ICK, avg ${pc(avg,1)}</span>
+          ${isHighRisk?'<span style="font-size:10px;background:#FEE2E2;color:#991B1B;padding:1px 7px;border-radius:20px;font-weight:700;">⚠ Berisiko Tinggi</span>':''}
+        </div>
+        ${risk?`<div style="font-size:11px;color:${isHighRisk?'#7F1D1D':'#78350F'};line-height:1.5;margin-bottom:4px;">
+          <span style="font-weight:600;">Kendala:</span> ${risk}
+        </div>`:''}
+        ${miti?`<div style="font-size:11px;color:#374151;line-height:1.5;">
+          <span style="font-weight:600;">Mitigasi:</span> ${miti}
+        </div>`:''}
+      </div>`;
+    }).join('');
+
+    set('ps-na-list',`
+      <div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;">
+        <div style="font-size:12px;color:#991B1B;line-height:1.8;">${narrative}</div>
+      </div>
+      <div style="padding:4px 2px;">${bullets}</div>
+    `);
+  };
+
+  renderAcc();
+  renderNA();
 }
 
 
@@ -1530,7 +1574,10 @@ function restoreSheetUrl(){
 
 // Fetch from Google Sheets first, then render
 (async ()=>{
-  initDD(); // load local data as backup
+  initDD();
+  // Show loading state while fetching
+  txt('data-source-name','⏳ Memuat dari Google Sheets...');
+  updateNavBadges(); renderOverview();
   try{
     const ctrl=new AbortController();
     setTimeout(()=>ctrl.abort(),12000);
@@ -1543,10 +1590,13 @@ function restoreSheetUrl(){
         ICK_D.length=0;nI.forEach(x=>ICK_D.push(x));
         txt('data-source-name','Google Sheets (Live)');
         txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
+        updateNavBadges(); renderOverview();
       }
     }
-  }catch(e){console.log('GSheets load:',e.message);}
-  updateNavBadges();renderOverview();
+  }catch(e){
+    txt('data-source-name','Data bawaan (offline)');
+    console.log('GSheets:',e.message);
+  }
   restoreSheetUrl();
 })();
 
