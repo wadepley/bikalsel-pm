@@ -267,6 +267,26 @@ tbody tr:hover td{background:#FAFBFE;}
 </style>
 </head>
 <body>
+<!-- Loading Overlay -->
+<div id="loading-overlay" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+    <div style="width:36px;height:36px;background:#1D4ED8;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📊</div>
+    <div>
+      <div style="font-size:16px;font-weight:700;color:#1E293B;">EKB Monitor</div>
+      <div style="font-size:12px;color:#64748B;">BI KPwDN Kalimantan Selatan</div>
+    </div>
+  </div>
+  <div style="width:280px;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+      <span style="font-size:12px;color:#64748B;" id="loading-msg">Menghubungkan Google Sheets...</span>
+      <span style="font-size:12px;font-weight:600;color:#1D4ED8;" id="loading-pct">0%</span>
+    </div>
+    <div style="height:6px;background:#E2E8F0;border-radius:99px;overflow:hidden;">
+      <div id="loading-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#1D4ED8,#059669);border-radius:99px;transition:width .3s ease;"></div>
+    </div>
+  </div>
+  <div style="font-size:11px;color:#94A3B8;" id="loading-sub">Memuat data terkini dari Google Sheets...</div>
+</div>
 <div class="app">
 
 <!-- ═══ SIDEBAR ═══ -->
@@ -428,7 +448,7 @@ tbody tr:hover td{background:#FAFBFE;}
               <div class="card-title" style="color:#065F46;">✅ ICK Accelerated per PS</div>
               <div class="card-sub" id="ps-acc-sub">Progress ≥ 100%</div>
             </div>
-            <span class="pill p-done" id="ps-acc-n">0</span>
+            
           </div>
           <div id="ps-acc-list" style="padding:0 16px 12px;"></div>
         </div>
@@ -438,7 +458,7 @@ tbody tr:hover td{background:#FAFBFE;}
               <div class="card-title" style="color:#991B1B;">⚠️ ICK Need Accelerate per PS</div>
               <div class="card-sub" id="ps-na-sub">Progress &lt; target bulan berjalan</div>
             </div>
-            <span class="pill p-attn" id="ps-na-n">0</span>
+            
           </div>
           <div id="ps-na-list" style="padding:0 16px 12px;"></div>
         </div>
@@ -1478,26 +1498,48 @@ async function captureScreenshot(){
 
 const APPS_URL='https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec';
 
+
+// ── Loading Overlay ──
+function setLoading(pct, msg, sub){
+  const bar = document.getElementById('loading-bar');
+  const pctEl = document.getElementById('loading-pct');
+  const msgEl = document.getElementById('loading-msg');
+  const subEl = document.getElementById('loading-sub');
+  if(bar) bar.style.width = pct+'%';
+  if(pctEl) pctEl.textContent = pct+'%';
+  if(msgEl && msg) msgEl.textContent = msg;
+  if(subEl && sub) subEl.textContent = sub;
+}
+function hideLoading(){
+  const ov = document.getElementById('loading-overlay');
+  if(ov){ ov.style.opacity='0'; ov.style.transition='opacity .4s'; setTimeout(()=>ov.remove(), 400); }
+}
 async function fetchFromAppsScript(){
-  showUploadStatus('loading','⏳ Memuat data dari Google Sheets...');
+  const isFirstLoad = !!document.getElementById('loading-overlay');
+  if(!isFirstLoad) showUploadStatus('loading','⏳ Memuat data dari Google Sheets...');
   try{
+    if(isFirstLoad) setLoading(20,'Menghubungkan Google Sheets...','Mengambil data terkini...');
     const ctrl=new AbortController();
     setTimeout(()=>ctrl.abort(),15000);
     const r=await fetch(APPS_URL,{signal:ctrl.signal});
     if(!r.ok) throw new Error('HTTP '+r.status);
+    if(isFirstLoad) setLoading(60,'Memproses data...','Parsing '+r.headers.get('content-length')||'data'+'...');
     const json=await r.json();
     if(!json.ok) throw new Error(json.error||'Response tidak valid');
     const{D:nD,ICK_D:nI,rows,updated}=json.data;
     if(!nD||!nD.length) throw new Error('Data kosong');
+    if(isFirstLoad) setLoading(85,'Membangun dashboard...','Menghitung '+rows+' baris data...');
     D.length=0; nD.forEach(x=>D.push(x));
     ICK_D.length=0; nI.forEach(x=>ICK_D.push(x));
     txt('data-source-name','Google Sheets (Live)');
     txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
-    showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat!');
+    if(!isFirstLoad) showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat!');
     refreshAll();
+    if(isFirstLoad){ setLoading(100,'Selesai!',''); setTimeout(hideLoading, 400); }
   }catch(e){
-    txt('data-source-name','Data bawaan (offline)');
-    showUploadStatus('error','❌ '+e.message);
+    txt('data-source-name','Gagal memuat data');
+    if(isFirstLoad){ setLoading(100,'Gagal: '+e.message,''); setTimeout(hideLoading,2000); }
+    else showUploadStatus('error','❌ '+e.message);
   }
 }
 
