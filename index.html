@@ -1058,6 +1058,59 @@ function renderICKPage(filtered){
 // ── All sub ICK ──
 let _allSt='';
 function setAllSt(btn,st){_allSt=st;document.querySelectorAll('[data-ast]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');S.pages.all=1;renderAll();}
+
+// ── Multi-select filter state ──
+const _fState={
+  all:{uks:new Set(),pss:new Set()},
+  dn:{uks:new Set(),pss:new Set()},
+  an:{uks:new Set(),pss:new Set()},
+};
+
+function toggleFilterUK(prefix,uk){
+  const st=_fState[prefix];
+  if(uk==='') st.uks.clear();
+  else{ if(st.uks.has(uk)) st.uks.delete(uk); else st.uks.add(uk); }
+  _syncChips(prefix);
+  if(prefix==='all') renderAll();
+  else if(prefix==='dn') renderDone();
+  else renderAttn();
+}
+
+function toggleFilterPS(prefix,ps){
+  const st=_fState[prefix];
+  if(ps===0) st.pss.clear();
+  else{ if(st.pss.has(ps)) st.pss.delete(ps); else st.pss.add(ps); }
+  _syncChips(prefix);
+  if(prefix==='all') renderAll();
+  else if(prefix==='dn') renderDone();
+  else renderAttn();
+}
+
+function _syncChips(prefix){
+  const st=_fState[prefix];
+  const ukAll=document.getElementById(prefix+'-uk-all');
+  if(ukAll) ukAll.className='fchip'+(st.uks.size===0?' active':'');
+  ['FDSEK','FPPUKIS','HUMAS','ICO','KPKWP','PM','PUR','RIRU','SP','TPID'].forEach(uk=>{
+    const el=document.getElementById(prefix+'-uk-'+uk);
+    if(el) el.className='fchip'+(st.uks.has(uk)?' active':'');
+  });
+  const psAll=document.getElementById(prefix+'-ps-all');
+  if(psAll) psAll.className='fchip'+(st.pss.size===0?' active':'');
+  [1,2,5,6,7,8,9,10,11].forEach(ps=>{
+    const el=document.getElementById(prefix+'-ps-'+ps);
+    if(el) el.className='fchip'+(st.pss.has(ps)?' active':'');
+  });
+}
+
+function _applyFilter(prefix,rows){
+  const st=_fState[prefix];
+  return rows.filter(r=>{
+    if(st.uks.size>0&&!st.uks.has(r.uk)) return false;
+    if(st.pss.size>0&&!st.pss.has(r.ps)) return false;
+    return true;
+  });
+}
+
 function renderAll(){
   const f=fRows(_applyFilter('all',getRows()),{st:_allSt,search:$('all-s')?.value});
   txt('all-count-lbl',f.length+' item');S.pages.all=1;renderPage(f,'all');
