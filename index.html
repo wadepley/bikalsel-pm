@@ -288,8 +288,8 @@ tbody tr:hover td{background:#FAFBFE;}
     <div class="sb-sect hide" style="margin-top:8px;">
       <div class="sect-hd">Data &amp; Sumber</div>
       <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:9px;padding:10px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;color:#065F46;margin-bottom:7px;">⚡ LIVE — Google Sheets</div>
-        <input type="text" id="apps-script-url" placeholder="URL Apps Script sudah tersimpan" value="https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec" style="width:100%;padding:6px 8px;border:1px solid #BBF7D0;border-radius:6px;font-size:10px;font-family:inherit;color:#334155;outline:none;margin-bottom:6px;box-sizing:border-box;"/>
+        <div style="font-size:10px;font-weight:700;color:#065F46;margin-bottom:5px;">⚡ LIVE — Google Sheets</div>
+        <div style="font-size:10px;color:#047857;margin-bottom:7px;">Auto-load saat halaman dibuka</div>
         <button onclick="fetchFromAppsScript()" style="width:100%;padding:7px;background:#059669;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;color:#fff;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
           Refresh dari Google Sheets
@@ -298,7 +298,7 @@ tbody tr:hover td{background:#FAFBFE;}
       <div id="upload-status" style="display:none;padding:7px 9px;border-radius:7px;font-size:11px;margin-bottom:8px;line-height:1.5;white-space:pre-line;"></div>
       <div style="background:#F8FAFC;border-radius:8px;padding:8px 10px;margin-bottom:10px;">
         <div style="font-size:10px;color:#94A3B8;margin-bottom:2px;">Sumber Data</div>
-        <div style="font-size:11px;font-weight:500;color:#334155;" id="data-source-name">Data bawaan (Mar 2026)</div>
+        <div style="font-size:11px;font-weight:500;color:#334155;" id="data-source-name">Memuat dari Google Sheets...</div>
         <div style="font-size:10px;color:#94A3B8;margin-top:2px;" id="data-source-date">—</div>
       </div>
       <div style="border-top:1px solid #F1F5F9;margin:0 0 10px;"></div>
@@ -1445,30 +1445,30 @@ async function captureScreenshot(){
 // ══════════════════════════════════════════
 
 
-const APPS_URL_KEY='ekb_apps_url';
-function saveAppsUrl(){const v=document.getElementById('apps-script-url')?.value.trim();if(v)localStorage.setItem(APPS_URL_KEY,v);}
+// ── Google Sheets Integration ──
 async function fetchFromAppsScript(){
-  const inp=document.getElementById('apps-script-url');
-    const url='https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec'||( inp?inp.value.trim():'')||localStorage.getItem(APPS_URL_KEY);
-  if(!url){showUploadStatus('error','❌ Paste URL Apps Script dulu');return;}
-  showUploadStatus('loading','⏳ Mengambil data dari Google Sheets...');
+  const APPS_URL='https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec';
+  showUploadStatus('loading','⏳ Memuat data dari Google Sheets...');
   try{
-    const ctrl=new AbortController();setTimeout(()=>ctrl.abort(),15000);
-    const r=await fetch(url,{signal:ctrl.signal});
-    if(!r.ok)throw new Error('HTTP '+r.status+' — pastikan deploy dengan access "Anyone"');
+    const ctrl=new AbortController();
+    setTimeout(()=>ctrl.abort(),15000);
+    const r=await fetch(APPS_URL,{signal:ctrl.signal});
+    if(!r.ok)throw new Error('HTTP '+r.status);
     const json=await r.json();
     if(!json.ok)throw new Error(json.error||'Response tidak valid');
     const{D:nD,ICK_D:nI,rows,updated}=json.data;
-    if(!nD?.length)throw new Error('Data kosong dari Apps Script');
+    if(!nD?.length)throw new Error('Data kosong');
     D.length=0;nD.forEach(r=>D.push(r));
     ICK_D.length=0;nI.forEach(r=>ICK_D.push(r));
     txt('data-source-name','Google Sheets (Live)');
     txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
-    showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat!');
-    localStorage.setItem(APPS_URL_KEY,url);
+    showUploadStatus('ok','✅ '+rows+' baris dimuat!');
     refreshAll();
-  }catch(e){showUploadStatus('error','❌ '+e.message);}
+  }catch(e){
+    showUploadStatus('error','❌ '+e.message);
+  }
 }
+
 function handleDrop(e){e.preventDefault();document.getElementById('upload-zone').style.borderColor='#CBD5E1';const f=e.dataTransfer.files[0];if(f)handleFileUpload(f);}
 function handleFileUpload(file){
   if(!file)return;
@@ -1518,16 +1518,12 @@ function showUploadStatus(type,msg){
   const s={loading:{bg:'#EFF6FF',bd:'#BFDBFE',c:'#1D4ED8'},ok:{bg:'#ECFDF5',bd:'#6EE7B7',c:'#065F46'},error:{bg:'#FEF2F2',bd:'#FECACA',c:'#991B1B'}};
   const st=s[type]||s.loading;
   el.style.cssText=`display:block;padding:7px 9px;border-radius:7px;font-size:11px;background:${st.bg};border:1px solid ${st.bd};color:${st.c};line-height:1.5;white-space:pre-line;margin-bottom:8px;`;
-  el.textContent=msg;if(type==='ok')setTimeout(()=>{el.style.display='none';},6000);
+  el.textContent=msg;if(type==='ok')setTimeout(()=>{el.style.display='none';},5000);
 }
 function downloadBackup(){const html=document.documentElement.outerHTML;const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download='EKB_Monitor_'+new Date().toISOString().slice(0,10)+'.html';a.click();URL.revokeObjectURL(a.href);}
-const DEFAULT_APPS_URL='https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec';
 function restoreSheetUrl(){
-  const url = localStorage.getItem(APPS_URL_KEY) || DEFAULT_APPS_URL;
-  const inp = document.getElementById('apps-script-url');
-  if(inp) inp.value = url;
-  // Auto-fetch from Google Sheets on every page load
-  setTimeout(()=>fetchFromAppsScript(), 800);
+  // Auto-fetch on every page load
+  setTimeout(()=>fetchFromAppsScript(), 500);
 }
 
 
