@@ -1449,7 +1449,7 @@ const APPS_URL_KEY='ekb_apps_url';
 function saveAppsUrl(){const v=document.getElementById('apps-script-url')?.value.trim();if(v)localStorage.setItem(APPS_URL_KEY,v);}
 async function fetchFromAppsScript(){
   const inp=document.getElementById('apps-script-url');
-  const url=(inp?inp.value.trim():'')||localStorage.getItem(APPS_URL_KEY)||'https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec';
+    const url='https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec'||( inp?inp.value.trim():'')||localStorage.getItem(APPS_URL_KEY);
   if(!url){showUploadStatus('error','❌ Paste URL Apps Script dulu');return;}
   showUploadStatus('loading','⏳ Mengambil data dari Google Sheets...');
   try{
