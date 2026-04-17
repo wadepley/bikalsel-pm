@@ -769,15 +769,12 @@ function renderPSSummary(){
 
   const uniq=arr=>[...new Set(arr.filter(Boolean))];
 
-  // Group sub-ICK by PS
   const groupByPS=rows=>{
     const map={};
     rows.forEach(r=>{
       if(!map[r.ps]) map[r.ps]={ps:r.ps,count:0,uks:new Set(),progs:[],narasis:[],risks:[],mitis:[]};
       const g=map[r.ps];
-      g.count++;
-      g.uks.add(r.uk);
-      g.progs.push(r.prog);
+      g.count++; g.uks.add(r.uk); g.progs.push(r.prog);
       if(r.narasi) g.narasis.push(r.narasi);
       if(r.risk)   g.risks.push(r.risk);
       if(r.miti)   g.mitis.push(r.miti);
@@ -794,24 +791,25 @@ function renderPSSummary(){
     const groups=groupByPS(doneSub);
     const avgAll=doneSub.reduce((s,r)=>s+r.prog,0)/doneSub.length;
     const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
-    const topPS=groups.sort((a,b)=>b.count-a.count)[0];
+    const topPS=[...groups].sort((a,b)=>b.count-a.count)[0];
 
-    // Narrative paragraph
     const narrative=`Hingga ${m.lbl}, terdapat <strong>${doneSub.length} Sub-ICK</strong> yang telah terselesaikan `+
       `dengan rata-rata progress <strong>${pc(avgAll,1)}</strong>, tersebar di ${groups.length} Program Strategis `+
       `(${psLabels}). `+
       (topPS?`PS ${topPS.ps} memberikan kontribusi terbesar dengan <strong>${topPS.count} Sub-ICK</strong> selesai `+
       `oleh unit kerja ${[...topPS.uks].join(' dan ')}.`:'');
 
-    // Per-PS bullets
-    const bullets=groups.map(g=>{
+    const bullets=groups.map((g,i)=>{
       const avg=g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
-      const narasi=uniq(g.narasis).slice(0,2).map(n=>n.slice(0,120)+(n.length>120?'…':'')).join('; ');
-      return`<div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;">
-        <span style="background:#059669;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:1px;">PS ${g.ps}</span>
-        <div style="font-size:11px;color:#374151;line-height:1.6;">
-          <strong>${[...g.uks].join(', ')}</strong> — ${g.count} Sub-ICK selesai, avg ${pc(avg,1)}.
-          ${narasi?`<span style="color:#6B7280;"> ${narasi}</span>`:''}
+      const narasi=uniq(g.narasis).slice(0,2).map(n=>n.slice(0,130)+(n.length>130?'…':'')).join('; ');
+      const isLast=i===groups.length-1;
+      return`<div style="padding:10px 0;${isLast?'':'border-bottom:1px solid #E2E8F0;'}">
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <span style="background:#059669;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px;">PS ${g.ps}</span>
+          <div style="font-size:11px;color:#374151;line-height:1.6;">
+            <strong>${[...g.uks].join(', ')}</strong> — ${g.count} Sub-ICK selesai, avg ${pc(avg,1)}.
+            ${narasi?`<span style="color:#6B7280;"> ${narasi}</span>`:''}
+          </div>
         </div>
       </div>`;
     }).join('');
@@ -820,7 +818,7 @@ function renderPSSummary(){
       <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;">
         <div style="font-size:12px;color:#065F46;line-height:1.8;">${narrative}</div>
       </div>
-      <div style="padding:4px 2px;">${bullets}</div>
+      <div style="padding:0 2px;">${bullets}</div>
     `);
   };
 
@@ -833,8 +831,6 @@ function renderPSSummary(){
     const groups=groupByPS(naSub);
     const avgAll=naSub.reduce((s,r)=>s+r.prog,0)/naSub.length;
     const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
-
-    // Find most at-risk: lowest avg progress
     const sorted=[...groups].sort((a,b)=>{
       const avgA=a.progs.reduce((s,x)=>s+x,0)/a.progs.length;
       const avgB=b.progs.reduce((s,x)=>s+x,0)/b.progs.length;
@@ -848,24 +844,24 @@ function renderPSSummary(){
       `tersebar di ${groups.length} Program Strategis (${psLabels}). `+
       `PS ${atRisk.ps} menjadi perhatian utama dengan progress rata-rata hanya <strong>${pc(atRiskAvg,1)}</strong>.`;
 
-    const bullets=sorted.map(g=>{
+    const bullets=groups.map((g,i)=>{
       const avg=g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
       const isHighRisk=avg<0.15;
-      const risk=uniq(g.risks).slice(0,1).map(r=>r.slice(0,130)+(r.length>130?'…':'')).join('');
-      const miti=uniq(g.mitis).slice(0,1).map(r=>r.slice(0,120)+(r.length>120?'…':'')).join('');
-
-      return`<div style="margin-bottom:10px;padding:10px 12px;border-radius:8px;border-left:3px solid ${isHighRisk?'#DC2626':'#F59E0B'};background:${isHighRisk?'#FFF5F5':'#FFFBEB'};">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <span style="background:${isHighRisk?'#DC2626':'#F59E0B'};color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;">PS ${g.ps}</span>
-          <span style="font-size:11px;font-weight:600;color:${isHighRisk?'#991B1B':'#92400E'};">${[...g.uks].join(', ')} — ${g.count} Sub-ICK, avg ${pc(avg,1)}</span>
-          ${isHighRisk?'<span style="font-size:10px;background:#FEE2E2;color:#991B1B;padding:1px 7px;border-radius:20px;font-weight:700;">⚠ Berisiko Tinggi</span>':''}
+      const risk=uniq(g.risks).slice(0,1).map(r=>r.slice(0,150)+(r.length>150?'…':'')).join('');
+      const miti=uniq(g.mitis).slice(0,1).map(r=>r.slice(0,130)+(r.length>130?'…':'')).join('');
+      const isLast=i===groups.length-1;
+      return`<div style="padding:10px 0;${isLast?'':'border-bottom:1px solid #E2E8F0;}">
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:${(risk||miti)?'6px':'0'};">
+          <span style="background:${isHighRisk?'#DC2626':'#F59E0B'};color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;margin-top:1px;">PS ${g.ps}</span>
+          <div style="font-size:11px;line-height:1.6;flex:1;">
+            <span style="font-weight:600;color:#374151;">${[...g.uks].join(', ')}</span>
+            <span style="color:#6B7280;"> — ${g.count} Sub-ICK, avg </span>
+            <span style="font-weight:700;color:${isHighRisk?'#DC2626':'#D97706'};">${pc(avg,1)}</span>
+            ${isHighRisk?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:1px 6px;border-radius:20px;font-weight:700;margin-left:4px;">⚠ Berisiko Tinggi</span>':''}
+          </div>
         </div>
-        ${risk?`<div style="font-size:11px;color:${isHighRisk?'#7F1D1D':'#78350F'};line-height:1.5;margin-bottom:4px;">
-          <span style="font-weight:600;">Kendala:</span> ${risk}
-        </div>`:''}
-        ${miti?`<div style="font-size:11px;color:#374151;line-height:1.5;">
-          <span style="font-weight:600;">Mitigasi:</span> ${miti}
-        </div>`:''}
+        ${risk?`<div style="font-size:11px;color:#374151;line-height:1.5;padding-left:0;margin-bottom:3px;"><span style="font-weight:600;color:#991B1B;">Kendala:</span> ${risk}</div>`:''}
+        ${miti?`<div style="font-size:11px;color:#374151;line-height:1.5;"><span style="font-weight:600;color:#92400E;">Mitigasi:</span> ${miti}</div>`:''}
       </div>`;
     }).join('');
 
@@ -873,7 +869,7 @@ function renderPSSummary(){
       <div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;">
         <div style="font-size:12px;color:#991B1B;line-height:1.8;">${narrative}</div>
       </div>
-      <div style="padding:4px 2px;">${bullets}</div>
+      <div style="padding:0 2px;">${bullets}</div>
     `);
   };
 
