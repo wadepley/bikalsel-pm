@@ -1528,8 +1528,27 @@ function restoreSheetUrl(){
 
 
 
-initDD();updateNavBadges();renderOverview();
-restoreSheetUrl();
+// Fetch from Google Sheets first, then render
+(async ()=>{
+  initDD(); // load local data as backup
+  try{
+    const ctrl=new AbortController();
+    setTimeout(()=>ctrl.abort(),12000);
+    const r=await fetch('https://script.google.com/macros/s/AKfycbzGBVi2v_1dwJWL9Gs78awr3Q9yVKjXZNdFeSae0upb01oSys-UABa_pMt9uheBzmus/exec',{signal:ctrl.signal});
+    if(r.ok){
+      const json=await r.json();
+      if(json.ok&&json.data?.D?.length){
+        const{D:nD,ICK_D:nI,rows,updated}=json.data;
+        D.length=0;nD.forEach(x=>D.push(x));
+        ICK_D.length=0;nI.forEach(x=>ICK_D.push(x));
+        txt('data-source-name','Google Sheets (Live)');
+        txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
+      }
+    }
+  }catch(e){console.log('GSheets load:',e.message);}
+  updateNavBadges();renderOverview();
+  restoreSheetUrl();
+})();
 
 </script>
 </body>
