@@ -525,6 +525,8 @@ thead th{background:var(--surf);}
             <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
+            <th>Target Bln</th>
+            <th>Gap</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="dn-tbody"></tbody>
@@ -553,6 +555,8 @@ thead th{background:var(--surf);}
             <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
+            <th>Target Bln</th>
+            <th>Gap</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="an-tbody"></tbody>
@@ -565,7 +569,7 @@ thead th{background:var(--surf);}
 
     <!-- ═══ EVALUASI INPUT ═══ -->
     <div id="tab-eval" style="display:none;">
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
         <div class="kpi" style="--a:#F59E0B;">
           <div class="kpi-num" id="ev-total" style="color:#D97706;">—</div>
           <div class="kpi-lbl">Total Temuan</div>
