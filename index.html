@@ -266,6 +266,62 @@ tbody tr:hover td{background:#FAFBFE;}
 @media(max-width:640px){.kpi-r3{grid-template-columns:1fr;}.kpi-r4{grid-template-columns:1fr 1fr;}.content{padding:12px;}}
 
 thead th{background:var(--surf);}
+
+/* ── Tooltip (JS-powered, fixed position) ── */
+.tt{cursor:help;}
+
+/* Global tooltip popup */
+#js-tooltip{
+  position:fixed;
+  z-index:99999;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .15s ease, transform .12s ease;
+  transform:translateY(4px);
+  max-width:320px;
+}
+#js-tooltip.show{
+  opacity:1;
+  transform:translateY(0);
+}
+#js-tooltip-inner{
+  background:#1E293B;
+  color:#fff;
+  font-size:11px;
+  font-weight:400;
+  line-height:1.6;
+  padding:9px 12px;
+  border-radius:9px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.2);
+  white-space:normal;
+  word-break:break-word;
+  font-family:"DM Sans",sans-serif;
+}
+#js-tooltip-inner .tt-ps-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  background:#3B82F6;
+  color:#fff;
+  font-size:10px;
+  font-weight:700;
+  padding:2px 9px;
+  border-radius:20px;
+  margin-bottom:7px;
+  letter-spacing:.3px;
+}
+#js-tooltip-inner .tt-title{
+  font-size:11px;
+  font-weight:700;
+  color:#F1F5F9;
+  margin-bottom:5px;
+  line-height:1.4;
+}
+#js-tooltip-inner .tt-body{
+  font-size:10.5px;
+  color:#CBD5E1;
+  line-height:1.65;
+}
 </style>
 </head>
 <body>
@@ -289,6 +345,7 @@ thead th{background:var(--surf);}
   </div>
   <div style="font-size:11px;color:#94A3B8;" id="loading-sub">Memuat data terkini dari Google Sheets...</div>
 </div>
+<div id="js-tooltip"><div id="js-tooltip-inner"></div></div>
 <div class="app">
 
 <!-- ═══ SIDEBAR ═══ -->
@@ -525,6 +582,7 @@ thead th{background:var(--surf);}
             <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
+            <th>Acuan Progress</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="dn-tbody"></tbody>
@@ -553,6 +611,7 @@ thead th{background:var(--surf);}
             <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
+            <th>Acuan Progress</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="an-tbody"></tbody>
@@ -562,6 +621,8 @@ thead th{background:var(--surf);}
     </div>
 
   
+  
+
 
     <!-- ═══ EVALUASI INPUT ═══ -->
     <div id="tab-eval" style="display:none;">
@@ -1138,7 +1199,7 @@ function renderICKPage(filtered){
     const rowCls=r.st==='done'?'row-done':r.st==='need_attention'?'row-attn':'';
     return`<tr class="${rowCls}">
       <td>${ukChip(r.uk)}</td>
-      <td><span class="pill p-gray" style="font-size:9px;">PS ${r.ps}</span></td>
+      <td><span class="pill p-gray tt" style="font-size:9px;" data-tip="${PS_NAMES[String(r.ps)]||'PS '+r.ps}">PS ${r.ps}</span></td>
       <td class="td-trunc td-m" title="${r.ick_nm}">${r.ick_nm}</td>
       <td style="font-size:11px;">${r.narasi||r.sub_nm}</td>
       <td class="td-m">${r.tgt||'—'}</td>
@@ -1226,8 +1287,8 @@ function renderPage(f,key){
   const thresh=CFG.MODES[S.mode].bln/12;
   if(key==='all'){
     set('all-tbody',sl.length?sl.map(r=>`<tr>
-      <td><span class="pill p-gray" style="font-size:9px;">PS ${r.ps}</span></td>
-      <td class="td-trunc td-m">${r.ick_nm}</td>
+      <td><span class="pill p-gray tt" style="font-size:9px;" data-tip="${PS_NAMES[String(r.ps)]||'PS '+r.ps}">PS ${r.ps}</span></td>
+      <td class="td-trunc td-m tt" data-tip="${r.ick_nm}">${r.ick_nm}</td>
       <td style="font-size:11px;">${r.narasi||r.sub_nm}</td>
       <td>${ukChip(r.uk)}</td>
       <td class="td-m">${r.tgt||'—'}</td>
@@ -1238,19 +1299,20 @@ function renderPage(f,key){
     </tr>`).join(''):'<tr><td colspan="9"><div class="empty"><div class="empty-ico">🔍</div><div class="empty-msg">Tidak ada data</div></div></td></tr>');
   }else if(key==='done'){
     set('dn-tbody',sl.length?sl.map(r=>`<tr class="row-done">
-      <td><span class="pill p-gray" style="font-size:9px;">PS ${r.ps}</span></td>
-      <td class="td-trunc td-m">${r.ick_nm}</td>
+      <td><span class="pill p-gray tt" style="font-size:9px;" data-tip="${PS_NAMES[String(r.ps)]||'PS '+r.ps}">PS ${r.ps}</span></td>
+      <td class="td-trunc td-m tt" data-tip="${r.ick_nm}">${r.ick_nm}</td>
       <td style="font-size:11px;">${r.narasi||r.sub_nm}</td>
       <td>${ukChip(r.uk)}</td>
       <td class="td-m">${r.tgt||'—'}</td>
       <td class="td-m">${fmtNum(r.real)}</td>
       <td>${progHtml(r.prog)}</td>
+      <td><span class="pill p-done" style="font-size:10px;">${pc(r.thr)}</span></td>
       <td style="font-size:11px;">${penHtml(r.pen,120)}</td>
-    </tr>`).join(''):'<tr><td colspan="8"><div class="empty"><div class="empty-ico">⏳</div><div class="empty-msg">Belum ada yang terselesaikan</div></div></td></tr>');
+    </tr>`).join(''):'<tr><td colspan="9"><div class="empty"><div class="empty-ico">⏳</div><div class="empty-msg">Belum ada yang terselesaikan</div></div></td></tr>');
   }else if(key==='attn'){
     set('an-tbody',sl.length?sl.map(r=>{const gap=thresh-r.prog;return `<tr class="row-attn">
-      <td><span class="pill p-gray" style="font-size:9px;">PS ${r.ps}</span></td>
-      <td class="td-trunc td-m">${r.ick_nm}</td>
+      <td><span class="pill p-gray tt" style="font-size:9px;" data-tip="${PS_NAMES[String(r.ps)]||'PS '+r.ps}">PS ${r.ps}</span></td>
+      <td class="td-trunc td-m tt" data-tip="${r.ick_nm}">${r.ick_nm}</td>
       <td style="font-size:11px;">${r.narasi||r.sub_nm}</td>
       <td>${ukChip(r.uk)}</td>
       <td class="td-m">${r.tgt||'—'}</td>
@@ -1976,6 +2038,98 @@ function restoreSheetUrl(){
   txt('data-source-name','⏳ Memuat dari Google Sheets...');
   updateNavBadges(); renderOverview();
   restoreSheetUrl();
+})();
+
+// ══════════════════════════════════════════
+// JS TOOLTIP ENGINE — Fixed position, never clipped
+// ══════════════════════════════════════════
+(function initTooltip(){
+  const tip = document.getElementById('js-tooltip');
+  const inner = document.getElementById('js-tooltip-inner');
+  if(!tip || !inner) return;
+
+  let hideTimer = null;
+
+  // Build rich HTML content for tooltip
+  function buildContent(el){
+    const isPSBadge = el.classList.contains('pill') && el.textContent.trim().startsWith('PS');
+    const isICKCell = el.classList.contains('td-trunc') || el.dataset.tipType === 'ick';
+
+    const rawTip = el.getAttribute('data-tip') || '';
+    if(!rawTip) return null;
+
+    if(isPSBadge){
+      // PS badge: show PS number + full program name
+      const psNum = el.textContent.trim(); // e.g. "PS 8"
+      return `
+        <div class="tt-ps-badge">📋 ${psNum}</div>
+        <div class="tt-title">Program Strategis</div>
+        <div class="tt-body">${rawTip}</div>`;
+    } else {
+      // ICK name cell: show full name
+      return `
+        <div class="tt-title">📌 Nama ICK</div>
+        <div class="tt-body">${rawTip}</div>`;
+    }
+  }
+
+  // Position tooltip near cursor, always within viewport
+  function positionTip(e){
+    const margin = 14;
+    const tw = tip.offsetWidth || 330;
+    const th = tip.offsetHeight || 80;
+    let x = e.clientX + 16;
+    let y = e.clientY - th - 10;
+
+    // Keep within viewport horizontally
+    if(x + tw > window.innerWidth - margin) x = e.clientX - tw - 10;
+    if(x < margin) x = margin;
+
+    // Keep within viewport vertically — below cursor if not enough space above
+    if(y < margin) y = e.clientY + 22;
+    if(y + th > window.innerHeight - margin) y = e.clientY - th - 10;
+
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  }
+
+  // Event delegation — works on dynamically rendered table rows
+  document.addEventListener('mouseover', function(e){
+    const el = e.target.closest('[data-tip]');
+    if(!el) return;
+    const content = buildContent(el);
+    if(!content) return;
+
+    clearTimeout(hideTimer);
+    inner.innerHTML = content;
+
+    // Show off-screen first to measure, then position
+    tip.style.left = '-9999px';
+    tip.style.top  = '-9999px';
+    tip.classList.add('show');
+
+    positionTip(e);
+  });
+
+  document.addEventListener('mousemove', function(e){
+    if(!tip.classList.contains('show')) return;
+    positionTip(e);
+  });
+
+  document.addEventListener('mouseout', function(e){
+    const el = e.target.closest('[data-tip]');
+    if(!el) return;
+    const related = e.relatedTarget;
+    if(related && el.contains(related)) return;
+    hideTimer = setTimeout(()=>{
+      tip.classList.remove('show');
+    }, 80);
+  });
+
+  // Also hide on scroll
+  document.addEventListener('scroll', function(){
+    tip.classList.remove('show');
+  }, true);
 })();
 
 </script>
