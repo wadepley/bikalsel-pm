@@ -512,16 +512,17 @@ thead th{background:var(--surf);}
         <div class="card-hd"><div><div class="card-title">Detail Sub ICK Terselesaikan</div><div class="card-sub" id="done-sub">—</div></div></div>
         <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="dn-uk-all" onclick="toggleFilterUK('dn','')" style="font-size:10px;">Semua</button><button class="fchip" id="dn-uk-FDSEK" onclick="toggleFilterUK('dn','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="dn-uk-FPPUKIS" onclick="toggleFilterUK('dn','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="dn-uk-HUMAS" onclick="toggleFilterUK('dn','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="dn-uk-ICO" onclick="toggleFilterUK('dn','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="dn-uk-KPKWP" onclick="toggleFilterUK('dn','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="dn-uk-PM" onclick="toggleFilterUK('dn','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="dn-uk-PUR" onclick="toggleFilterUK('dn','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="dn-uk-RIRU" onclick="toggleFilterUK('dn','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="dn-uk-SP" onclick="toggleFilterUK('dn','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="dn-uk-TPID" onclick="toggleFilterUK('dn','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="dn-ps-all" onclick="toggleFilterPS('dn',0)" style="font-size:10px;">Semua</button><button class="fchip" id="dn-ps-1" onclick="toggleFilterPS('dn',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="dn-ps-2" onclick="toggleFilterPS('dn',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="dn-ps-5" onclick="toggleFilterPS('dn',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="dn-ps-6" onclick="toggleFilterPS('dn',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="dn-ps-7" onclick="toggleFilterPS('dn',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="dn-ps-8" onclick="toggleFilterPS('dn',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="dn-ps-9" onclick="toggleFilterPS('dn',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="dn-ps-10" onclick="toggleFilterPS('dn',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="dn-ps-11" onclick="toggleFilterPS('dn',11)" style="font-size:10px;">PS 11</button></div></div>
         <div class="tbl-wrap"><table>
-          <thead><tr>
-            <th style="width:54px;">PS</th>
-            <th style="width:13%;">Nama ICK</th>
-            <th style="width:25%;">Narasi Target ICK</th>
-            <th style="width:80px;">Unit Kerja</th>
-            <th style="width:70px;">Target</th>
-            <th style="width:80px;">Realisasi</th>
-            <th style="width:120px;">Progress</th>
-            <th style="width:100px;">Status</th>
-            <th style="width:22%;">Penjelasan</th>
+          <thead style="position:sticky;top:0;z-index:10;"><tr>
+            <th>PS</th>
+            <th style="min-width:140px;">Nama ICK</th>
+            <th style="min-width:180px;">Narasi Target ICK</th>
+            <th>Unit Kerja</th>
+            <th>Target</th>
+            <th>Realisasi</th>
+            <th style="min-width:110px;">Progress</th>
+            <th>Target Bln</th>
+            <th>Gap</th>
+            <th style="min-width:160px;">Penjelasan</th>
           </tr></thead>
           <tbody id="dn-tbody"></tbody>
         </table></div>
@@ -541,16 +542,17 @@ thead th{background:var(--surf);}
         <div class="card-hd"><div><div class="card-title">Detail Sub ICK Need Attention</div><div class="card-sub" id="attn-sub">Diurutkan dari progress terendah</div></div></div>
         <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="an-uk-all" onclick="toggleFilterUK('an','')" style="font-size:10px;">Semua</button><button class="fchip" id="an-uk-FDSEK" onclick="toggleFilterUK('an','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="an-uk-FPPUKIS" onclick="toggleFilterUK('an','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="an-uk-HUMAS" onclick="toggleFilterUK('an','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="an-uk-ICO" onclick="toggleFilterUK('an','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="an-uk-KPKWP" onclick="toggleFilterUK('an','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="an-uk-PM" onclick="toggleFilterUK('an','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="an-uk-PUR" onclick="toggleFilterUK('an','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="an-uk-RIRU" onclick="toggleFilterUK('an','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="an-uk-SP" onclick="toggleFilterUK('an','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="an-uk-TPID" onclick="toggleFilterUK('an','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="an-ps-all" onclick="toggleFilterPS('an',0)" style="font-size:10px;">Semua</button><button class="fchip" id="an-ps-1" onclick="toggleFilterPS('an',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="an-ps-2" onclick="toggleFilterPS('an',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="an-ps-5" onclick="toggleFilterPS('an',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="an-ps-6" onclick="toggleFilterPS('an',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="an-ps-7" onclick="toggleFilterPS('an',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="an-ps-8" onclick="toggleFilterPS('an',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="an-ps-9" onclick="toggleFilterPS('an',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="an-ps-10" onclick="toggleFilterPS('an',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="an-ps-11" onclick="toggleFilterPS('an',11)" style="font-size:10px;">PS 11</button></div></div>
         <div class="tbl-wrap"><table>
-          <thead><tr>
-            <th style="width:54px;">PS</th>
-            <th style="width:13%;">Nama ICK</th>
-            <th style="width:25%;">Narasi Target ICK</th>
-            <th style="width:80px;">Unit Kerja</th>
-            <th style="width:70px;">Target</th>
-            <th style="width:80px;">Realisasi</th>
-            <th style="width:120px;">Progress</th>
-            <th style="width:100px;">Status</th>
-            <th style="width:22%;">Penjelasan</th>
+          <thead style="position:sticky;top:0;z-index:10;"><tr>
+            <th>PS</th>
+            <th style="min-width:140px;">Nama ICK</th>
+            <th style="min-width:180px;">Narasi Target ICK</th>
+            <th>Unit Kerja</th>
+            <th>Target</th>
+            <th>Realisasi</th>
+            <th style="min-width:110px;">Progress</th>
+            <th>Target Bln</th>
+            <th>Gap</th>
+            <th style="min-width:160px;">Penjelasan</th>
           </tr></thead>
           <tbody id="an-tbody"></tbody>
         </table></div>
@@ -1043,7 +1045,7 @@ function renderICKPage(filtered){
       <td class="td-m">${fmtNum(r.real)}</td>
       <td>${progHtml(r.prog)}</td>
       <td>${statusPill(r.st)}</td>
-      <td class="td-wrap">${penHtml(r.pen,80)}</td>
+      <td class="td-trunc" style="max-width:200px;">${penHtml(r.pen,80)}</td>
     </tr>`;
   }).join(''):'<tr><td colspan="8"><div class="empty"><div class="empty-ico">🔍</div><div class="empty-msg">Tidak ada data</div></div></td></tr>');
   renderPag('ick-det-pag',total,P,'ick');
@@ -1132,7 +1134,7 @@ function renderPage(f,key){
       <td class="td-m">${fmtNum(r.real)}</td>
       <td>${progHtml(r.prog)}</td>
       <td>${statusPill(r.st)}</td>
-      <td class="td-wrap">${penHtml(r.pen,80)}</td>
+      <td class="td-trunc" style="max-width:200px;">${penHtml(r.pen,80)}</td>
     </tr>`).join(''):'<tr><td colspan="9"><div class="empty"><div class="empty-ico">🔍</div><div class="empty-msg">Tidak ada data</div></div></td></tr>');
   }else if(key==='done'){
     set('dn-tbody',sl.length?sl.map(r=>`<tr class="row-done">
@@ -1143,7 +1145,7 @@ function renderPage(f,key){
       <td class="td-m">${r.tgt||'—'}</td>
       <td class="td-m">${fmtNum(r.real)}</td>
       <td>${progHtml(r.prog)}</td>
-      <td class="td-wrap">${penHtml(r.pen,120)}</td>
+      <td class="td-trunc" style="max-width:200px;">${penHtml(r.pen,120)}</td>
     </tr>`).join(''):'<tr><td colspan="8"><div class="empty"><div class="empty-ico">⏳</div><div class="empty-msg">Belum ada yang terselesaikan</div></div></td></tr>');
   }else if(key==='attn'){
     set('an-tbody',sl.length?sl.map(r=>{const gap=thresh-r.prog;return `<tr class="row-attn">
@@ -1156,7 +1158,7 @@ function renderPage(f,key){
       <td>${progHtml(r.prog)}</td>
       <td><span class="pill p-warn">${pc(thresh)}</span></td>
       <td><span class="pill p-attn">-${pc(gap)}</span></td>
-      <td class="td-wrap">${penHtml(r.pen,100)}</td>
+      <td class="td-trunc" style="max-width:200px;">${penHtml(r.pen,100)}</td>
     </tr>`;}).join(''):'<tr><td colspan="10"><div class="empty"><div class="empty-ico">🎉</div><div class="empty-msg">Semua on track!</div></div></td></tr>');
   }
   renderPag(key==='all'?'all-pag':key==='done'?'dn-pag':'an-pag',total,P,key);
