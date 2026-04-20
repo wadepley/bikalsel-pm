@@ -526,7 +526,6 @@ thead th{background:var(--surf);}
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
             <th>Target Bln</th>
-            <th>Gap</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="dn-tbody"></tbody>
@@ -556,7 +555,6 @@ thead th{background:var(--surf);}
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
             <th>Target Bln</th>
-            <th>Gap</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="an-tbody"></tbody>
@@ -569,23 +567,11 @@ thead th{background:var(--surf);}
 
     <!-- ═══ EVALUASI INPUT ═══ -->
     <div id="tab-eval" style="display:none;">
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;">
-        <div class="kpi" style="--a:#F59E0B;">
-          <div class="kpi-num" id="ev-total" style="color:#D97706;">—</div>
-          <div class="kpi-lbl">Total Temuan</div>
-        </div>
-        <div class="kpi" style="--a:#EF4444;">
-          <div class="kpi-num" id="ev-prog-over" style="color:#DC2626;">—</div>
-          <div class="kpi-lbl">Progress &gt; 100%</div>
-        </div>
-        <div class="kpi" style="--a:#EF4444;">
-          <div class="kpi-num" id="ev-real-empty" style="color:#DC2626;">—</div>
-          <div class="kpi-lbl">Real. Kosong (Prog=100%)</div>
-        </div>
-        <div class="kpi" style="--a:#EF4444;">
-          <div class="kpi-num" id="ev-real-lt" style="color:#DC2626;">—</div>
-          <div class="kpi-lbl">Real. &lt; Target (Prog=100%)</div>
-        </div>
+      <div class="kpi-row kpi-r4" style="margin-bottom:12px;">
+        <div class="kpi" style="--ac:#F59E0B"><div class="kpi-ac"></div><div class="kpi-num" id="ev-total" style="color:#D97706;">—</div><div class="kpi-lbl">Total Temuan</div></div>
+        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="ev-prog-over" style="color:#DC2626;">—</div><div class="kpi-lbl">Progress &gt; 100%</div></div>
+        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="ev-real-empty" style="color:#DC2626;">—</div><div class="kpi-lbl">Real. Kosong (Prog=100%)</div></div>
+        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="ev-real-lt" style="color:#DC2626;">—</div><div class="kpi-lbl">Real. &lt; Target (Prog=100%)</div></div>
       </div>
       <div class="card">
         <div class="card-hd" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
@@ -1260,9 +1246,8 @@ function renderPage(f,key){
       <td class="td-m">${fmtNum(r.real)}</td>
       <td>${progHtml(r.prog)}</td>
       <td><span class="pill p-warn">${pc(thresh)}</span></td>
-      <td><span class="pill p-attn">-${pc(gap)}</span></td>
       <td style="font-size:11px;">${penHtml(r.pen,100)}</td>
-    </tr>`;}).join(''):'<tr><td colspan="10"><div class="empty"><div class="empty-ico">🎉</div><div class="empty-msg">Semua on track!</div></div></td></tr>');
+    </tr>`;}).join(''):'<tr><td colspan="9"><div class="empty"><div class="empty-ico">🎉</div><div class="empty-msg">Semua on track!</div></div></td></tr>');
   }
   renderPag(key==='all'?'all-pag':key==='done'?'dn-pag':'an-pag',total,P,key);
 }
