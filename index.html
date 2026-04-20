@@ -385,6 +385,11 @@ thead th{background:var(--surf);}
       Need Attention
       <span class="tn tn-danger" id="tn-attn">—</span>
     </div>
+    <div class="tab" data-tab="eval" onclick="goTab('eval')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Evaluasi Input
+      <span class="tn tn-danger" id="tn-eval" style="background:#F59E0B;color:#fff;"></span>
+    </div>
   </div>
 
   <!-- Content -->
@@ -561,7 +566,50 @@ thead th{background:var(--surf);}
     </div>
 
   </div>
-</div>
+
+    <!-- ═══ EVALUASI INPUT ═══ -->
+    <div id="tab-eval" style="display:none;">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+        <div class="kpi" style="--a:#F59E0B;">
+          <div class="kpi-num" id="ev-total" style="color:#D97706;">—</div>
+          <div class="kpi-lbl">Total Temuan</div>
+        </div>
+        <div class="kpi" style="--a:#EF4444;">
+          <div class="kpi-num" id="ev-prog-over" style="color:#DC2626;">—</div>
+          <div class="kpi-lbl">Progress &gt; 100%</div>
+        </div>
+        <div class="kpi" style="--a:#EF4444;">
+          <div class="kpi-num" id="ev-real-empty" style="color:#DC2626;">—</div>
+          <div class="kpi-lbl">Real. Kosong (Prog=100%)</div>
+        </div>
+        <div class="kpi" style="--a:#EF4444;">
+          <div class="kpi-num" id="ev-real-lt" style="color:#DC2626;">—</div>
+          <div class="kpi-lbl">Real. &lt; Target (Prog=100%)</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div class="card-title">Evaluasi Kualitas Input Data</div>
+            <div class="card-sub" id="ev-sub">Memeriksa konsistensi data yang diinput PIC Satker</div>
+          </div>
+        </div>
+        <div class="tbl-wrap"><table>
+          <thead style="position:sticky;top:0;z-index:10;"><tr>
+            <th>PS</th>
+            <th style="min-width:140px;">Nama ICK</th>
+            <th style="min-width:170px;">Narasi Target ICK</th>
+            <th>Unit Kerja</th>
+            <th>Target</th>
+            <th>Realisasi</th>
+            <th style="min-width:100px;">Progress</th>
+            <th style="min-width:200px;">⚠ Temuan</th>
+          </tr></thead>
+          <tbody id="ev-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
 </div>
 <div class="toast" id="toast"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -690,11 +738,11 @@ function setMode(m){
 }
 
 // ── Tab ──
-const TITLES={overview:'Evaluasi Kinerja Bulanan BI Kalsel',all:'Detail Capaian Keseluruhan ICK',done:'Sub ICK Terselesaikan',attn:'Sub ICK Need Attention'};
+const TITLES={overview:'Evaluasi Kinerja Bulanan BI Kalsel',all:'Detail Capaian Keseluruhan ICK',done:'Sub ICK Terselesaikan',attn:'Sub ICK Need Attention',eval:'Evaluasi Input Data'};
 function goTab(t){
   S.tab=t;
   document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===t));
-  ['overview','all','done','attn'].forEach(x=>$('tab-'+x).style.display=x===t?'block':'none');
+  ['overview','all','done','attn','eval'].forEach(x=>$('tab-'+x).style.display=x===t?'block':'none');
   txt('page-title',TITLES[t]);
   renderCurrent();
 }
@@ -800,6 +848,60 @@ function renderOverview(){
 
 
 // ── PS Summary: Accelerated + Need Accelerate ──
+
+function renderEval(){
+  const m=CFG.MODES[S.mode];
+  const rows=D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const issues=[];
+
+  rows.forEach(r=>{
+    const probs=[];
+    // Rule 1: Progress tidak boleh > 100%
+    if(r.prog>1.001){
+      probs.push('<span style="color:#DC2626;font-weight:600;">Progress '+pc(r.prog)+' melebihi 100%</span> — seharusnya max 100%');
+    }
+    // Rule 2: Progress 100% → realisasi wajib diisi
+    if(r.prog>=0.999&&(!r.real||r.real===0)){
+      probs.push('<span style="color:#DC2626;font-weight:600;">Realisasi kosong</span> — wajib diisi jika progress 100%');
+    }
+    // Rule 3: Progress 100% → realisasi >= target
+    if(r.prog>=0.999&&r.real&&r.real>0&&r.tgt){
+      try{
+        const tStr=String(r.tgt).replace(/[Rp±<>\s]/g,'').replace(/\./g,'').replace(',','.');
+        const tNum=parseFloat(tStr);
+        if(!isNaN(tNum)&&r.real<tNum*0.99){
+          probs.push('<span style="color:#DC2626;font-weight:600;">Realisasi ('+fmtNum(r.real)+') &lt; Target ('+r.tgt+')</span> — tidak konsisten dengan progress 100%');
+        }
+      }catch(e){}
+    }
+    if(probs.length) issues.push({...r,probs});
+  });
+
+  // Update KPI counts
+  const progOver=issues.filter(r=>r.probs.some(p=>p.includes('melebihi 100%'))).length;
+  const realEmpty=issues.filter(r=>r.probs.some(p=>p.includes('kosong'))).length;
+  const realLt=issues.filter(r=>r.probs.some(p=>p.includes('Realisasi ('))).length;
+  txt('ev-total',issues.length);
+  txt('ev-prog-over',progOver);
+  txt('ev-real-empty',realEmpty);
+  txt('ev-real-lt',realLt);
+  txt('tn-eval',issues.length||'');
+  txt('ev-sub',m.lbl+' · '+issues.length+' temuan dari '+rows.length+' Sub-ICK');
+
+  set('ev-tbody',issues.length?issues.map(r=>
+    '<tr style="background:#FFFBEB;">'
+    +'<td><span class="pill p-gray" style="font-size:9px;">PS '+r.ps+'</span></td>'
+    +'<td class="td-trunc td-m" style="max-width:160px;">'+r.ick_nm+'</td>'
+    +'<td style="font-size:11px;">'+( r.narasi||r.sub_nm)+'</td>'
+    +'<td>'+ukChip(r.uk)+'</td>'
+    +'<td class="td-m">'+( r.tgt||'—')+'</td>'
+    +'<td class="td-m">'+fmtNum(r.real)+'</td>'
+    +'<td>'+progHtml(r.prog)+'</td>'
+    +'<td style="font-size:11px;line-height:1.6;">'+r.probs.join('<br>')+'</td>'
+    +'</tr>'
+  ).join(''):'<tr><td colspan="8"><div class="empty"><div class="empty-ico">✅</div><div class="empty-msg">Tidak ada temuan — data sudah konsisten!</div></div></td></tr>');
+}
+
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
   const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
