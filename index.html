@@ -525,8 +525,6 @@ thead th{background:var(--surf);}
             <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
-            <th>Target Bln</th>
-            <th>Gap</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="dn-tbody"></tbody>
@@ -555,8 +553,6 @@ thead th{background:var(--surf);}
             <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
-            <th>Target Bln</th>
-            <th>Gap</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="an-tbody"></tbody>
@@ -752,6 +748,7 @@ function renderCurrent(){
   else if(S.tab==='all')renderAll();
   else if(S.tab==='done'){renderDoneKPI();renderDone();}
   else if(S.tab==='attn'){renderAttnKPI();renderAttn();}
+  else if(S.tab==='eval')renderEval();
 }
 function updateNavBadges(){
   const rows=getRows();
