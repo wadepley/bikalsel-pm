@@ -522,9 +522,10 @@ thead th{background:var(--surf);}
             <th style="min-width:150px;">Nama ICK</th>
             <th style="min-width:180px;">Narasi Target ICK</th>
             <th>Unit Kerja</th>
+            <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
-            <th style="min-width:200px;">Penjelasan</th>
+            <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="dn-tbody"></tbody>
         </table></div>
@@ -549,9 +550,10 @@ thead th{background:var(--surf);}
             <th style="min-width:150px;">Nama ICK</th>
             <th style="min-width:180px;">Narasi Target ICK</th>
             <th>Unit Kerja</th>
+            <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
-            <th style="min-width:200px;">Penjelasan</th>
+            <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
           <tbody id="an-tbody"></tbody>
         </table></div>
@@ -559,7 +561,7 @@ thead th{background:var(--surf);}
       </div>
     </div>
 
-  </div>
+  
 
     <!-- ═══ EVALUASI INPUT ═══ -->
     <div id="tab-eval" style="display:none;">
@@ -588,6 +590,9 @@ thead th{background:var(--surf);}
         </table></div>
       </div>
     </div>
+  </div>
+
+
   </div>
 </div>
 <div class="toast" id="toast"></div>
@@ -725,7 +730,20 @@ function goTab(t){
   txt('page-title',TITLES[t]);
   renderCurrent();
 }
-function refreshAll(){updateNavBadges();renderCurrent();}
+function refreshAll(){
+  updateNavBadges();renderCurrent();
+  // Update eval badge even when not on eval tab
+  if(S.tab!=='eval'){
+    const m=CFG.MODES[S.mode];
+    const rows=D.filter(r=>r.per===m.per);
+    let evCount=0;
+    rows.forEach(r=>{
+      if(r.prog>1.001) evCount++;
+      else if(r.prog>=0.999&&(!r.real||r.real===0)) evCount++;
+    });
+    txt('tn-eval',evCount||'');
+  }
+}
 function renderCurrent(){
   if(S.tab==='overview')renderOverview();
   else if(S.tab==='all')renderAll();
@@ -1224,10 +1242,11 @@ function renderPage(f,key){
       <td class="td-trunc td-m">${r.ick_nm}</td>
       <td style="font-size:11px;">${r.narasi||r.sub_nm}</td>
       <td>${ukChip(r.uk)}</td>
+      <td class="td-m">${r.tgt||'—'}</td>
       <td class="td-m">${fmtNum(r.real)}</td>
       <td>${progHtml(r.prog)}</td>
-      <td style="font-size:11px;">${r.tgt?'<span style="color:#6B7280;font-size:10px;">Target: '+r.tgt+'</span><br>':''  }${penHtml(r.pen,120)}</td>
-    </tr>`).join(''):'<tr><td colspan="7"><div class="empty"><div class="empty-ico">⏳</div><div class="empty-msg">Belum ada yang terselesaikan</div></div></td></tr>');
+      <td style="font-size:11px;">${penHtml(r.pen,120)}</td>
+    </tr>`).join(''):'<tr><td colspan="8"><div class="empty"><div class="empty-ico">⏳</div><div class="empty-msg">Belum ada yang terselesaikan</div></div></td></tr>');
   }else if(key==='attn'){
     set('an-tbody',sl.length?sl.map(r=>{const gap=thresh-r.prog;return `<tr class="row-attn">
       <td><span class="pill p-gray" style="font-size:9px;">PS ${r.ps}</span></td>
