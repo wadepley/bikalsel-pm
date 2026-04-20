@@ -522,11 +522,9 @@ thead th{background:var(--surf);}
             <th style="min-width:150px;">Nama ICK</th>
             <th style="min-width:180px;">Narasi Target ICK</th>
             <th>Unit Kerja</th>
-            <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
-            <th>Target Bln</th>
-            <th style="min-width:170px;">Penjelasan</th>
+            <th style="min-width:200px;">Penjelasan</th>
           </tr></thead>
           <tbody id="dn-tbody"></tbody>
         </table></div>
@@ -551,11 +549,9 @@ thead th{background:var(--surf);}
             <th style="min-width:150px;">Nama ICK</th>
             <th style="min-width:180px;">Narasi Target ICK</th>
             <th>Unit Kerja</th>
-            <th>Target</th>
             <th>Realisasi</th>
             <th style="min-width:110px;">Progress</th>
-            <th>Target Bln</th>
-            <th style="min-width:170px;">Penjelasan</th>
+            <th style="min-width:200px;">Penjelasan</th>
           </tr></thead>
           <tbody id="an-tbody"></tbody>
         </table></div>
@@ -574,11 +570,8 @@ thead th{background:var(--surf);}
         <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="ev-real-lt" style="color:#DC2626;">—</div><div class="kpi-lbl">Real. &lt; Target (Prog=100%)</div></div>
       </div>
       <div class="card">
-        <div class="card-hd" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-          <div>
-            <div class="card-title">Evaluasi Kualitas Input Data</div>
-            <div class="card-sub" id="ev-sub">Memeriksa konsistensi data yang diinput PIC Satker</div>
-          </div>
+        <div class="card-hd">
+          <div><div class="card-title">Evaluasi Kualitas Input Data</div><div class="card-sub" id="ev-sub">Memeriksa konsistensi data yang diinput PIC Satker</div></div>
         </div>
         <div class="tbl-wrap"><table>
           <thead style="position:sticky;top:0;z-index:10;"><tr>
@@ -1231,11 +1224,10 @@ function renderPage(f,key){
       <td class="td-trunc td-m">${r.ick_nm}</td>
       <td style="font-size:11px;">${r.narasi||r.sub_nm}</td>
       <td>${ukChip(r.uk)}</td>
-      <td class="td-m">${r.tgt||'—'}</td>
       <td class="td-m">${fmtNum(r.real)}</td>
       <td>${progHtml(r.prog)}</td>
-      <td style="font-size:11px;">${penHtml(r.pen,120)}</td>
-    </tr>`).join(''):'<tr><td colspan="8"><div class="empty"><div class="empty-ico">⏳</div><div class="empty-msg">Belum ada yang terselesaikan</div></div></td></tr>');
+      <td style="font-size:11px;">${r.tgt?'<span style="color:#6B7280;font-size:10px;">Target: '+r.tgt+'</span><br>':''  }${penHtml(r.pen,120)}</td>
+    </tr>`).join(''):'<tr><td colspan="7"><div class="empty"><div class="empty-ico">⏳</div><div class="empty-msg">Belum ada yang terselesaikan</div></div></td></tr>');
   }else if(key==='attn'){
     set('an-tbody',sl.length?sl.map(r=>{const gap=thresh-r.prog;return `<tr class="row-attn">
       <td><span class="pill p-gray" style="font-size:9px;">PS ${r.ps}</span></td>
