@@ -410,15 +410,13 @@ thead th{background:var(--surf);}
     </div>
   </div>
 
-  <!-- ── Period Selector (HORIZONTAL) ── -->
+  <!-- ── Period Selector (HORIZONTAL, DINAMIS) ── -->
   <div class="period-bar">
     <span class="period-bar-lbl">📅 Periode</span>
-    <div class="period-btns">
-      <button class="pbtn" id="pb-jan" onclick="setMode('jan')">Januari 2026</button>
-      <button class="pbtn" id="pb-feb" onclick="setMode('feb')">Februari 2026</button>
-      <button class="pbtn active" id="pb-mar" onclick="setMode('mar')">Maret 2026</button>
+    <div class="period-btns" id="period-btns-container">
+      <!-- Di-generate dinamis oleh buildPeriodBar() setelah data dimuat -->
+      <span style="font-size:11px;color:var(--s5);padding:6px 10px;">Memuat periode...</span>
     </div>
-    
   </div>
 
   <!-- Tab bar -->
@@ -672,20 +670,52 @@ Chart.defaults.font.family = 'DM Sans, sans-serif';
 Chart.defaults.font.size = 11;
 Chart.defaults.color = '#475569';
 let D=[];
+
+// ── Mapping bulan Indonesia ──
+const MONTH_ID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+// ── Bangun CFG.MODES secara dinamis dari periode yang ada di data ──
+function buildModes(periods){
+  // periods: sorted array of 'YYYY-MM' strings
+  const modes={};
+  periods.forEach((per,idx)=>{
+    const [yr,mm]=per.split('-');
+    const bln=parseInt(mm,10);
+    const key=per; // gunakan 'YYYY-MM' sebagai key (tidak lagi alias jan/feb/mar)
+    const prevPer=idx>0?periods[idx-1]:null;
+    const prevLbl=prevPer?MONTH_ID[parseInt(prevPer.split('-')[1],10)-1]:null;
+    modes[key]={per,bln,lbl:MONTH_ID[bln-1]+' '+yr,prevPer,prevLbl};
+  });
+  return modes;
+}
+
 const CFG={
   UKS:['FDSEK','FPPUKIS','HUMAS','ICO','KPKWP','PM','PUR','RIRU','SP','TPID'],
   PSS:[1,2,5,6,7,8,9,10,11],
   UK_COLOR:{FDSEK:'#6366F1',FPPUKIS:'#3B82F6',HUMAS:'#8B5CF6',ICO:'#EC4899',
     KPKWP:'#0EA5E9',PM:'#14B8A6',PUR:'#F97316',RIRU:'#EAB308',SP:'#10B981',TPID:'#EF4444'},
-  MODES:{
-    jan:{per:'2026-01',bln:1,lbl:'Januari 2026',prevPer:null,prevLbl:null},
-    feb:{per:'2026-02',bln:2,lbl:'Februari 2026',prevPer:'2026-01',prevLbl:'Januari'},
-    mar:{per:'2026-03',bln:3,lbl:'Maret 2026',prevPer:'2026-02',prevLbl:'Februari'},
-  },
+  MODES:{}, // akan diisi dinamis setelah data dimuat
   PER_PAGE:15,
 };
 
-let S={mode:'mar',tab:'overview',ukF:new Set(),allSt:'',ickTab:'all',ickUK:'',pages:{all:1,done:1,attn:1,ick:1},charts:{}};
+// ── Render tombol periode dinamis ──
+function buildPeriodBar(periods){
+  const container=document.getElementById('period-btns-container');
+  if(!container) return;
+  // Rebuild MODES dari periods yang ada di data
+  CFG.MODES=buildModes(periods);
+  // Set mode ke periode terbaru
+  const latestPer=periods[periods.length-1];
+  S.mode=latestPer;
+  // Render tombol
+  container.innerHTML=periods.map(per=>{
+    const m=CFG.MODES[per];
+    const isActive=per===latestPer;
+    return `<button class="pbtn${isActive?' active':''}" id="pb-${per}" onclick="setMode('${per}')">${m.lbl}</button>`;
+  }).join('');
+}
+
+let S={mode:'2026-03',tab:'overview',ukF:new Set(),allSt:'',ickTab:'all',ickUK:'',pages:{all:1,done:1,attn:1,ick:1},charts:{}};
 let _pd={};
 
 // ── Helpers ──
@@ -733,7 +763,7 @@ function cl(id){$('s'+id).style.display='';$('f'+id).style.display='none';}
 
 // ── Data ──
 function getRows(){
-  const p=CFG.MODES[S.mode].per;
+  const p=S.mode; // S.mode sudah berupa 'YYYY-MM'
   return D.filter(r=>r.per===p&&(S.ukF.size===0||S.ukF.has(r.uk)));
 }
 function fRows(rows,{st='',search=''}={}){
@@ -774,11 +804,12 @@ function updateSidebarStats(){
 }
 
 // ── Mode ──
-function setMode(m){
-  S.mode=m;
-  ['jan','feb','mar'].forEach(x=>$('pb-'+x).classList.toggle('active',x===m));
-  const c=CFG.MODES[m],thresh=c.bln/12;
-  
+function setMode(per){
+  S.mode=per;
+  // Update tombol aktif
+  document.querySelectorAll('#period-btns-container .pbtn').forEach(btn=>{
+    btn.classList.toggle('active', btn.id==='pb-'+per);
+  });
   refreshAll();
 }
 
@@ -795,8 +826,7 @@ function refreshAll(){
   updateNavBadges();renderCurrent();
   // Update eval badge even when not on eval tab
   if(S.tab!=='eval'){
-    const m=CFG.MODES[S.mode];
-    const rows=D.filter(r=>r.per===m.per);
+    const rows=D.filter(r=>r.per===S.mode);
     let evCount=0;
     rows.forEach(r=>{
       if(r.prog>1.001) evCount++;
@@ -821,10 +851,12 @@ function updateNavBadges(){
 
 // ── Overview ──
 function renderOverview(){
-  const rows=getRows(),m=CFG.MODES[S.mode],thresh=m.bln/12;
+  const m=CFG.MODES[S.mode];
+  if(!m) return; // belum ada data
+  const rows=getRows(),thresh=m.bln/12;
 
   // ── ICK-level stats (avg prog per unique UK+ICK) ──
-  const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const ickRows=ICK_D.filter(r=>r.per===S.mode&&(S.ukF.size===0||S.ukF.has(r.uk)));
   const ickCount=ickRows.length;
   const ickAvg=ickCount?ickRows.reduce((s,r)=>s+r.avg_prog,0)/ickCount:0;
   const ickAcc=ickRows.filter(r=>r.avg_prog>=1).length;
@@ -840,7 +872,7 @@ function renderOverview(){
 
   // ── Delta vs previous period ──
   const modes=Object.values(CFG.MODES);
-  const curIdx=modes.findIndex(x=>x.per===m.per);
+  const curIdx=modes.findIndex(x=>x.per===S.mode);
   const prevMode=curIdx>0?modes[curIdx-1]:null;
   const prevIck=prevMode?ICK_D.filter(r=>r.per===prevMode.per&&(S.ukF.size===0||S.ukF.has(r.uk))):[];
   const prevRows=prevMode?D.filter(r=>r.per===prevMode.per&&(S.ukF.size===0||S.ukF.has(r.uk))):[];
@@ -910,7 +942,8 @@ function renderOverview(){
 
 function renderEval(){
   const m=CFG.MODES[S.mode];
-  const rows=D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  if(!m) return;
+  const rows=D.filter(r=>r.per===S.mode&&(S.ukF.size===0||S.ukF.has(r.uk)));
   const issues=[];
 
   rows.forEach(r=>{
@@ -963,7 +996,8 @@ function renderEval(){
 
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
-  const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  if(!m) return;
+  const ickRows=ICK_D.filter(r=>r.per===S.mode&&(S.ukF.size===0||S.ukF.has(r.uk)));
   const accRows=ickRows.filter(r=>r.st==='accelerated');
   const naRows=ickRows.filter(r=>r.st==='need_accelerate');
   txt('ps-acc-n',accRows.length); txt('ps-na-n',naRows.length);
@@ -1051,7 +1085,8 @@ function renderPSSummary(){
 // ── Bar Charts: UK + PS ──
 function renderBarCharts(){
   const m=CFG.MODES[S.mode];
-  const curPer=m.per,prevPer=m.prevPer;
+  if(!m) return;
+  const curPer=S.mode,prevPer=m.prevPer;
   const prevLbl=m.prevLbl||null,xLbl=m.lbl.split(' ')[0];
 
   const shortL=l=>l?l.slice(0,3)+"'26":'';const label=prevLbl?`${shortL(xLbl)} vs ${shortL(prevLbl)}`:shortL(xLbl)||xLbl;
@@ -1179,6 +1214,7 @@ function renderICKDetail(){
   S.ickUK=$('ick-uk-filter')?.value||'';
   const rows=getRows().filter(r=>!S.ickUK||r.uk===S.ickUK);
   const m=CFG.MODES[S.mode];
+  if(!m) return;
 
   // Count per status for sub-tab badges
   txt('ick-n-all',rows.length);
@@ -1193,7 +1229,8 @@ function renderICKDetail(){
 function renderICKPage(filtered){
   const P=CFG.PER_PAGE,total=filtered.length,start=(S.pages.ick-1)*P;
   const sl=filtered.slice(start,start+P);
-  const thresh=CFG.MODES[S.mode].bln/12;
+  const m=CFG.MODES[S.mode];
+  const thresh=m?m.bln/12:0.25;
   _pd.ick=filtered;
   set('ick-det-tbody',sl.length?sl.map(r=>{
     const rowCls=r.st==='done'?'row-done':r.st==='need_attention'?'row-attn':'';
@@ -1284,7 +1321,8 @@ function renderAll(){
 function renderPage(f,key){
   const P=CFG.PER_PAGE,total=f.length,start=(S.pages[key]-1)*P,sl=f.slice(start,start+P);
   _pd[key]=f;
-  const thresh=CFG.MODES[S.mode].bln/12;
+  const m=CFG.MODES[S.mode];
+  const thresh=m?m.bln/12:0.25;
   if(key==='all'){
     set('all-tbody',sl.length?sl.map(r=>`<tr>
       <td><span class="pill p-gray tt" style="font-size:9px;" data-tip="${PS_NAMES[String(r.ps)]||'PS '+r.ps}">PS ${r.ps}</span></td>
@@ -1328,10 +1366,11 @@ function renderPage(f,key){
 // ── Done KPI ──
 function renderDoneKPI(){
   const rows=getRows().filter(r=>r.st==='done');
+  const m=CFG.MODES[S.mode];
   txt('d-count',rows.length);
   const avg=rows.length?rows.reduce((s,r)=>s+r.prog,0)/rows.length:0;
   txt('d-avg',pc(avg));txt('d-over',rows.filter(r=>r.prog>1).length);txt('d-ps',new Set(rows.map(r=>r.ps)).size);
-  txt('done-sub',CFG.MODES[S.mode].lbl+' · '+rows.length+' item');
+  txt('done-sub',(m?m.lbl:S.mode)+' · '+rows.length+' item');
 }
 function renderDone(){
   const f=fRows(_applyFilter('dn',getRows().filter(r=>r.st==='done')),{search:$('dn-s')?.value});
@@ -1340,7 +1379,9 @@ function renderDone(){
 
 // ── Attn KPI ──
 function renderAttnKPI(){
-  const m=CFG.MODES[S.mode],thresh=m.bln/12;
+  const m=CFG.MODES[S.mode];
+  if(!m) return;
+  const thresh=m.bln/12;
   const rows=getRows().filter(r=>r.st==='need_attention');
   txt('a-count',rows.length);
   const avg=rows.length?rows.reduce((s,r)=>s+r.prog,0)/rows.length:0;
@@ -1599,7 +1640,7 @@ async function captureScreenshot(){
   if(btn){btn.style.opacity='0.5';btn.style.pointerEvents='none';}
   if(toast){toast.style.display='block';toast.textContent='Menyiapkan screenshot...';}
   try{
-    const periodPill = CFG.MODES[S.mode].lbl;
+    const periodPill = (CFG.MODES[S.mode]||{lbl:S.mode}).lbl;
 
     // ── Step 1: Convert all Chart.js canvases to <img> temporarily ──
     const canvasMap = [];
@@ -1639,11 +1680,11 @@ async function captureScreenshot(){
       </div>`;
     wrapper.appendChild(header);
 
-    // Period pills
+    // Period pills — dinamis dari data
     const periodBar = document.createElement('div');
     periodBar.style.cssText='display:flex;align-items:center;gap:6px;margin-bottom:16px;';
-    ['jan','feb','mar'].forEach(m=>{
-      const cfg=CFG.MODES[m];const isActive=m===S.mode;
+    Object.entries(CFG.MODES).forEach(([per,cfg])=>{
+      const isActive=per===S.mode;
       const b=document.createElement('span');
       b.style.cssText=`padding:5px 14px;border-radius:7px;font-size:12px;font-weight:500;border:1px solid ${isActive?'#3B82F6':'#E2E8F0'};background:${isActive?'#3B82F6':'#fff'};color:${isActive?'#fff':'#64748B'};`;
       b.textContent=cfg.lbl;
@@ -1743,7 +1784,7 @@ async function fetchFromAppsScript(){
     setTimeout(()=>ctrl.abort(),15000);
     const r=await fetch(APPS_URL,{signal:ctrl.signal});
     if(!r.ok) throw new Error('HTTP '+r.status);
-    if(isFirstLoad) setLoading(60,'Memproses data...','Parsing '+r.headers.get('content-length')||'data'+'...');
+    if(isFirstLoad) setLoading(60,'Memproses data...','Parsing data...');
     const json=await r.json();
     if(!json.ok) throw new Error(json.error||'Response tidak valid');
     const{D:nD,ICK_D:nI,rows,updated}=json.data;
@@ -1753,7 +1794,10 @@ async function fetchFromAppsScript(){
     ICK_D.length=0; nI.forEach(x=>ICK_D.push(x));
     txt('data-source-name','Google Sheets (Live)');
     txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
-    if(!isFirstLoad) showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat!');
+    // ── Bangun tombol periode dinamis dari data yang ada ──
+    const periods=[...new Set(D.map(r=>r.per))].filter(Boolean).sort();
+    buildPeriodBar(periods);
+    if(!isFirstLoad) showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat! Periode: '+periods.join(', '));
     refreshAll();
     if(isFirstLoad){ setLoading(100,'Selesai!',''); setTimeout(hideLoading, 400); }
   }catch(e){
@@ -1786,7 +1830,9 @@ function handleFileUpload(file){
       ICK_D.length=0; result.ICK_D.forEach(x=>ICK_D.push(x));
       txt('data-source-name',file.name);
       txt('data-source-date',new Date().toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})+' ('+result.D.length+' baris)');
-      showUploadStatus('ok','✅ '+result.D.length+' baris dimuat!');
+      // ── Bangun tombol periode dinamis dari data ──
+      buildPeriodBar(result.periods);
+      showUploadStatus('ok','✅ '+result.D.length+' baris dimuat! Periode: '+result.periods.join(', '));
       refreshAll();
     }catch(err){showUploadStatus('error','❌ '+err.message);}
   };
@@ -1895,7 +1941,8 @@ function mkReadMore(id,shortText,fullText,color){
 
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
-  const per=m.per;
+  if(!m) return;
+  const per=S.mode;
   const thr=m.bln/12;
 
   const subRows=D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
@@ -2036,7 +2083,7 @@ function restoreSheetUrl(){
 
 (function(){
   txt('data-source-name','⏳ Memuat dari Google Sheets...');
-  updateNavBadges(); renderOverview();
+  // Jangan render dulu — tunggu data dari Google Sheets (buildPeriodBar akan dipanggil di sana)
   restoreSheetUrl();
 })();
 
