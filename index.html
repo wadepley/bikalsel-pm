@@ -410,15 +410,12 @@ thead th{background:var(--surf);}
     </div>
   </div>
 
-  <!-- ── Period Selector (HORIZONTAL) ── -->
+  <!-- ── Period Selector (HORIZONTAL) — auto-generated from data ── -->
   <div class="period-bar">
-    <span class="period-bar-lbl">📅 Periode</span>
-    <div class="period-btns">
-      <button class="pbtn" id="pb-jan" onclick="setMode('jan')">Januari 2026</button>
-      <button class="pbtn" id="pb-feb" onclick="setMode('feb')">Februari 2026</button>
-      <button class="pbtn active" id="pb-mar" onclick="setMode('mar')">Maret 2026</button>
+    <span class="period-bar-lbl">&#128197; Periode</span>
+    <div class="period-btns" id="period-btns-wrap">
+      <span style="font-size:11px;color:#94A3B8;">Memuat periode...</span>
     </div>
-    
   </div>
 
   <!-- Tab bar -->
@@ -677,16 +674,48 @@ const CFG={
   PSS:[1,2,5,6,7,8,9,10,11],
   UK_COLOR:{FDSEK:'#6366F1',FPPUKIS:'#3B82F6',HUMAS:'#8B5CF6',ICO:'#EC4899',
     KPKWP:'#0EA5E9',MI:'#D946EF',PM:'#14B8A6',PUR:'#F97316',RIRU:'#EAB308',SP:'#10B981',TPID:'#EF4444'},
-  MODES:{
-    jan:{per:'2026-01',bln:1,lbl:'Januari 2026',prevPer:null,prevLbl:null},
-    feb:{per:'2026-02',bln:2,lbl:'Februari 2026',prevPer:'2026-01',prevLbl:'Januari'},
-    mar:{per:'2026-03',bln:3,lbl:'Maret 2026',prevPer:'2026-02',prevLbl:'Februari'},
-  },
+  MODES:{},  // populated dynamically by buildModes()
   PER_PAGE:15,
 };
 
-let S={mode:'mar',tab:'overview',ukF:new Set(),allSt:'',ickTab:'all',ickUK:'',pages:{all:1,done:1,attn:1,ick:1},charts:{}};
+let S={mode:'',tab:'overview',ukF:new Set(),allSt:'',ickTab:'all',ickUK:'',pages:{all:1,done:1,attn:1,ick:1},charts:{}};
 let _pd={};
+
+// ── Dynamic Period / Mode Builder ──
+const MONTH_NAMES_ID=['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+function buildModes(){
+  // Collect all unique 'YYYY-MM' periods from D
+  const pers=[...new Set(D.map(r=>r.per))].filter(Boolean).sort();
+  if(!pers.length) return false;
+
+  // Build CFG.MODES dynamically
+  CFG.MODES={};
+  pers.forEach((per,i)=>{
+    const[y,mm]=per.split('-');
+    const bln=parseInt(mm,10);
+    const lbl=MONTH_NAMES_ID[bln]+' '+y;
+    const prevPer=i>0?pers[i-1]:null;
+    const prevMm=prevPer?parseInt(prevPer.split('-')[1],10):null;
+    const prevLbl=prevMm?MONTH_NAMES_ID[prevMm]:null;
+    CFG.MODES[per]={per,bln,lbl,prevPer,prevLbl};
+  });
+
+  // Set active mode to latest period, keeping current if still valid
+  if(!CFG.MODES[S.mode]) S.mode=pers[pers.length-1];
+  return true;
+}
+
+function renderPeriodBar(){
+  const wrap=document.getElementById('period-btns-wrap');
+  if(!wrap) return;
+  const pers=Object.keys(CFG.MODES).sort();
+  wrap.innerHTML=pers.map(per=>{
+    const m=CFG.MODES[per];
+    const isActive=per===S.mode;
+    return`<button class="pbtn${isActive?' active':''}" onclick="setMode('${per}')">${m.lbl}</button>`;
+  }).join('');
+}
 
 // ── Helpers ──
 const pc=(v,d=1)=>(v*100).toFixed(d)+'%';
@@ -775,10 +804,9 @@ function updateSidebarStats(){
 
 // ── Mode ──
 function setMode(m){
+  if(!CFG.MODES[m]) return;
   S.mode=m;
-  ['jan','feb','mar'].forEach(x=>$('pb-'+x).classList.toggle('active',x===m));
-  const c=CFG.MODES[m],thresh=c.bln/12;
-  
+  renderPeriodBar();
   refreshAll();
 }
 
@@ -792,6 +820,8 @@ function goTab(t){
   renderCurrent();
 }
 function refreshAll(){
+  buildModes();
+  renderPeriodBar();
   updateNavBadges();renderCurrent();
   // Update eval badge even when not on eval tab
   if(S.tab!=='eval'){
@@ -1430,7 +1460,7 @@ function handleFileUpload(file){
       txt('data-source-name', file.name);
       txt('data-source-date', 'Diupload: '+new Date().toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'}));
       showUploadStatus('ok','✅ '+result.D.length+' baris dimuat ('+result.periods.join(', ')+')');
-      S.mode='mar'; // reset to last period
+      S.mode=''; // will be set to latest by buildModes()
       refreshAll();
     }catch(err){
       console.error('Upload error:', err);
@@ -1642,7 +1672,7 @@ async function captureScreenshot(){
     // Period pills
     const periodBar = document.createElement('div');
     periodBar.style.cssText='display:flex;align-items:center;gap:6px;margin-bottom:16px;';
-    ['jan','feb','mar'].forEach(m=>{
+    Object.keys(CFG.MODES).sort().forEach(m=>{
       const cfg=CFG.MODES[m];const isActive=m===S.mode;
       const b=document.createElement('span');
       b.style.cssText=`padding:5px 14px;border-radius:7px;font-size:12px;font-weight:500;border:1px solid ${isActive?'#3B82F6':'#E2E8F0'};background:${isActive?'#3B82F6':'#fff'};color:${isActive?'#fff':'#64748B'};`;
@@ -2036,7 +2066,6 @@ function restoreSheetUrl(){
 
 (function(){
   txt('data-source-name','⏳ Memuat dari Google Sheets...');
-  updateNavBadges(); renderOverview();
   restoreSheetUrl();
 })();
 
