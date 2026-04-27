@@ -410,13 +410,15 @@ thead th{background:var(--surf);}
     </div>
   </div>
 
-  <!-- ── Period Selector (HORIZONTAL, DINAMIS) ── -->
+  <!-- ── Period Selector (HORIZONTAL) ── -->
   <div class="period-bar">
     <span class="period-bar-lbl">📅 Periode</span>
-    <div class="period-btns" id="period-btns-container">
-      <!-- Di-generate dinamis oleh buildPeriodBar() setelah data dimuat -->
-      <span style="font-size:11px;color:var(--s5);padding:6px 10px;">Memuat periode...</span>
+    <div class="period-btns">
+      <button class="pbtn" id="pb-jan" onclick="setMode('jan')">Januari 2026</button>
+      <button class="pbtn" id="pb-feb" onclick="setMode('feb')">Februari 2026</button>
+      <button class="pbtn active" id="pb-mar" onclick="setMode('mar')">Maret 2026</button>
     </div>
+    
   </div>
 
   <!-- Tab bar -->
@@ -541,7 +543,7 @@ thead th{background:var(--surf);}
             <button class="fchip a-danger" data-ast="need_attention" onclick="setAllSt(this,'need_attention')" style="font-size:10px;">Need Attention</button>
           </div>
         </div>
-        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="all-uk-all" onclick="toggleFilterUK('all','')" style="font-size:10px;">Semua</button><button class="fchip" id="all-uk-FDSEK" onclick="toggleFilterUK('all','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="all-uk-FPPUKIS" onclick="toggleFilterUK('all','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="all-uk-HUMAS" onclick="toggleFilterUK('all','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="all-uk-ICO" onclick="toggleFilterUK('all','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="all-uk-KPKWP" onclick="toggleFilterUK('all','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="all-uk-PM" onclick="toggleFilterUK('all','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="all-uk-PUR" onclick="toggleFilterUK('all','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="all-uk-RIRU" onclick="toggleFilterUK('all','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="all-uk-SP" onclick="toggleFilterUK('all','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="all-uk-TPID" onclick="toggleFilterUK('all','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="all-ps-all" onclick="toggleFilterPS('all',0)" style="font-size:10px;">Semua</button><button class="fchip" id="all-ps-1" onclick="toggleFilterPS('all',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="all-ps-2" onclick="toggleFilterPS('all',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="all-ps-5" onclick="toggleFilterPS('all',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="all-ps-6" onclick="toggleFilterPS('all',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="all-ps-7" onclick="toggleFilterPS('all',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="all-ps-8" onclick="toggleFilterPS('all',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="all-ps-9" onclick="toggleFilterPS('all',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="all-ps-10" onclick="toggleFilterPS('all',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="all-ps-11" onclick="toggleFilterPS('all',11)" style="font-size:10px;">PS 11</button></div></div>
+        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="all-uk-all" onclick="toggleFilterUK('all','')" style="font-size:10px;">Semua</button><button class="fchip" id="all-uk-FDSEK" onclick="toggleFilterUK('all','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="all-uk-FPPUKIS" onclick="toggleFilterUK('all','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="all-uk-HUMAS" onclick="toggleFilterUK('all','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="all-uk-ICO" onclick="toggleFilterUK('all','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="all-uk-KPKWP" onclick="toggleFilterUK('all','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="all-uk-MI" onclick="toggleFilterUK('all','MI')" style="font-size:10px;color:#D946EF;border-color:#D946EF33;">MI</button><button class="fchip" id="all-uk-PM" onclick="toggleFilterUK('all','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="all-uk-PUR" onclick="toggleFilterUK('all','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="all-uk-RIRU" onclick="toggleFilterUK('all','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="all-uk-SP" onclick="toggleFilterUK('all','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="all-uk-TPID" onclick="toggleFilterUK('all','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="all-ps-all" onclick="toggleFilterPS('all',0)" style="font-size:10px;">Semua</button><button class="fchip" id="all-ps-1" onclick="toggleFilterPS('all',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="all-ps-2" onclick="toggleFilterPS('all',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="all-ps-5" onclick="toggleFilterPS('all',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="all-ps-6" onclick="toggleFilterPS('all',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="all-ps-7" onclick="toggleFilterPS('all',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="all-ps-8" onclick="toggleFilterPS('all',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="all-ps-9" onclick="toggleFilterPS('all',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="all-ps-10" onclick="toggleFilterPS('all',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="all-ps-11" onclick="toggleFilterPS('all',11)" style="font-size:10px;">PS 11</button></div></div>
         <div class="tbl-wrap"><table>
           <thead style="position:sticky;top:0;z-index:10;"><tr>
             <th>PS</th>
@@ -570,7 +572,7 @@ thead th{background:var(--surf);}
       </div>
       <div class="card">
         <div class="card-hd"><div><div class="card-title">Detail Sub ICK Terselesaikan</div><div class="card-sub" id="done-sub">—</div></div></div>
-        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="dn-uk-all" onclick="toggleFilterUK('dn','')" style="font-size:10px;">Semua</button><button class="fchip" id="dn-uk-FDSEK" onclick="toggleFilterUK('dn','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="dn-uk-FPPUKIS" onclick="toggleFilterUK('dn','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="dn-uk-HUMAS" onclick="toggleFilterUK('dn','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="dn-uk-ICO" onclick="toggleFilterUK('dn','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="dn-uk-KPKWP" onclick="toggleFilterUK('dn','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="dn-uk-PM" onclick="toggleFilterUK('dn','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="dn-uk-PUR" onclick="toggleFilterUK('dn','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="dn-uk-RIRU" onclick="toggleFilterUK('dn','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="dn-uk-SP" onclick="toggleFilterUK('dn','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="dn-uk-TPID" onclick="toggleFilterUK('dn','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="dn-ps-all" onclick="toggleFilterPS('dn',0)" style="font-size:10px;">Semua</button><button class="fchip" id="dn-ps-1" onclick="toggleFilterPS('dn',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="dn-ps-2" onclick="toggleFilterPS('dn',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="dn-ps-5" onclick="toggleFilterPS('dn',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="dn-ps-6" onclick="toggleFilterPS('dn',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="dn-ps-7" onclick="toggleFilterPS('dn',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="dn-ps-8" onclick="toggleFilterPS('dn',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="dn-ps-9" onclick="toggleFilterPS('dn',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="dn-ps-10" onclick="toggleFilterPS('dn',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="dn-ps-11" onclick="toggleFilterPS('dn',11)" style="font-size:10px;">PS 11</button></div></div>
+        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="dn-uk-all" onclick="toggleFilterUK('dn','')" style="font-size:10px;">Semua</button><button class="fchip" id="dn-uk-FDSEK" onclick="toggleFilterUK('dn','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="dn-uk-FPPUKIS" onclick="toggleFilterUK('dn','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="dn-uk-HUMAS" onclick="toggleFilterUK('dn','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="dn-uk-ICO" onclick="toggleFilterUK('dn','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="dn-uk-KPKWP" onclick="toggleFilterUK('dn','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="dn-uk-MI" onclick="toggleFilterUK('dn','MI')" style="font-size:10px;color:#D946EF;border-color:#D946EF33;">MI</button><button class="fchip" id="dn-uk-PM" onclick="toggleFilterUK('dn','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="dn-uk-PUR" onclick="toggleFilterUK('dn','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="dn-uk-RIRU" onclick="toggleFilterUK('dn','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="dn-uk-SP" onclick="toggleFilterUK('dn','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="dn-uk-TPID" onclick="toggleFilterUK('dn','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="dn-ps-all" onclick="toggleFilterPS('dn',0)" style="font-size:10px;">Semua</button><button class="fchip" id="dn-ps-1" onclick="toggleFilterPS('dn',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="dn-ps-2" onclick="toggleFilterPS('dn',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="dn-ps-5" onclick="toggleFilterPS('dn',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="dn-ps-6" onclick="toggleFilterPS('dn',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="dn-ps-7" onclick="toggleFilterPS('dn',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="dn-ps-8" onclick="toggleFilterPS('dn',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="dn-ps-9" onclick="toggleFilterPS('dn',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="dn-ps-10" onclick="toggleFilterPS('dn',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="dn-ps-11" onclick="toggleFilterPS('dn',11)" style="font-size:10px;">PS 11</button></div></div>
         <div class="tbl-wrap"><table>
           <thead style="position:sticky;top:0;z-index:10;"><tr>
             <th>PS</th>
@@ -599,7 +601,7 @@ thead th{background:var(--surf);}
       </div>
       <div class="card">
         <div class="card-hd"><div><div class="card-title">Detail Sub ICK Need Attention</div><div class="card-sub" id="attn-sub">Diurutkan dari progress terendah</div></div></div>
-        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="an-uk-all" onclick="toggleFilterUK('an','')" style="font-size:10px;">Semua</button><button class="fchip" id="an-uk-FDSEK" onclick="toggleFilterUK('an','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="an-uk-FPPUKIS" onclick="toggleFilterUK('an','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="an-uk-HUMAS" onclick="toggleFilterUK('an','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="an-uk-ICO" onclick="toggleFilterUK('an','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="an-uk-KPKWP" onclick="toggleFilterUK('an','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="an-uk-PM" onclick="toggleFilterUK('an','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="an-uk-PUR" onclick="toggleFilterUK('an','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="an-uk-RIRU" onclick="toggleFilterUK('an','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="an-uk-SP" onclick="toggleFilterUK('an','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="an-uk-TPID" onclick="toggleFilterUK('an','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="an-ps-all" onclick="toggleFilterPS('an',0)" style="font-size:10px;">Semua</button><button class="fchip" id="an-ps-1" onclick="toggleFilterPS('an',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="an-ps-2" onclick="toggleFilterPS('an',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="an-ps-5" onclick="toggleFilterPS('an',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="an-ps-6" onclick="toggleFilterPS('an',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="an-ps-7" onclick="toggleFilterPS('an',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="an-ps-8" onclick="toggleFilterPS('an',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="an-ps-9" onclick="toggleFilterPS('an',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="an-ps-10" onclick="toggleFilterPS('an',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="an-ps-11" onclick="toggleFilterPS('an',11)" style="font-size:10px;">PS 11</button></div></div>
+        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="an-uk-all" onclick="toggleFilterUK('an','')" style="font-size:10px;">Semua</button><button class="fchip" id="an-uk-FDSEK" onclick="toggleFilterUK('an','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="an-uk-FPPUKIS" onclick="toggleFilterUK('an','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="an-uk-HUMAS" onclick="toggleFilterUK('an','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="an-uk-ICO" onclick="toggleFilterUK('an','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="an-uk-KPKWP" onclick="toggleFilterUK('an','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="an-uk-MI" onclick="toggleFilterUK('an','MI')" style="font-size:10px;color:#D946EF;border-color:#D946EF33;">MI</button><button class="fchip" id="an-uk-PM" onclick="toggleFilterUK('an','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="an-uk-PUR" onclick="toggleFilterUK('an','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="an-uk-RIRU" onclick="toggleFilterUK('an','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="an-uk-SP" onclick="toggleFilterUK('an','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="an-uk-TPID" onclick="toggleFilterUK('an','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="an-ps-all" onclick="toggleFilterPS('an',0)" style="font-size:10px;">Semua</button><button class="fchip" id="an-ps-1" onclick="toggleFilterPS('an',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="an-ps-2" onclick="toggleFilterPS('an',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="an-ps-5" onclick="toggleFilterPS('an',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="an-ps-6" onclick="toggleFilterPS('an',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="an-ps-7" onclick="toggleFilterPS('an',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="an-ps-8" onclick="toggleFilterPS('an',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="an-ps-9" onclick="toggleFilterPS('an',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="an-ps-10" onclick="toggleFilterPS('an',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="an-ps-11" onclick="toggleFilterPS('an',11)" style="font-size:10px;">PS 11</button></div></div>
         <div class="tbl-wrap"><table>
           <thead style="position:sticky;top:0;z-index:10;"><tr>
             <th>PS</th>
@@ -670,52 +672,20 @@ Chart.defaults.font.family = 'DM Sans, sans-serif';
 Chart.defaults.font.size = 11;
 Chart.defaults.color = '#475569';
 let D=[];
-
-// ── Mapping bulan Indonesia ──
-const MONTH_ID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-
-// ── Bangun CFG.MODES secara dinamis dari periode yang ada di data ──
-function buildModes(periods){
-  // periods: sorted array of 'YYYY-MM' strings
-  const modes={};
-  periods.forEach((per,idx)=>{
-    const [yr,mm]=per.split('-');
-    const bln=parseInt(mm,10);
-    const key=per; // gunakan 'YYYY-MM' sebagai key (tidak lagi alias jan/feb/mar)
-    const prevPer=idx>0?periods[idx-1]:null;
-    const prevLbl=prevPer?MONTH_ID[parseInt(prevPer.split('-')[1],10)-1]:null;
-    modes[key]={per,bln,lbl:MONTH_ID[bln-1]+' '+yr,prevPer,prevLbl};
-  });
-  return modes;
-}
-
 const CFG={
-  UKS:['FDSEK','FPPUKIS','HUMAS','ICO','KPKWP','PM','PUR','RIRU','SP','TPID'],
+  UKS:['FDSEK','FPPUKIS','HUMAS','ICO','KPKWP','MI','PM','PUR','RIRU','SP','TPID'],
   PSS:[1,2,5,6,7,8,9,10,11],
   UK_COLOR:{FDSEK:'#6366F1',FPPUKIS:'#3B82F6',HUMAS:'#8B5CF6',ICO:'#EC4899',
-    KPKWP:'#0EA5E9',PM:'#14B8A6',PUR:'#F97316',RIRU:'#EAB308',SP:'#10B981',TPID:'#EF4444'},
-  MODES:{}, // akan diisi dinamis setelah data dimuat
+    KPKWP:'#0EA5E9',MI:'#D946EF',PM:'#14B8A6',PUR:'#F97316',RIRU:'#EAB308',SP:'#10B981',TPID:'#EF4444'},
+  MODES:{
+    jan:{per:'2026-01',bln:1,lbl:'Januari 2026',prevPer:null,prevLbl:null},
+    feb:{per:'2026-02',bln:2,lbl:'Februari 2026',prevPer:'2026-01',prevLbl:'Januari'},
+    mar:{per:'2026-03',bln:3,lbl:'Maret 2026',prevPer:'2026-02',prevLbl:'Februari'},
+  },
   PER_PAGE:15,
 };
 
-// ── Render tombol periode dinamis ──
-function buildPeriodBar(periods){
-  const container=document.getElementById('period-btns-container');
-  if(!container) return;
-  // Rebuild MODES dari periods yang ada di data
-  CFG.MODES=buildModes(periods);
-  // Set mode ke periode terbaru
-  const latestPer=periods[periods.length-1];
-  S.mode=latestPer;
-  // Render tombol
-  container.innerHTML=periods.map(per=>{
-    const m=CFG.MODES[per];
-    const isActive=per===latestPer;
-    return `<button class="pbtn${isActive?' active':''}" id="pb-${per}" onclick="setMode('${per}')">${m.lbl}</button>`;
-  }).join('');
-}
-
-let S={mode:'2026-03',tab:'overview',ukF:new Set(),allSt:'',ickTab:'all',ickUK:'',pages:{all:1,done:1,attn:1,ick:1},charts:{}};
+let S={mode:'mar',tab:'overview',ukF:new Set(),allSt:'',ickTab:'all',ickUK:'',pages:{all:1,done:1,attn:1,ick:1},charts:{}};
 let _pd={};
 
 // ── Helpers ──
@@ -763,7 +733,7 @@ function cl(id){$('s'+id).style.display='';$('f'+id).style.display='none';}
 
 // ── Data ──
 function getRows(){
-  const p=S.mode; // S.mode sudah berupa 'YYYY-MM'
+  const p=CFG.MODES[S.mode].per;
   return D.filter(r=>r.per===p&&(S.ukF.size===0||S.ukF.has(r.uk)));
 }
 function fRows(rows,{st='',search=''}={}){
@@ -804,12 +774,11 @@ function updateSidebarStats(){
 }
 
 // ── Mode ──
-function setMode(per){
-  S.mode=per;
-  // Update tombol aktif
-  document.querySelectorAll('#period-btns-container .pbtn').forEach(btn=>{
-    btn.classList.toggle('active', btn.id==='pb-'+per);
-  });
+function setMode(m){
+  S.mode=m;
+  ['jan','feb','mar'].forEach(x=>$('pb-'+x).classList.toggle('active',x===m));
+  const c=CFG.MODES[m],thresh=c.bln/12;
+  
   refreshAll();
 }
 
@@ -826,7 +795,8 @@ function refreshAll(){
   updateNavBadges();renderCurrent();
   // Update eval badge even when not on eval tab
   if(S.tab!=='eval'){
-    const rows=D.filter(r=>r.per===S.mode);
+    const m=CFG.MODES[S.mode];
+    const rows=D.filter(r=>r.per===m.per);
     let evCount=0;
     rows.forEach(r=>{
       if(r.prog>1.001) evCount++;
@@ -851,12 +821,10 @@ function updateNavBadges(){
 
 // ── Overview ──
 function renderOverview(){
-  const m=CFG.MODES[S.mode];
-  if(!m) return; // belum ada data
-  const rows=getRows(),thresh=m.bln/12;
+  const rows=getRows(),m=CFG.MODES[S.mode],thresh=m.bln/12;
 
   // ── ICK-level stats (avg prog per unique UK+ICK) ──
-  const ickRows=ICK_D.filter(r=>r.per===S.mode&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
   const ickCount=ickRows.length;
   const ickAvg=ickCount?ickRows.reduce((s,r)=>s+r.avg_prog,0)/ickCount:0;
   const ickAcc=ickRows.filter(r=>r.avg_prog>=1).length;
@@ -872,7 +840,7 @@ function renderOverview(){
 
   // ── Delta vs previous period ──
   const modes=Object.values(CFG.MODES);
-  const curIdx=modes.findIndex(x=>x.per===S.mode);
+  const curIdx=modes.findIndex(x=>x.per===m.per);
   const prevMode=curIdx>0?modes[curIdx-1]:null;
   const prevIck=prevMode?ICK_D.filter(r=>r.per===prevMode.per&&(S.ukF.size===0||S.ukF.has(r.uk))):[];
   const prevRows=prevMode?D.filter(r=>r.per===prevMode.per&&(S.ukF.size===0||S.ukF.has(r.uk))):[];
@@ -942,8 +910,7 @@ function renderOverview(){
 
 function renderEval(){
   const m=CFG.MODES[S.mode];
-  if(!m) return;
-  const rows=D.filter(r=>r.per===S.mode&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const rows=D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
   const issues=[];
 
   rows.forEach(r=>{
@@ -996,8 +963,7 @@ function renderEval(){
 
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
-  if(!m) return;
-  const ickRows=ICK_D.filter(r=>r.per===S.mode&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
   const accRows=ickRows.filter(r=>r.st==='accelerated');
   const naRows=ickRows.filter(r=>r.st==='need_accelerate');
   txt('ps-acc-n',accRows.length); txt('ps-na-n',naRows.length);
@@ -1085,8 +1051,7 @@ function renderPSSummary(){
 // ── Bar Charts: UK + PS ──
 function renderBarCharts(){
   const m=CFG.MODES[S.mode];
-  if(!m) return;
-  const curPer=S.mode,prevPer=m.prevPer;
+  const curPer=m.per,prevPer=m.prevPer;
   const prevLbl=m.prevLbl||null,xLbl=m.lbl.split(' ')[0];
 
   const shortL=l=>l?l.slice(0,3)+"'26":'';const label=prevLbl?`${shortL(xLbl)} vs ${shortL(prevLbl)}`:shortL(xLbl)||xLbl;
@@ -1214,7 +1179,6 @@ function renderICKDetail(){
   S.ickUK=$('ick-uk-filter')?.value||'';
   const rows=getRows().filter(r=>!S.ickUK||r.uk===S.ickUK);
   const m=CFG.MODES[S.mode];
-  if(!m) return;
 
   // Count per status for sub-tab badges
   txt('ick-n-all',rows.length);
@@ -1229,8 +1193,7 @@ function renderICKDetail(){
 function renderICKPage(filtered){
   const P=CFG.PER_PAGE,total=filtered.length,start=(S.pages.ick-1)*P;
   const sl=filtered.slice(start,start+P);
-  const m=CFG.MODES[S.mode];
-  const thresh=m?m.bln/12:0.25;
+  const thresh=CFG.MODES[S.mode].bln/12;
   _pd.ick=filtered;
   set('ick-det-tbody',sl.length?sl.map(r=>{
     const rowCls=r.st==='done'?'row-done':r.st==='need_attention'?'row-attn':'';
@@ -1280,13 +1243,13 @@ function toggleFilterPS(prefix,ps){
   else renderAttn();
 }
 
-const UK_COLORS_MAP={'FDSEK':'#6366F1','FPPUKIS':'#3B82F6','HUMAS':'#8B5CF6','ICO':'#EC4899','KPKWP':'#0EA5E9','PM':'#14B8A6','PUR':'#F97316','RIRU':'#EAB308','SP':'#10B981','TPID':'#EF4444'};
+const UK_COLORS_MAP={'FDSEK':'#6366F1','FPPUKIS':'#3B82F6','HUMAS':'#8B5CF6','ICO':'#EC4899','KPKWP':'#0EA5E9','MI':'#D946EF','PM':'#14B8A6','PUR':'#F97316','RIRU':'#EAB308','SP':'#10B981','TPID':'#EF4444'};
 
 function _syncChips(prefix){
   const st=_fState[prefix];
   const ukAll=document.getElementById(prefix+'-uk-all');
   if(ukAll){ ukAll.className='fchip'+(st.uks.size===0?' active':''); ukAll.style.color=st.uks.size===0?'':''; }
-  ['FDSEK','FPPUKIS','HUMAS','ICO','KPKWP','PM','PUR','RIRU','SP','TPID'].forEach(uk=>{
+  ['FDSEK','FPPUKIS','HUMAS','ICO','KPKWP','MI','PM','PUR','RIRU','SP','TPID'].forEach(uk=>{
     const el=document.getElementById(prefix+'-uk-'+uk);
     if(!el) return;
     const col=UK_COLORS_MAP[uk]||'#94A3B8';
@@ -1321,8 +1284,7 @@ function renderAll(){
 function renderPage(f,key){
   const P=CFG.PER_PAGE,total=f.length,start=(S.pages[key]-1)*P,sl=f.slice(start,start+P);
   _pd[key]=f;
-  const m=CFG.MODES[S.mode];
-  const thresh=m?m.bln/12:0.25;
+  const thresh=CFG.MODES[S.mode].bln/12;
   if(key==='all'){
     set('all-tbody',sl.length?sl.map(r=>`<tr>
       <td><span class="pill p-gray tt" style="font-size:9px;" data-tip="${PS_NAMES[String(r.ps)]||'PS '+r.ps}">PS ${r.ps}</span></td>
@@ -1366,11 +1328,10 @@ function renderPage(f,key){
 // ── Done KPI ──
 function renderDoneKPI(){
   const rows=getRows().filter(r=>r.st==='done');
-  const m=CFG.MODES[S.mode];
   txt('d-count',rows.length);
   const avg=rows.length?rows.reduce((s,r)=>s+r.prog,0)/rows.length:0;
   txt('d-avg',pc(avg));txt('d-over',rows.filter(r=>r.prog>1).length);txt('d-ps',new Set(rows.map(r=>r.ps)).size);
-  txt('done-sub',(m?m.lbl:S.mode)+' · '+rows.length+' item');
+  txt('done-sub',CFG.MODES[S.mode].lbl+' · '+rows.length+' item');
 }
 function renderDone(){
   const f=fRows(_applyFilter('dn',getRows().filter(r=>r.st==='done')),{search:$('dn-s')?.value});
@@ -1379,9 +1340,7 @@ function renderDone(){
 
 // ── Attn KPI ──
 function renderAttnKPI(){
-  const m=CFG.MODES[S.mode];
-  if(!m) return;
-  const thresh=m.bln/12;
+  const m=CFG.MODES[S.mode],thresh=m.bln/12;
   const rows=getRows().filter(r=>r.st==='need_attention');
   txt('a-count',rows.length);
   const avg=rows.length?rows.reduce((s,r)=>s+r.prog,0)/rows.length:0;
@@ -1640,7 +1599,7 @@ async function captureScreenshot(){
   if(btn){btn.style.opacity='0.5';btn.style.pointerEvents='none';}
   if(toast){toast.style.display='block';toast.textContent='Menyiapkan screenshot...';}
   try{
-    const periodPill = (CFG.MODES[S.mode]||{lbl:S.mode}).lbl;
+    const periodPill = CFG.MODES[S.mode].lbl;
 
     // ── Step 1: Convert all Chart.js canvases to <img> temporarily ──
     const canvasMap = [];
@@ -1680,11 +1639,11 @@ async function captureScreenshot(){
       </div>`;
     wrapper.appendChild(header);
 
-    // Period pills — dinamis dari data
+    // Period pills
     const periodBar = document.createElement('div');
     periodBar.style.cssText='display:flex;align-items:center;gap:6px;margin-bottom:16px;';
-    Object.entries(CFG.MODES).forEach(([per,cfg])=>{
-      const isActive=per===S.mode;
+    ['jan','feb','mar'].forEach(m=>{
+      const cfg=CFG.MODES[m];const isActive=m===S.mode;
       const b=document.createElement('span');
       b.style.cssText=`padding:5px 14px;border-radius:7px;font-size:12px;font-weight:500;border:1px solid ${isActive?'#3B82F6':'#E2E8F0'};background:${isActive?'#3B82F6':'#fff'};color:${isActive?'#fff':'#64748B'};`;
       b.textContent=cfg.lbl;
@@ -1784,7 +1743,7 @@ async function fetchFromAppsScript(){
     setTimeout(()=>ctrl.abort(),15000);
     const r=await fetch(APPS_URL,{signal:ctrl.signal});
     if(!r.ok) throw new Error('HTTP '+r.status);
-    if(isFirstLoad) setLoading(60,'Memproses data...','Parsing data...');
+    if(isFirstLoad) setLoading(60,'Memproses data...','Parsing '+r.headers.get('content-length')||'data'+'...');
     const json=await r.json();
     if(!json.ok) throw new Error(json.error||'Response tidak valid');
     const{D:nD,ICK_D:nI,rows,updated}=json.data;
@@ -1794,10 +1753,7 @@ async function fetchFromAppsScript(){
     ICK_D.length=0; nI.forEach(x=>ICK_D.push(x));
     txt('data-source-name','Google Sheets (Live)');
     txt('data-source-date','Updated: '+updated+' ('+rows+' baris)');
-    // ── Bangun tombol periode dinamis dari data yang ada ──
-    const periods=[...new Set(D.map(r=>r.per))].filter(Boolean).sort();
-    buildPeriodBar(periods);
-    if(!isFirstLoad) showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat! Periode: '+periods.join(', '));
+    if(!isFirstLoad) showUploadStatus('ok','✅ '+rows+' baris berhasil dimuat!');
     refreshAll();
     if(isFirstLoad){ setLoading(100,'Selesai!',''); setTimeout(hideLoading, 400); }
   }catch(e){
@@ -1830,9 +1786,7 @@ function handleFileUpload(file){
       ICK_D.length=0; result.ICK_D.forEach(x=>ICK_D.push(x));
       txt('data-source-name',file.name);
       txt('data-source-date',new Date().toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})+' ('+result.D.length+' baris)');
-      // ── Bangun tombol periode dinamis dari data ──
-      buildPeriodBar(result.periods);
-      showUploadStatus('ok','✅ '+result.D.length+' baris dimuat! Periode: '+result.periods.join(', '));
+      showUploadStatus('ok','✅ '+result.D.length+' baris dimuat!');
       refreshAll();
     }catch(err){showUploadStatus('error','❌ '+err.message);}
   };
@@ -1941,8 +1895,7 @@ function mkReadMore(id,shortText,fullText,color){
 
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
-  if(!m) return;
-  const per=S.mode;
+  const per=m.per;
   const thr=m.bln/12;
 
   const subRows=D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
@@ -2083,7 +2036,7 @@ function restoreSheetUrl(){
 
 (function(){
   txt('data-source-name','⏳ Memuat dari Google Sheets...');
-  // Jangan render dulu — tunggu data dari Google Sheets (buildPeriodBar akan dipanggil di sana)
+  updateNavBadges(); renderOverview();
   restoreSheetUrl();
 })();
 
