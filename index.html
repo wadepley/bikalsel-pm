@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<html lang="id"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>EKB Monitor — BI KPwDN Kalsel 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
@@ -323,33 +321,15 @@ thead th{background:var(--surf);}
   line-height:1.65;
 }
 </style>
-</head>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&amp;display=swap"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800;900&amp;display=swap"></head>
 <body>
 <!-- Loading Overlay -->
-<div id="loading-overlay" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
-  <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
-    <div style="width:36px;height:36px;background:#1D4ED8;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">📊</div>
-    <div>
-      <div style="font-size:16px;font-weight:700;color:#1E293B;">EKB Monitor</div>
-      <div style="font-size:12px;color:#64748B;">BI KPwDN Kalimantan Selatan</div>
-    </div>
-  </div>
-  <div style="width:280px;">
-    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-      <span style="font-size:12px;color:#64748B;" id="loading-msg">Menghubungkan Google Sheets...</span>
-      <span style="font-size:12px;font-weight:600;color:#1D4ED8;" id="loading-pct">0%</span>
-    </div>
-    <div style="height:6px;background:#E2E8F0;border-radius:99px;overflow:hidden;">
-      <div id="loading-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#1D4ED8,#059669);border-radius:99px;transition:width .3s ease;"></div>
-    </div>
-  </div>
-  <div style="font-size:11px;color:#94A3B8;" id="loading-sub">Memuat data terkini dari Google Sheets...</div>
-</div>
+
 <div id="js-tooltip"><div id="js-tooltip-inner"></div></div>
 <div class="app">
 
 <!-- ═══ SIDEBAR ═══ -->
-<div class="sb mini" id="sb">
+<div class="sb" id="sb">
   <div class="sb-body">
     <div class="sb-hd">
       <div class="logo">
@@ -360,41 +340,41 @@ thead th{background:var(--surf);}
         </div>
       </div>
       <button class="sb-btn hide" onclick="toggleSB()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
       </button>
     </div>
 
     <div class="sb-sect hide" style="margin-top:8px;">
       <div class="sect-hd">Data &amp; Sumber</div>
       <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:9px;padding:10px;margin-bottom:10px;">
-        <div style="font-size:10px;font-weight:700;color:#065F46;margin-bottom:5px;">&#9889; LIVE &#8212; Google Sheets</div>
+        <div style="font-size:10px;font-weight:700;color:#065F46;margin-bottom:5px;">⚡ LIVE — Google Sheets</div>
         <div style="font-size:10px;color:#047857;margin-bottom:7px;">Auto-load saat halaman dibuka</div>
-        <button onclick="fetchFromAppsScript()" style="width:100%;padding:7px;background:#059669;border:none;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;color:#fff;font-family:inherit;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">&#8635; Refresh dari Google Sheets</button>
+        <button onclick="fetchFromAppsScript()" style="width: 100%; padding: 7px; background: rgb(5, 150, 105); border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: 600; color: rgb(255, 255, 255); font-family: inherit;" onmouseover="this.style.background='#047857'" onmouseout="this.style.background='#059669'">↻ Refresh dari Google Sheets</button>
       </div>
       <div id="upload-status" style="display:none;padding:7px 9px;border-radius:7px;font-size:11px;margin-bottom:8px;line-height:1.5;"></div>
       <div style="background:#F8FAFC;border-radius:8px;padding:8px 10px;margin-bottom:10px;">
         <div style="font-size:10px;color:#94A3B8;margin-bottom:2px;">Sumber Data</div>
-        <div style="font-size:11px;font-weight:500;color:#334155;" id="data-source-name">Memuat...</div>
-        <div style="font-size:10px;color:#94A3B8;margin-top:2px;" id="data-source-date">&#8212;</div>
+        <div style="font-size:11px;font-weight:500;color:#334155;" id="data-source-name">Google Sheets (Live)</div>
+        <div style="font-size:10px;color:#94A3B8;margin-top:2px;" id="data-source-date">Updated: 11/5/2026, 10.13.35 (294 baris)</div>
       </div>
       <div style="border-top:1px solid #F1F5F9;margin:0 0 10px;"></div>
-      <div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">&#128193; Upload Excel</div>
+      <div style="font-size:10px;font-weight:600;color:#94A3B8;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px;">📁 Upload Excel</div>
       <div id="upload-zone" style="border:1.5px dashed #CBD5E1;border-radius:8px;padding:10px;text-align:center;cursor:pointer;background:#FAFBFC;margin-bottom:8px;" onclick="document.getElementById('excel-input').click()" ondragover="event.preventDefault();this.style.borderColor='#3B82F6'" ondragleave="this.style.borderColor='#CBD5E1'" ondrop="handleDrop(event)">
-        <input type="file" id="excel-input" accept=".xlsx,.xls" style="display:none" onchange="handleFileUpload(this.files[0])"/>
-        <div style="font-size:18px;margin-bottom:2px;">&#128194;</div>
+        <input type="file" id="excel-input" accept=".xlsx,.xls" style="display:none" onchange="handleFileUpload(this.files[0])">
+        <div style="font-size:18px;margin-bottom:2px;">📂</div>
         <div style="font-size:10px;color:#94A3B8;">Klik atau drag &amp; drop .xlsx</div>
       </div>
-      <button onclick="downloadBackup()" style="width:100%;padding:7px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:#1D4ED8;font-family:inherit;">&#8659; Download HTML</button>
+      <button onclick="downloadBackup()" style="width:100%;padding:7px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:#1D4ED8;font-family:inherit;">⇓ Download HTML</button>
     </div>
 
   </div>
   <div class="sb-mini-tab" onclick="toggleSB()">
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
   </div>
 </div>
 
 <!-- ═══ MAIN ═══ -->
-<div class="m<div class="main">
+<div class="m&lt;div class=" main"="">
   <div class="topbar">
     <div class="topbar-l">
       <div class="page-title" id="page-title">Evaluasi Kinerja Bulanan BI Kalsel</div>
@@ -402,7 +382,7 @@ thead th{background:var(--surf);}
     <div style="display:flex;align-items:center;gap:8px;">
       <div id="screenshot-btn-wrap" style="display:flex;align-items:center;gap:6px;">
         <button onclick="captureScreenshot()" style="display:flex;align-items:center;gap:6px;padding:6px 13px;background:#fff;border:1px solid #E2E8F0;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:#334155;font-family:inherit;transition:all .15s;white-space:nowrap;" onmouseover="this.style.background='#F8FAFC';this.style.borderColor='#94A3B8'" onmouseout="this.style.background='#fff';this.style.borderColor='#E2E8F0'">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
           Screenshot
         </button>
         <span id="ss-toast" style="display:none;font-size:11px;padding:5px 10px;background:#0F172A;color:#fff;border-radius:7px;white-space:nowrap;"></span>
@@ -412,35 +392,33 @@ thead th{background:var(--surf);}
 
   <!-- ── Period Selector (HORIZONTAL) — auto-generated from data ── -->
   <div class="period-bar">
-    <span class="period-bar-lbl">&#128197; Periode</span>
-    <div class="period-btns" id="period-btns-wrap">
-      <span style="font-size:11px;color:#94A3B8;">Memuat periode...</span>
-    </div>
+    <span class="period-bar-lbl">📅 Periode</span>
+    <div class="period-btns" id="period-btns-wrap"><button class="pbtn" onclick="setMode('2026-01')">Januari 2026</button><button class="pbtn" onclick="setMode('2026-02')">Februari 2026</button><button class="pbtn" onclick="setMode('2026-03')">Maret 2026</button><button class="pbtn active" onclick="setMode('2026-04')">April 2026</button></div>
   </div>
 
   <!-- Tab bar -->
   <div class="tabbar">
     <div class="tab active" data-tab="overview" onclick="goTab('overview')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect></svg>
       Ringkasan
     </div>
     <div class="tab" data-tab="all" onclick="goTab('all')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="3" cy="12" r="1.5" fill="currentColor"/><circle cx="3" cy="18" r="1.5" fill="currentColor"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1.5" fill="currentColor"></circle><circle cx="3" cy="12" r="1.5" fill="currentColor"></circle><circle cx="3" cy="18" r="1.5" fill="currentColor"></circle></svg>
       Detail Capaian ICK
-      <span class="tn tn-blue" id="tn-all">—</span>
+      <span class="tn tn-blue" id="tn-all">84</span>
     </div>
     <div class="tab" data-tab="done" onclick="goTab('done')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
       Terselesaikan
-      <span class="tn tn-ok" id="tn-done">—</span>
+      <span class="tn tn-ok" id="tn-done">9</span>
     </div>
     <div class="tab" data-tab="attn" onclick="goTab('attn')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><circle cx="12" cy="17" r=".5" fill="currentColor"></circle></svg>
       Need Attention
-      <span class="tn tn-danger" id="tn-attn">—</span>
+      <span class="tn tn-danger" id="tn-attn">16</span>
     </div>
     <div class="tab" data-tab="eval" onclick="goTab('eval')">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
       Evaluasi Input
       <span class="tn tn-danger" id="tn-eval" style="background:#F59E0B;color:#fff;"></span>
     </div>
@@ -451,27 +429,27 @@ thead th{background:var(--surf);}
 
 
     <!-- ═══ OVERVIEW ═══ -->
-    <div id="tab-overview">
+    <div id="tab-overview" style="display: block;">
       <!-- KPI Cards: dual category -->
       <div style="display:flex;align-items:center;padding:7px 14px;background:#1D4ED8;border-radius:9px;margin-bottom:7px;">
         <span style="font-size:10px;font-weight:700;color:#fff;letter-spacing:.6px;text-transform:uppercase;">ICK — Indikator Capaian Kinerja</span>
       </div>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:12px;">
-        <div class="kpi" style="--ac:#1D4ED8;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#EFF6FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2.5" stroke-linecap="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/></svg></div><div class="kpi-num" id="ki-count">—</div><div class="kpi-lbl">Jumlah ICK</div></div>
-        <div class="kpi" style="--ac:#4F46E5;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#EEF2FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="kpi-num kpi-num-sm" id="ki-avg">—</div><div class="kpi-lbl">Avg Progress ICK</div><div style="margin-top:6px;background:#E0E7FF;border-radius:4px;height:6px;overflow:hidden;"><div id="ki-avg-bar" style="height:100%;border-radius:4px;background:linear-gradient(90deg,#4F46E5,#818CF8);width:0%;transition:width .6s ease;"></div></div></div>
-        <div class="kpi" style="--ac:#059669;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#ECFDF5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="kpi-num" id="ki-acc">—</div><div class="kpi-lbl">ICK Accelerated</div><div class="kpi-sub" style="font-size:10px;">Progress ≥ 100%</div></div>
-        <div class="kpi" style="--ac:#0284C7;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#F0F9FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="kpi-num" id="ki-ot">—</div><div class="kpi-lbl">ICK On Track</div><div class="kpi-sub" id="ki-ot-s" style="font-size:10px;">≥ target bln</div></div>
-        <div class="kpi" style="--ac:#DC2626;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#FEF2F2;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div><div class="kpi-num" id="ki-na">—</div><div class="kpi-lbl">ICK Need Accelerate</div><div class="kpi-sub" id="ki-na-s" style="font-size:10px;">&lt; target bln</div></div>
+        <div class="kpi" style="--ac:#1D4ED8;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#EFF6FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2.5" stroke-linecap="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline></svg></div><div class="kpi-num" id="ki-count">22<span style="font-size:10px;font-weight:600;color:#059669;margin-left:4px;">▲4</span></div><div class="kpi-lbl">Jumlah ICK</div></div>
+        <div class="kpi" style="--ac:#4F46E5;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#EEF2FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><div class="kpi-num kpi-num-sm" id="ki-avg">41.2%<span style="font-size:10px;font-weight:600;color:#059669;margin-left:6px;">▲ 8.6%</span></div><div class="kpi-lbl">Avg Progress ICK</div><div style="margin-top:6px;background:#E0E7FF;border-radius:4px;height:6px;overflow:hidden;"><div id="ki-avg-bar" style="height: 100%; border-radius: 4px; background: linear-gradient(90deg, rgb(79, 70, 229), rgb(129, 140, 248)); width: 41.244%; transition: width 0.6s;"></div></div></div>
+        <div class="kpi" style="--ac:#059669;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#ECFDF5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><div class="kpi-num" id="ki-acc">1<span style="font-size:10px;color:#94A3B8;margin-left:4px;">↔</span></div><div class="kpi-lbl">ICK Accelerated</div><div class="kpi-sub" style="font-size:10px;">Progress ≥ 100%</div></div>
+        <div class="kpi" style="--ac:#0284C7;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#F0F9FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284C7" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="kpi-num" id="ki-ot">9<span style="font-size:10px;font-weight:600;color:#DC2626;margin-left:4px;">▼7</span></div><div class="kpi-lbl">ICK On Track</div><div class="kpi-sub" id="ki-ot-s" style="font-size:10px;">≥ 33.3% &amp; &lt;100%</div></div>
+        <div class="kpi" style="--ac:#DC2626;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#FEF2F2;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line></svg></div><div class="kpi-num" id="ki-na">12<span style="font-size:10px;font-weight:600;color:#059669;margin-left:4px;">▲11</span></div><div class="kpi-lbl">ICK Need Accelerate</div><div class="kpi-sub" id="ki-na-s" style="font-size:10px;">&lt; 33.3%</div></div>
       </div>
       <div style="display:flex;align-items:center;padding:7px 14px;background:#059669;border-radius:9px;margin-bottom:7px;">
         <span style="font-size:10px;font-weight:700;color:#fff;letter-spacing:.6px;text-transform:uppercase;">Sub ICK — Detail Capaian</span>
       </div>
       <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:14px;">
-        <div class="kpi" style="--ac:#0F766E;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#F0FDFA;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.5" fill="currentColor"/></svg></div><div class="kpi-num" id="ks-count">—</div><div class="kpi-lbl">Jumlah Sub ICK</div></div>
-        <div class="kpi" style="--ac:#7C3AED;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#F5F3FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="kpi-num kpi-num-sm" id="ks-avg">—</div><div class="kpi-lbl">Avg Progress Sub ICK</div><div style="margin-top:6px;background:#EDE9FE;border-radius:4px;height:6px;overflow:hidden;"><div id="ks-avg-bar" style="height:100%;border-radius:4px;background:linear-gradient(90deg,#7C3AED,#A78BFA);width:0%;transition:width .6s ease;"></div></div></div>
-        <div class="kpi" style="--ac:#10B981;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#ECFDF5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="kpi-num" id="ks-acc">—</div><div class="kpi-lbl">Sub ICK Accelerated</div><div class="kpi-sub" style="font-size:10px;">Progress ≥ 100%</div></div>
-        <div class="kpi" style="--ac:#0891B2;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#ECFEFF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="kpi-num" id="ks-ot">—</div><div class="kpi-lbl">Sub ICK On Track</div><div class="kpi-sub" id="ks-ot-s" style="font-size:10px;">≥ target bln</div></div>
-        <div class="kpi" style="--ac:#E11D48;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#FFF1F2;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg></div><div class="kpi-num" id="ks-na">—</div><div class="kpi-lbl">Sub ICK Need Accelerate</div><div class="kpi-sub" id="ks-na-s" style="font-size:10px;">&lt; target bln</div></div>
+        <div class="kpi" style="--ac:#0F766E;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#F0FDFA;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1.5" fill="currentColor"></circle></svg></div><div class="kpi-num" id="ks-count">84<span style="font-size:10px;font-weight:600;color:#059669;margin-left:4px;">▲14</span></div><div class="kpi-lbl">Jumlah Sub ICK</div></div>
+        <div class="kpi" style="--ac:#7C3AED;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#F5F3FF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div><div class="kpi-num kpi-num-sm" id="ks-avg">42.7%<span style="font-size:10px;font-weight:600;color:#059669;margin-left:6px;">▲ 7.9%</span></div><div class="kpi-lbl">Avg Progress Sub ICK</div><div style="margin-top:6px;background:#EDE9FE;border-radius:4px;height:6px;overflow:hidden;"><div id="ks-avg-bar" style="height: 100%; border-radius: 4px; background: linear-gradient(90deg, rgb(124, 58, 237), rgb(167, 139, 250)); width: 42.6906%; transition: width 0.6s;"></div></div></div>
+        <div class="kpi" style="--ac:#10B981;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#ECFDF5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><div class="kpi-num" id="ks-acc">9<span style="font-size:10px;font-weight:600;color:#059669;margin-left:4px;">▲2</span></div><div class="kpi-lbl">Sub ICK Accelerated</div><div class="kpi-sub" style="font-size:10px;">Progress ≥ 100%</div></div>
+        <div class="kpi" style="--ac:#0891B2;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#ECFEFF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="kpi-num" id="ks-ot">14<span style="font-size:10px;font-weight:600;color:#DC2626;margin-left:4px;">▼43</span></div><div class="kpi-lbl">Sub ICK On Track</div><div class="kpi-sub" id="ks-ot-s" style="font-size:10px;">≥ 33.3% &amp; &lt;100%</div></div>
+        <div class="kpi" style="--ac:#E11D48;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#FFF1F2;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line></svg></div><div class="kpi-num" id="ks-na">61<span style="font-size:10px;font-weight:600;color:#059669;margin-left:4px;">▲55</span></div><div class="kpi-lbl">Sub ICK Need Accelerate</div><div class="kpi-sub" id="ks-na-s" style="font-size:10px;">&lt; 33.3%</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <!-- Bar chart: by Unit Kerja -->
@@ -479,10 +457,10 @@ thead th{background:var(--surf);}
           <div class="card-hd" style="padding:12px 16px;">
             <div>
               <div class="card-title">% Capaian Unit Kerja</div>
-              <div class="card-sub" id="uk-bar-sub">—</div>
+              <div class="card-sub" id="uk-bar-sub">Apr'26 vs Mar'26</div>
             </div>
           </div>
-          <div style="padding:8px 14px 12px;position:relative;height:240px;">
+          <div style="padding:8px 14px 12px;position:relative;height:310px;">
             <canvas id="uk-bar-chart"></canvas>
           </div>
         </div>
@@ -491,10 +469,10 @@ thead th{background:var(--surf);}
           <div class="card-hd" style="padding:12px 16px;">
             <div>
               <div class="card-title">% Capaian Program Strategis</div>
-              <div class="card-sub" id="ps-bar-sub">—</div>
+              <div class="card-sub" id="ps-bar-sub">Apr'26 vs Mar'26</div>
             </div>
           </div>
-          <div style="padding:8px 14px 12px;position:relative;height:240px;">
+          <div style="padding:8px 14px 12px;position:relative;height:310px;">
             <canvas id="ps-bar-chart"></canvas>
           </div>
         </div>
@@ -507,21 +485,29 @@ thead th{background:var(--surf);}
           <div class="card-hd" style="padding:12px 16px;">
             <div>
               <div class="card-title" style="color:#065F46;">✅ ICK Accelerated per PS</div>
-              <div class="card-sub" id="ps-acc-sub">Progress ≥ 100%</div>
+              <div class="card-sub" id="ps-acc-sub">Progress ≥ 100% · April 2026</div>
             </div>
             
           </div>
-          <div id="ps-acc-list" style="padding:0 16px 12px;"></div>
+          <div id="ps-acc-list" style="padding:0 16px 12px;"><div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;"><div style="font-size:12px;color:#065F46;line-height:1.8;">Hingga April 2026, terdapat <strong>9 Sub-ICK</strong> yang telah terselesaikan dengan rata-rata progress <strong>100.0%</strong>, tersebar di 1 Program Strategis (PS 0). PS 0 memberikan kontribusi terbesar dengan <strong>9 Sub-ICK</strong> selesai oleh unit kerja TPID dan SP dan FPPUKIS dan MI.</div></div><div style="padding:0 2px;"><div style="padding:10px 0;"><div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;"><span style="background:#059669;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;">PS 0</span><span style="font-size:11px;font-weight:600;color:#374151;">TPID, SP, FPPUKIS, MI <span style="color:#6B7280;font-weight:400;">— 9 Sub-ICK, avg </span><span style="font-weight:700;color:#059669;">100.0%</span></span></div><div style="font-size:9px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">🎯 Narasi Target yang Tercapai</div><div id="rms-ps0_202604_acc" style="font-size:11px;color:#374151;line-height:1.6;">i. Jumlah realisasi kegiatan High Level Meeting (HLM) TPID untuk mendukung pengendalian inflasi di d…</div><div id="rmf-ps0_202604_acc" style="display:none;font-size:11px;color:#374151;line-height:1.6;"><div style="margin-bottom:3px;"><span style="color:#059669;font-weight:700;">1. </span>i. Jumlah realisasi kegiatan High Level Meeting (HLM) TPID untuk mendukung pengendalian inflasi di daerah</div><div style="margin-bottom:3px;"><span style="color:#059669;font-weight:700;">2. </span>i. (a) Perluasan QRIS di daerah: jumlah pengguna QRIS</div><div style="margin-bottom:3px;"><span style="color:#059669;font-weight:700;">3. </span>v. (b) Jumlah pelaksanaan pemeriksaan terhadap Kas Titipan</div><div style="margin-bottom:3px;"><span style="color:#059669;font-weight:700;">4. </span>vii. (a) Kualitas kegiatan edukasi pelindungan konsumen: jumlah pelaksanaan program kegiatan edukasi</div><div style="margin-top:6px;"><span style="font-weight:600;color:#065F46;">Realisasi:</span> Telah dilaksanakan HLM TPID Provinsi &amp; Kab/Kota sbb:
+i. 7 Maret 2026: HLM TPID Kab. Tapin di Grand Qin Banjarbaru, dihadiri oleh Bupati Kab. Tapin
+ii. 11 Maret 2026: HLM TPID Kota Banjarbaru di Kantor Pemkot Banjarbaru, dihadiri oleh Sekretaris Daerah Kota Banjarbaru
+iii. 16 Maret 2026: HLM TPID Prov. Kalsel di Gedung Mahligai Pancasila Banjarmasin, dihadiri oleh Gubernur Kalsel
+iv. 8 April 2026: HLM TPID Kota Banjarmasin di Balai Kota Banjarmasin, dihadiri oleh Walikota Banjarmasin
+v. 16 April 2026: HLM TPID Kab. Tanah Laut di Hotel Grand Sunshine Resort and Convention Soreang Kab. Bandung, dihadiri oleh Wakil Bupati Kab. Tanah Laut | Total User QRIS: 819.548
+- Januari: 808.089
+- Februari: 819.548
+- Maret: 832.209</div></div><button data-rmid="ps0_202604_acc" onclick="toggleReadMore(this.dataset.rmid)" style="font-size:10px;color:#059669;background:none;border:none;cursor:pointer;padding:2px 0;font-weight:600;">Baca selengkapnya ▼</button></div></div></div>
         </div>
         <div class="card" style="margin-bottom:0;">
           <div class="card-hd" style="padding:12px 16px;">
             <div>
               <div class="card-title" style="color:#991B1B;">⚠️ ICK Need Accelerate per PS</div>
-              <div class="card-sub" id="ps-na-sub">Progress &lt; target bulan berjalan</div>
+              <div class="card-sub" id="ps-na-sub">Progress &lt; 33.3% · April 2026</div>
             </div>
             
           </div>
-          <div id="ps-na-list" style="padding:0 16px 12px;"></div>
+          <div id="ps-na-list" style="padding:0 16px 12px;"><div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;"><div style="font-size:12px;color:#991B1B;line-height:1.8;">Hingga April 2026, terdapat <strong>61 Sub-ICK</strong> yang memerlukan akselerasi dengan rata-rata progress <strong>31.0%</strong> (di bawah threshold 33.3%), tersebar di 1 Program Strategis (PS 0). PS 0 menjadi perhatian utama dengan progress rata-rata hanya <strong>31.0%</strong>.</div></div><div style="padding:0 2px;"><div style="padding:10px 0;"><div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;"><span style="background:#F59E0B;color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;">PS 0</span><span style="font-size:11px;font-weight:600;color:#374151;">FPPUKIS, KPKWP, FDSEK, TPID, SP, PUR, RIRU, PM, HUMAS, ICO, MI <span style="color:#6B7280;font-weight:400;">— 61 Sub-ICK, avg </span><span style="font-weight:700;color:#F59E0B;">31.0%</span></span></div><div style="font-size:9px;font-weight:700;color:#F59E0B;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">🎯 Narasi Target yang Perlu Diakselerasi</div><div id="rms-ps0_202604_na" style="font-size:11px;color:#374151;line-height:1.6;">08.860.120.4400.31.0.32.</div><div id="rmf-ps0_202604_na" style="display:none;font-size:11px;color:#374151;line-height:1.6;"><div style="margin-bottom:3px;"><span style="color:#F59E0B;font-weight:700;">1. </span>08.860.120.4400.31.0.32.</div><div style="margin-bottom:3px;"><span style="color:#F59E0B;font-weight:700;">2. </span>ii. Nilai asesmen RER Wilayah (skala 1-6)</div><div style="margin-bottom:3px;"><span style="color:#F59E0B;font-weight:700;">3. </span>iii. Nilai asesmen RER Provinsi (skala 1-6)</div><div style="margin-bottom:3px;"><span style="color:#F59E0B;font-weight:700;">4. </span>i. Jumlah kajian kebijakan (PN) terkait inflasi dan/atau pertumbuhan ekonomi</div><div style="margin-top:6px;"><span style="font-weight:600;color:#991B1B;">Kendala:</span> Potensi pembatalan transaksi ekspor dikarenakan instabilitas global</div><div style="margin-top:4px;"><span style="font-weight:600;color:#92400E;">Mitigasi:</span> Memperkuat fasilitasi dan business matching dengan potential buyer yang memiliki kapasitas finansial yang baik</div></div><button data-rmid="ps0_202604_na" onclick="toggleReadMore(this.dataset.rmid)" style="font-size:10px;color:#F59E0B;background:none;border:none;cursor:pointer;padding:2px 0;font-weight:600;">Baca selengkapnya ▼</button></div></div></div>
         </div>
       </div>
 
@@ -589,16 +575,16 @@ thead th{background:var(--surf);}
     </div>
 
     <!-- ═══ ATTENTION ═══ -->
-    <div id="tab-attn" style="display:none;">
+    <div id="tab-attn" style="display: none;">
       <div class="kpi-row kpi-r4" style="margin-bottom:12px;">
-        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="a-count">—</div><div class="kpi-lbl">Need Attention</div></div>
-        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num kpi-num-sm" id="a-avg">—</div><div class="kpi-lbl">Avg Progress</div></div>
-        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="a-zero">—</div><div class="kpi-lbl">Progress = 0%</div></div>
-        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num kpi-num-sm" id="a-gap">—</div><div class="kpi-lbl">Avg Gap vs Target</div></div>
+        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="a-count">16</div><div class="kpi-lbl">Need Attention</div></div>
+        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num kpi-num-sm" id="a-avg">24.6%</div><div class="kpi-lbl">Avg Progress</div></div>
+        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num" id="a-zero">0</div><div class="kpi-lbl">Progress = 0%</div></div>
+        <div class="kpi" style="--ac:var(--red)"><div class="kpi-ac"></div><div class="kpi-num kpi-num-sm" id="a-gap">8.8%</div><div class="kpi-lbl">Avg Gap vs Target</div></div>
       </div>
       <div class="card">
-        <div class="card-hd"><div><div class="card-title">Detail Sub ICK Need Attention</div><div class="card-sub" id="attn-sub">Diurutkan dari progress terendah</div></div></div>
-        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip active" id="an-uk-all" onclick="toggleFilterUK('an','')" style="font-size:10px;">Semua</button><button class="fchip" id="an-uk-FDSEK" onclick="toggleFilterUK('an','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="an-uk-FPPUKIS" onclick="toggleFilterUK('an','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="an-uk-HUMAS" onclick="toggleFilterUK('an','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="an-uk-ICO" onclick="toggleFilterUK('an','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="an-uk-KPKWP" onclick="toggleFilterUK('an','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip" id="an-uk-MI" onclick="toggleFilterUK('an','MI')" style="font-size:10px;color:#D946EF;border-color:#D946EF33;">MI</button><button class="fchip" id="an-uk-PM" onclick="toggleFilterUK('an','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="an-uk-PUR" onclick="toggleFilterUK('an','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="an-uk-RIRU" onclick="toggleFilterUK('an','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="an-uk-SP" onclick="toggleFilterUK('an','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="an-uk-TPID" onclick="toggleFilterUK('an','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="an-ps-all" onclick="toggleFilterPS('an',0)" style="font-size:10px;">Semua</button><button class="fchip" id="an-ps-1" onclick="toggleFilterPS('an',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="an-ps-2" onclick="toggleFilterPS('an',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="an-ps-5" onclick="toggleFilterPS('an',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="an-ps-6" onclick="toggleFilterPS('an',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="an-ps-7" onclick="toggleFilterPS('an',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="an-ps-8" onclick="toggleFilterPS('an',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="an-ps-9" onclick="toggleFilterPS('an',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="an-ps-10" onclick="toggleFilterPS('an',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="an-ps-11" onclick="toggleFilterPS('an',11)" style="font-size:10px;">PS 11</button></div></div>
+        <div class="card-hd"><div><div class="card-title">Detail Sub ICK Need Attention</div><div class="card-sub" id="attn-sub">Target bln ke-4: 33.3% · diurutkan terendah</div></div></div>
+        <div class="fbar" style="display:block;"><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Unit Kerja:</span><button class="fchip" id="an-uk-all" onclick="toggleFilterUK('an','')" style="font-size:10px;">Semua</button><button class="fchip" id="an-uk-FDSEK" onclick="toggleFilterUK('an','FDSEK')" style="font-size:10px;color:#6366F1;border-color:#6366F133;">FDSEK</button><button class="fchip" id="an-uk-FPPUKIS" onclick="toggleFilterUK('an','FPPUKIS')" style="font-size:10px;color:#3B82F6;border-color:#3B82F633;">FPPUKIS</button><button class="fchip" id="an-uk-HUMAS" onclick="toggleFilterUK('an','HUMAS')" style="font-size:10px;color:#8B5CF6;border-color:#8B5CF633;">HUMAS</button><button class="fchip" id="an-uk-ICO" onclick="toggleFilterUK('an','ICO')" style="font-size:10px;color:#EC4899;border-color:#EC489933;">ICO</button><button class="fchip" id="an-uk-KPKWP" onclick="toggleFilterUK('an','KPKWP')" style="font-size:10px;color:#0EA5E9;border-color:#0EA5E933;">KPKWP</button><button class="fchip active" id="an-uk-MI" onclick="toggleFilterUK('an','MI')" style="font-size: 10px; color: rgb(255, 255, 255); border-color: rgb(217, 70, 239); background: rgb(217, 70, 239);">MI</button><button class="fchip" id="an-uk-PM" onclick="toggleFilterUK('an','PM')" style="font-size:10px;color:#14B8A6;border-color:#14B8A633;">PM</button><button class="fchip" id="an-uk-PUR" onclick="toggleFilterUK('an','PUR')" style="font-size:10px;color:#F97316;border-color:#F9731633;">PUR</button><button class="fchip" id="an-uk-RIRU" onclick="toggleFilterUK('an','RIRU')" style="font-size:10px;color:#EAB308;border-color:#EAB30833;">RIRU</button><button class="fchip" id="an-uk-SP" onclick="toggleFilterUK('an','SP')" style="font-size:10px;color:#10B981;border-color:#10B98133;">SP</button><button class="fchip" id="an-uk-TPID" onclick="toggleFilterUK('an','TPID')" style="font-size:10px;color:#EF4444;border-color:#EF444433;">TPID</button></div><div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:6px;"><span class="fb-lbl" style="font-size:10px;font-weight:600;width:110px;flex-shrink:0;">Prog. Strategis:</span><button class="fchip active" id="an-ps-all" onclick="toggleFilterPS('an',0)" style="font-size:10px;">Semua</button><button class="fchip" id="an-ps-1" onclick="toggleFilterPS('an',1)" style="font-size:10px;">PS 1</button><button class="fchip" id="an-ps-2" onclick="toggleFilterPS('an',2)" style="font-size:10px;">PS 2</button><button class="fchip" id="an-ps-5" onclick="toggleFilterPS('an',5)" style="font-size:10px;">PS 5</button><button class="fchip" id="an-ps-6" onclick="toggleFilterPS('an',6)" style="font-size:10px;">PS 6</button><button class="fchip" id="an-ps-7" onclick="toggleFilterPS('an',7)" style="font-size:10px;">PS 7</button><button class="fchip" id="an-ps-8" onclick="toggleFilterPS('an',8)" style="font-size:10px;">PS 8</button><button class="fchip" id="an-ps-9" onclick="toggleFilterPS('an',9)" style="font-size:10px;">PS 9</button><button class="fchip" id="an-ps-10" onclick="toggleFilterPS('an',10)" style="font-size:10px;">PS 10</button><button class="fchip" id="an-ps-11" onclick="toggleFilterPS('an',11)" style="font-size:10px;">PS 11</button></div></div>
         <div class="tbl-wrap"><table>
           <thead style="position:sticky;top:0;z-index:10;"><tr>
             <th>PS</th>
@@ -611,7 +597,17 @@ thead th{background:var(--surf);}
             <th>Acuan Progress</th>
             <th style="min-width:170px;">Penjelasan</th>
           </tr></thead>
-          <tbody id="an-tbody"></tbody>
+          <tbody id="an-tbody"><tr class="row-attn">
+      <td><span class="pill p-gray tt" style="font-size:9px;" data-tip="PS 0">PS 0</span></td>
+      <td class="td-trunc td-m tt" data-tip="Kualitas implementasi terkait pengendalian risiko serta audit intern dan ekstern">Kualitas implementasi terkait pengendalian risiko serta audit intern dan ekstern</td>
+      <td style="font-size:11px;">i. Penyampaian rencana pengendalian dan evaluasi rencana risiko tahunan</td>
+      <td><span class="uk-chip" style="background:#D946EF18;color:#D946EF">MI</span></td>
+      <td class="td-m">1</td>
+      <td class="td-m">0,25</td>
+      <td><div class="prog"><div class="prog-bar"><div class="prog-fill" style="width:25%;background:#F59E0B"></div></div><span class="prog-val" style="color:#F59E0B">25.0%</span></div></td>
+      <td><span class="pill p-warn">33.3%</span></td>
+      <td style="font-size:11px;"><div class="pen"><span id="sp6q2a" style="display: none;">Laporan Profil Risiko Satuan Kerja Tahun 2026 Kantor Perwakilan Bank Indonesia Provinsi Kalimantan S<span class="pen-more" onclick="xp('p6q2a')"> …lanjut</span></span><span id="fp6q2a" style="">Laporan Profil Risiko Satuan Kerja Tahun 2026 Kantor Perwakilan Bank Indonesia Provinsi Kalimantan Selatan telah disusun melalui aplikasi PRITA, dan telah dilakukan Pemantauan Risiko Tahunan Posisi Triwulan I 2026 yang laporannya telah disampaikan kepada DMR melalui M.01 No.28/183/Bjm/M.01/B tanggal 22 April 2026 <span class="pen-more" onclick="cl('p6q2a')">↑</span></span></div></td>
+    </tr></tbody>
         </table></div>
         <div class="pag" id="an-pag"></div>
       </div>
@@ -993,210 +989,363 @@ function renderEval(){
 
 function renderPSSummary(){
   const m=CFG.MODES[S.mode];
-  const ickRows=ICK_D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
-  const accRows=ickRows.filter(r=>r.st==='accelerated');
-  const naRows=ickRows.filter(r=>r.st==='need_accelerate');
-  txt('ps-acc-n',accRows.length); txt('ps-na-n',naRows.length);
-  txt('ps-acc-sub','Progress ≥ 100% · '+m.lbl);
-  txt('ps-na-sub','Progress < '+pc(m.bln/12,1)+' · '+m.lbl);
+  const thr=m.bln/12;
+  const subRows=D.filter(r=>r.per===m.per&&(S.ukF.size===0||S.ukF.has(r.uk)));
+  const doneSub=subRows.filter(r=>r.prog>=1);
+  const naSub=subRows.filter(r=>r.prog<thr);
 
-  const groupByPS=rows=>{const map={};rows.forEach(r=>{map[r.ps]=map[r.ps]||[];map[r.ps].push(r);});return Object.entries(map).sort((a,b)=>+a[0]-+b[0]);};
-  const getNarasi=(uk,ick,per)=>[...new Set(D.filter(r=>r.per===per&&r.uk===uk&&r.ick===ick&&r.narasi).map(r=>r.narasi).filter(Boolean))].slice(0,3);
+  // Get prev period data for delta
+  const modes=Object.values(CFG.MODES);
+  const curIdx=modes.findIndex(x=>x.per===m.per);
+  const prevMode=curIdx>0?modes[curIdx-1]:null;
+  const prevRows=prevMode?D.filter(r=>r.per===prevMode.per&&(S.ukF.size===0||S.ukF.has(r.uk))):[];
 
-  const renderList=(rows,elId,isAcc)=>{
-    const groups=groupByPS(rows);
-    if(!groups.length){
-      set(elId,'<div style="padding:16px 0;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">'+(isAcc?'Belum ada ICK yang mencapai 100%':'Semua ICK on track! 🎉')+'</div>');
-      return;
-    }
-    const color=isAcc?'#059669':'#DC2626';
-    const bg=isAcc?'#F0FDF4':'#FFF5F5';
-    const bd=isAcc?'#A7F3D0':'#FECACA';
-    const pillCls=isAcc?'p-done':'p-attn';
-
-    set(elId, groups.map(([ps,items])=>{
-      const psName=PS_NAMES[String(ps)]||'PS '+ps;
-      const rows_html=items.map(r=>{
-        const narasis=getNarasi(r.uk,r.ick,m.per);
-
-        const narasi_html=narasis.length
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:var(--s5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">🎯 Narasi Target ICK</div>
-              ${narasis.map(n=>`<div style="font-size:11px;color:var(--s3);line-height:1.5;padding:2px 0 2px 10px;">• ${n.slice(0,160)}${n.length>160?'…':''}</div>`).join('')}
-            </div>`:
-          '';
-
-        const pen_html=r.pen
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:var(--s5);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">📋 Penjelasan Progress</div>
-              <div style="font-size:11px;color:var(--s3);line-height:1.6;padding-left:10px;">${r.pen.slice(0,250)}${r.pen.length>250?'…':''}</div>
-            </div>`:
-          '';
-
-        const sdh_html=r.sdh
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:#065F46;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">✅ Hal yang Telah Dilakukan</div>
-              <div style="font-size:11px;color:#064E3B;line-height:1.6;padding-left:10px;">${r.sdh.slice(0,250)}${r.sdh.length>250?'…':''}</div>
-            </div>`:
-          '';
-
-        const risk_html=(!isAcc&&r.risk)
-          ?`<div style="margin-bottom:6px;">
-              <div style="font-size:10px;font-weight:600;color:#991B1B;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">⚠️ Potensi Risiko & Kendala</div>
-              <div style="font-size:11px;color:#7F1D1D;line-height:1.6;padding-left:10px;">${r.risk.slice(0,220)}${r.risk.length>220?'…':''}</div>
-            </div>`:
-          '';
-
-        const miti_html=(!isAcc&&r.miti)
-          ?`<div>
-              <div style="font-size:10px;font-weight:600;color:#92400E;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;">🔧 Langkah Mitigasi</div>
-              <div style="font-size:11px;color:#78350F;line-height:1.6;padding-left:10px;">${r.miti.slice(0,220)}${r.miti.length>220?'…':''}</div>
-            </div>`:
-          '';
-
-        return`<div style="padding:10px 0;border-top:1px solid ${bd};">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <span style="font-size:13px;font-weight:700;color:${color};min-width:52px;">${pc(r.avg_prog)}</span>
-            <span class="uk-chip" style="background:${CFG.UK_COLOR[r.uk]||'#94A3B8'}22;color:${CFG.UK_COLOR[r.uk]||'#94A3B8'};font-size:9px;font-weight:700;">${r.uk}</span>
-            <span style="font-size:11px;color:var(--s2);font-weight:600;flex:1;">${r.ick_nm.slice(0,75)}${r.ick_nm.length>75?'…':''}</span>
-          </div>
-          <div style="padding-left:12px;">${narasi_html}${pen_html}${sdh_html}${risk_html}${miti_html}</div>
-        </div>`;
-      }).join('');
-
-      return`<div style="margin-top:10px;padding:12px 14px;background:${bg};border-radius:10px;border-left:3px solid ${color};">
-        <div style="margin-bottom:8px;">
-          <span class="pill ${pillCls}" style="font-size:10px;font-weight:700;cursor:default;" title="${psName}">PS ${ps}</span>
-        </div>
-        ${rows_html}
-      </div>`;
-    }).join(''));
+  // PS avg for current & prev
+  const psAvg=(psNum,rows)=>{
+    const rr=rows.filter(r=>r.ps===psNum);
+    return rr.length?rr.reduce((s,r)=>s+r.prog,0)/rr.length:null;
+  };
+  // UK avg for current & prev within a PS
+  const ukAvgInPS=(uk,psNum,rows)=>{
+    const rr=rows.filter(r=>r.ps===psNum&&r.uk===uk);
+    return rr.length?rr.reduce((s,r)=>s+r.prog,0)/rr.length:null;
   };
 
-  renderList(accRows,'ps-acc-list',true);
-  renderList(naRows,'ps-na-list',false);
+  txt('ps-acc-sub','Progress \u2265 100% \u00b7 '+m.lbl);
+  txt('ps-na-sub','Progress < '+pc(thr,1)+' \u00b7 '+m.lbl);
+
+  const uniq=arr=>[...new Set(arr.filter(Boolean))];
+
+  // Delta badge HTML
+  const deltaBadge=(cur,prev)=>{
+    if(prev===null||prev===undefined||!prevMode) return '';
+    const d=cur-prev;
+    if(Math.abs(d)<0.0005) return '<span style="font-size:9px;color:#94A3B8;margin-left:4px;font-weight:600;">↔ stabil</span>';
+    const up=d>0,col=up?'#059669':'#DC2626',arrow=up?'▲':'▼';
+    return '<span style="font-size:9px;font-weight:700;color:'+col+';margin-left:4px;">'+arrow+pc(Math.abs(d),1)+'</span>';
+  };
+
+  const groupByPS=rows=>{
+    const map={};
+    rows.forEach(r=>{
+      if(!map[r.ps]) map[r.ps]={ps:r.ps,count:0,uks:new Set(),progs:[],narasis:[],pens:[],risks:[],mitis:[]};
+      const g=map[r.ps];
+      g.count++; g.uks.add(r.uk); g.progs.push(r.prog);
+      if(r.narasi) g.narasis.push(r.narasi);
+      if(r.pen)    g.pens.push(r.pen);
+      if(r.risk)   g.risks.push(r.risk);
+      if(r.miti)   g.mitis.push(r.miti);
+    });
+    return Object.values(map).sort((a,b)=>a.ps-b.ps);
+  };
+  const avgProgs=g=>g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
+
+  const renderRow=(g,i,total,isAcc)=>{
+    const avg=avgProgs(g);
+    const prevAvg=psAvg(g.ps,prevRows);
+    const isHigh=!isAcc&&avg<0.15;
+    const badgeColor=isAcc?'#059669':(isHigh?'#DC2626':'#F59E0B');
+    const sep=i<total-1?'border-bottom:1px solid #E2E8F0;':'';
+
+    // UK compact chips with value + delta
+    const ukList=[...g.uks].sort();
+    const ukChips=ukList.map(uk=>{
+      const ukVal=ukAvgInPS(uk,g.ps,subRows);
+      if(ukVal===null) return '';
+      const ukPrev=ukAvgInPS(uk,g.ps,prevRows);
+      const ukColor=CFG.UK_COLOR[uk]||'#94A3B8';
+      const d=ukPrev!==null?(ukVal-ukPrev):null;
+      const dHtml=d===null?'':Math.abs(d)<0.0005
+        ?'<span style="font-size:8px;color:#94A3B8;"> \u2194</span>'
+        :'<span style="font-size:8px;font-weight:700;color:'+(d>0?'#059669':'#DC2626')+';"> '+(d>0?'\u25b2':'\u25bc')+pc(Math.abs(d),1)+'</span>';
+      return '<span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px 3px 6px;border-radius:7px;border:1px solid '+ukColor+'33;background:'+ukColor+'0D;margin:2px;">'
+        +'<span style="font-size:9px;font-weight:700;color:'+ukColor+';">'+uk+'</span>'
+        +'<span style="font-size:9px;font-weight:700;color:'+badgeColor+';margin-left:2px;">'+pc(ukVal,1)+'</span>'
+        +dHtml
+        +'</span>';
+    }).join('');
+
+    // Narasi targets
+    const narasis=uniq(g.narasis).slice(0,4);
+    const narasisShort=narasis.slice(0,1).map(n=>n.slice(0,100)+(n.length>100?'\u2026':'')).join('');
+    const narasisFull=narasis.map((n,idx2)=>'<div style="margin-bottom:3px;">'+(narasis.length>1?'<span style="color:'+badgeColor+';font-weight:700;">'+(idx2+1)+'. </span>':'')+n+'</div>').join('');
+    let extraFull='';
+    if(isAcc){
+      const pens=uniq(g.pens).slice(0,2).join(' | ');
+      if(pens) extraFull+='<div style="margin-top:6px;"><span style="font-weight:600;color:#065F46;">Realisasi:</span> '+pens+'</div>';
+    } else {
+      const risk=uniq(g.risks).slice(0,1).join('');
+      const miti=uniq(g.mitis).slice(0,1).join('');
+      if(risk) extraFull+='<div style="margin-top:6px;"><span style="font-weight:600;color:#991B1B;">Kendala:</span> '+risk+'</div>';
+      if(miti) extraFull+='<div style="margin-top:4px;"><span style="font-weight:600;color:#92400E;">Mitigasi:</span> '+miti+'</div>';
+    }
+    const uid='ps'+g.ps+'_'+m.per.replace('-','')+'_'+(isAcc?'acc':'na');
+
+    // Delta badge for PS avg
+    const dPS=prevAvg!==null?(avg-prevAvg):null;
+    const dPSHtml=dPS===null?'':Math.abs(dPS)<0.0005
+      ?'<span style="font-size:9px;color:#94A3B8;margin-left:5px;font-weight:600;">\u2194 stabil</span>'
+      :'<span style="font-size:9px;font-weight:700;color:'+(dPS>0?'#059669':'#DC2626')+';margin-left:5px;">'+(dPS>0?'\u25b2':'\u25bc')+pc(Math.abs(dPS),1)+'</span>';
+
+    return '<div style="padding:10px 0;'+sep+'">'
+      // Header row: PS badge | UKs count | avg% + delta | risk badge
+      +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">'
+        +'<span style="background:'+badgeColor+';color:#fff;font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;flex-shrink:0;letter-spacing:.2px;">PS '+g.ps+'</span>'
+        +'<span style="font-size:11px;font-weight:600;color:#374151;flex:1;min-width:0;">'
+          +[...g.uks].join(', ')
+          +' <span style="color:#9CA3AF;font-weight:400;">('+g.count+' Sub-ICK)</span>'
+        +'</span>'
+        // Avg pill
+        +'<span style="background:'+badgeColor+'18;border:1px solid '+badgeColor+'44;border-radius:8px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;">'
+          +'<span style="font-size:12px;font-weight:800;color:'+badgeColor+';">'+pc(avg,1)+'</span>'
+          +dPSHtml
+        +'</span>'
+        +(isHigh?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;font-weight:700;flex-shrink:0;">\u26A0 Risiko Tinggi</span>':'')
+      +'</div>'
+      // UK chips row
+      +(ukChips?'<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:7px;padding-left:2px;">'+ukChips+'</div>':'')
+      // Narasi label + read more
+      +(narasis.length?'<div style="font-size:9px;font-weight:700;color:'+badgeColor+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'
+        +(isAcc?'\uD83C\uDFAF Narasi Target yang Tercapai':'\uD83C\uDFAF Narasi Target yang Perlu Diakselerasi')+'</div>':'')
+      +(narasis.length||extraFull ? mkReadMore(uid, narasisShort, narasisFull+extraFull, badgeColor) : '')
+    +'</div>';
+  };
+
+  // Accelerated
+  const doGroups=groupByPS(doneSub);
+  if(!doGroups.length){
+    set('ps-acc-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Belum ada Sub-ICK yang mencapai 100%</div>');
+  } else {
+    const avgAll=doneSub.reduce((s,r)=>s+r.prog,0)/doneSub.length;
+    const psLabels=doGroups.map(g=>'PS '+g.ps).join(', ');
+    const topPS=[...doGroups].sort((a,b)=>b.count-a.count)[0];
+    const narrative='Hingga '+m.lbl+', terdapat <strong>'+doneSub.length+' Sub-ICK</strong> yang telah terselesaikan '
+      +'dengan rata-rata progress <strong>'+pc(avgAll,1)+'</strong>, tersebar di '+doGroups.length+' Program Strategis '
+      +'('+psLabels+'). '
+      +(topPS?'PS '+topPS.ps+' memberikan kontribusi terbesar dengan <strong>'+topPS.count+' Sub-ICK</strong> selesai oleh unit kerja '+[...topPS.uks].join(' dan ')+'.':'');
+    set('ps-acc-list',
+      '<div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
+        +'<div style="font-size:12px;color:#065F46;line-height:1.8;">'+narrative+'</div>'
+      +'</div>'
+      +'<div style="padding:0 2px;">'
+        +doGroups.map((g,i)=>renderRow(g,i,doGroups.length,true)).join('')
+      +'</div>'
+    );
+  }
+
+  // Need Accelerate
+  const naGroups=groupByPS(naSub);
+  if(!naGroups.length){
+    set('ps-na-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Semua Sub-ICK on track! \uD83C\uDF89</div>');
+  } else {
+    const sorted=[...naGroups].sort((a,b)=>(a.progs.reduce((s,x)=>s+x,0)/a.progs.length)-(b.progs.reduce((s,x)=>s+x,0)/b.progs.length));
+    const avgAll=naSub.reduce((s,r)=>s+r.prog,0)/naSub.length;
+    const psLabels=sorted.map(g=>'PS '+g.ps).join(', ');
+    const atRisk=sorted[0];
+    const atRiskAvg=atRisk.progs.reduce((s,x)=>s+x,0)/atRisk.progs.length;
+    const narrative='Hingga '+m.lbl+', terdapat <strong>'+naSub.length+' Sub-ICK</strong> yang memerlukan akselerasi '
+      +'dengan rata-rata progress <strong>'+pc(avgAll,1)+'</strong> (di bawah threshold '+pc(thr,1)+'), '
+      +'tersebar di '+naGroups.length+' Program Strategis ('+psLabels+'). '
+      +'PS '+atRisk.ps+' menjadi perhatian utama dengan progress rata-rata hanya <strong>'+pc(atRiskAvg,1)+'</strong>.';
+    set('ps-na-list',
+      '<div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
+        +'<div style="font-size:12px;color:#991B1B;line-height:1.8;">'+narrative+'</div>'
+      +'</div>'
+      +'<div style="padding:0 2px;">'
+        +sorted.map((g,i)=>renderRow(g,i,sorted.length,false)).join('')
+      +'</div>'
+    );
+  }
 }
 
 
-// ── Bar Charts: UK + PS ──
+// ── Bar Charts: UK + PS (single bar + delta badge) ──
 function renderBarCharts(){
   const m=CFG.MODES[S.mode];
-  const curPer=m.per,prevPer=m.prevPer;
-  const prevLbl=m.prevLbl||null,xLbl=m.lbl.split(' ')[0];
+  const curPer=m.per, prevPer=m.prevPer;
+  const xLbl=m.lbl;
+  const thrPct=+(m.bln/12*100).toFixed(1);
 
-  const shortL=l=>l?l.slice(0,3)+"'26":'';const label=prevLbl?`${shortL(xLbl)} vs ${shortL(prevLbl)}`:shortL(xLbl)||xLbl;
-  txt('uk-bar-sub',label);
-  txt('ps-bar-sub',label);
+  txt('uk-bar-sub', xLbl+(prevPer?' · Δ vs bulan lalu':''));
+  txt('ps-bar-sub', xLbl+(prevPer?' · Δ vs bulan lalu':''));
 
-  // Avg per UK
+  // Avg helpers
   const ukAvg=(uk,per)=>{
     const rr=D.filter(r=>r.per===per&&r.uk===uk);
     return rr.length?+(rr.reduce((s,r)=>s+r.prog,0)/rr.length*100).toFixed(1):0;
   };
-  const uksCur=CFG.UKS.filter(uk=>S.ukF.size===0||S.ukF.has(uk));
-  const ukDataCur=uksCur.map(uk=>ukAvg(uk,curPer));
-  const ukDataPrev=prevPer?uksCur.map(uk=>ukAvg(uk,prevPer)):null;
-
-  // Avg per PS
   const psAvg=(ps,per)=>{
     const rr=D.filter(r=>r.per===per&&r.ps===ps&&(S.ukF.size===0||S.ukF.has(r.uk)));
     return rr.length?+(rr.reduce((s,r)=>s+r.prog,0)/rr.length*100).toFixed(1):0;
   };
+
+  // Deduplicated UK list respecting filter
+  const uksCur=[...new Set(CFG.UKS)].filter(uk=>S.ukF.size===0||S.ukF.has(uk));
+  const ukDataCur=uksCur.map(uk=>ukAvg(uk,curPer));
+  const ukDataPrev=prevPer?uksCur.map(uk=>ukAvg(uk,prevPer)):null;
+
   const psDataCur=CFG.PSS.map(ps=>psAvg(ps,curPer));
   const psDataPrev=prevPer?CFG.PSS.map(ps=>psAvg(ps,prevPer)):null;
 
-  // Color per UK value
+  // Color by value
   const barColor=v=>v>=50?'#10B981':v>=25?'#3B82F6':v>=15?'#F59E0B':'#EF4444';
 
   // Destroy old
   if(S.charts.ukBar){S.charts.ukBar.destroy();delete S.charts.ukBar;}
   if(S.charts.psBar){S.charts.psBar.destroy();delete S.charts.psBar;}
 
-  // Shared chart options builder
-  const makeOpts=(labels,curData,prevData,isHoriz)=>({
-    type:'bar',
-    data:{
-      labels,
-      datasets:[
-        ...(prevData?[{
-          label:shortL(prevLbl)||'Sblm',
-          data:prevData,
-          backgroundColor:'#CBD5E1',
-          borderRadius:3,
-          barPercentage:0.55,
-          categoryPercentage:0.75,
-        }]:[]),
-        {
-          label:shortL(xLbl)||'Ini',
-          data:curData,
-          backgroundColor:curData.map(v=>barColor(v)+'CC'),
-          borderColor:curData.map(v=>barColor(v)),
-          borderWidth:1,
-          borderRadius:3,
-          barPercentage:0.55,
-          categoryPercentage:0.75,
+  // ── Plugin: delta label right of bar (canvas draw) ──
+  const deltaPlugin={
+    id:'deltaRight',
+    afterDatasetsDraw(chart){
+      const prevArr=chart._prevData;
+      if(!prevArr) return;
+      const {ctx,data,scales:{x,y}}=chart;
+      const vals=data.datasets[0].data;
+      ctx.save();
+      ctx.textBaseline='middle';
+      ctx.textAlign='left';
+      vals.forEach((v,i)=>{
+        const pv=prevArr[i];
+        if(pv===null||pv===undefined) return;
+        const d=+(v-pv).toFixed(1);
+        // Use getMeta to get actual rendered bar center Y
+        const meta=chart.getDatasetMeta(0);
+        if(!meta||!meta.data[i]) return;
+        const barEl=meta.data[i];
+        const yPos=barEl.y;
+        const barEnd=x.getPixelForValue(v);
+        if(Math.abs(d)<0.05){
+          ctx.fillStyle='#94A3B8';
+          ctx.font='600 9px "DM Sans",sans-serif';
+          ctx.fillText('\u2194',barEnd+7,yPos);
+        } else {
+          ctx.fillStyle=d>0?'#059669':'#DC2626';
+          ctx.font='700 9px "DM Sans",sans-serif';
+          ctx.fillText((d>0?'\u25b2':'\u25bc')+Math.abs(d)+'%',barEnd+7,yPos);
         }
-      ]
-    },
-    options:{
-      indexAxis:'y',
-      responsive:true,
-      maintainAspectRatio:false,
-      layout:{padding:{right:36}},
-      plugins:{
-        legend:{display:!!prevData,position:'top',align:'end',
-          labels:{boxWidth:10,font:{size:10,family:'DM Sans, sans-serif'},color:'#64748B',padding:8}},
-        datalabels:{
-          display:(ctx)=>ctx.datasetIndex===ctx.chart.data.datasets.length-1,
-          formatter:v=>v+'%',
-          color:(ctx)=>{const v=ctx.dataset.data[ctx.dataIndex];return barColor(v);},
-          font:{size:10,weight:'600',family:'DM Sans, sans-serif'},
-          anchor:'end',align:'end',offset:2,
-        },
-        tooltip:{
-          callbacks:{
-            title:ctx=>{
-              const lbl=ctx[0].label;
-              const per=CFG.MODES[S.mode].per;
-              const isUK=CFG.UKS.includes(lbl);
-              const isPS=typeof lbl==='string'&&lbl.startsWith('PS ');
-              if(isUK){
-                const rows=D.filter(r=>r.per===per&&r.uk===lbl&&(S.ukF.size===0||S.ukF.has(r.uk)));
-                const icks=new Set(rows.map(r=>r.ick)).size;
-                return `${lbl}  ·  ${icks} ICK  ·  ${rows.length} Sub ICK`;
-              }
-              if(isPS){
-                const psNum=parseInt(lbl.replace('PS ',''));
-                const rows=D.filter(r=>r.per===per&&r.ps===psNum&&(S.ukF.size===0||S.ukF.has(r.uk)));
-                const icks=new Set(rows.map(r=>r.ick)).size;
-                const psName=PS_NAMES[String(psNum)]||'';
-                return [
-                  `${lbl}  ·  ${icks} ICK  ·  ${rows.length} Sub ICK`,
-                  psName.slice(0,65)+(psName.length>65?'…':''),
-                ];
-              }
-              return lbl;
-            },
-            label:ctx=>`${ctx.dataset.label}: ${ctx.raw}%`,
-          }
-        },
-      },
-      scales:{
-        x:{min:0,max:100,
-          ticks:{callback:v=>v+'%',font:{size:10,family:'DM Sans, sans-serif'},color:'#94A3B8',maxTicksLimit:6},
-          grid:{color:'#F1F5F9'},border:{display:false}},
-        y:{ticks:{font:{size:10,family:'DM Sans, sans-serif'},color:'#334155'},
-          grid:{display:false},border:{display:false}},
-      }
+      });
+      ctx.restore();
     }
-  });
+  };
 
-  S.charts.ukBar=new Chart($('uk-bar-chart'),makeOpts(uksCur,ukDataCur,ukDataPrev,true));
-  S.charts.psBar=new Chart($('ps-bar-chart'),makeOpts(CFG.PSS.map(p=>'PS '+p),psDataCur,psDataPrev,true));
+  // ── Plugin: threshold dashed line + label ──
+  const thresholdPlugin={
+    id:'thresholdLine',
+    afterDraw(chart){
+      const {ctx,scales:{x},chartArea:{top,bottom}}=chart;
+      const xPx=x.getPixelForValue(thrPct);
+      ctx.save();
+      ctx.setLineDash([4,3]);
+      ctx.strokeStyle='rgba(100,116,139,0.55)';
+      ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.moveTo(xPx,top+2);ctx.lineTo(xPx,bottom);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='#475569';
+      ctx.font='600 9px "DM Sans",sans-serif';
+      ctx.textAlign='center';
+      ctx.fillText('Target '+thrPct+'%',xPx,top-6);
+      ctx.restore();
+    }
+  };
+
+  // ── Build chart ──
+  const makeChart=(canvasId,labels,curData,prevData)=>{
+    const plugins=[thresholdPlugin];
+    if(prevData) plugins.push(deltaPlugin);
+
+    const chart=new Chart($(canvasId),{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[{
+          label:xLbl,
+          data:curData,
+          backgroundColor:curData.map(v=>barColor(v)+'E0'),
+          borderColor:curData.map(v=>barColor(v)),
+          borderWidth:0,
+          borderRadius:3,
+          barPercentage:0.65,
+          categoryPercentage:0.85,
+        }]
+      },
+      plugins,
+      options:{
+        indexAxis:'y',
+        responsive:true,
+        maintainAspectRatio:false,
+        layout:{padding:{top:18, right:prevData?62:12, bottom:4, left:4}},
+        plugins:{
+          legend:{display:false},
+          datalabels:{
+            display:(ctx)=>ctx.dataset.data[ctx.dataIndex]>=10,
+            formatter:v=>v+'%',
+            color:'#ffffff',
+            font:{size:10,weight:'700',family:'"DM Sans",sans-serif'},
+            anchor:'end',
+            align:'start',
+            offset:8,
+            textShadowBlur:4,
+            textShadowColor:'rgba(0,0,0,0.25)',
+          },
+          tooltip:{
+            callbacks:{
+              title:ctx=>{
+                const lbl=ctx[0].label;
+                const per=CFG.MODES[S.mode].per;
+                if(CFG.UKS.includes(lbl)){
+                  const rows=D.filter(r=>r.per===per&&r.uk===lbl);
+                  return lbl+' \u00b7 '+new Set(rows.map(r=>r.ick)).size+' ICK \u00b7 '+rows.length+' Sub ICK';
+                }
+                if(lbl.startsWith('PS ')){
+                  const psNum=parseInt(lbl.replace('PS ',''));
+                  const rows=D.filter(r=>r.per===per&&r.ps===psNum&&(S.ukF.size===0||S.ukF.has(r.uk)));
+                  const psName=PS_NAMES[String(psNum)]||'';
+                  return [lbl+' \u00b7 '+new Set(rows.map(r=>r.ick)).size+' ICK \u00b7 '+rows.length+' Sub ICK',
+                    psName.slice(0,60)+(psName.length>60?'\u2026':'')];
+                }
+                return lbl;
+              },
+              label:ctx=>{
+                const v=ctx.raw, idx=ctx.dataIndex;
+                const prev=prevData?prevData[idx]:null;
+                const st=v>=thrPct?'\u2705 On Track':'\u26a0\ufe0f Perlu Akselerasi';
+                let s=' '+xLbl+': '+v+'%  '+st;
+                if(prev!==null&&prev!==undefined&&prevPer){
+                  const d=+(v-prev).toFixed(1);
+                  s+='  | \u0394: '+(d>0?'+':'')+d+'%';
+                }
+                return s;
+              },
+              afterBody:()=>['  Target bulanan: '+thrPct+'%'],
+            }
+          },
+        },
+        scales:{
+          x:{min:0,max:100,
+            ticks:{callback:v=>v+'%',font:{size:10,family:'"DM Sans",sans-serif'},color:'#94A3B8',maxTicksLimit:6},
+            grid:{color:'#F1F5F9'},border:{display:false}},
+          y:{
+            ticks:{
+              font:{size:11,family:'"DM Sans",sans-serif'},
+              color:'#334155',
+              padding:6,
+              // Ensure label always shows even if bar is tiny
+              autoSkip:false,
+            },
+            grid:{display:false},
+            border:{display:false},
+          },
+        }
+      }
+    });
+    chart._prevData=prevData||null;
+    return chart;
+  };
+
+  S.charts.ukBar=makeChart('uk-bar-chart',uksCur,ukDataCur,ukDataPrev);
+  S.charts.psBar=makeChart('ps-bar-chart',CFG.PSS.map(p=>'PS '+p),psDataCur,psDataPrev);
 }
-
-
-
 
 // ── ICK Detail (in overview, with sub-tabs + UK filter) ──
 function setICKTab(el,tab){
@@ -1923,139 +2072,10 @@ function mkReadMore(id,shortText,fullText,color){
     +'<button data-rmid="'+id+'" onclick="toggleReadMore(this.dataset.rmid)" style="font-size:10px;color:'+color+';background:none;border:none;cursor:pointer;padding:2px 0;font-weight:600;">Baca selengkapnya ▼</button>';
 }
 
-function renderPSSummary(){
-  const m=CFG.MODES[S.mode];
-  const per=m.per;
-  const thr=m.bln/12;
-
-  const subRows=D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
-  const doneSub=subRows.filter(r=>r.prog>=1);
-  const naSub=subRows.filter(r=>r.prog<thr);
-  const ickRows=ICK_D.filter(r=>r.per===per&&(S.ukF.size===0||S.ukF.has(r.uk)));
-  const accICK=ickRows.filter(r=>r.st==='accelerated');
-  const naICK=ickRows.filter(r=>r.st==='need_accelerate');
-
-  txt('ps-acc-n',accICK.length); txt('ps-na-n',naICK.length);
-  txt('ps-acc-sub','Progress \u2265 100% \u00b7 '+m.lbl);
-  txt('ps-na-sub','Progress < '+pc(thr,1)+' \u00b7 '+m.lbl);
-
-  const uniq=arr=>[...new Set(arr.filter(Boolean))];
-
-  const groupByPS=rows=>{
-    const map={};
-    rows.forEach(r=>{
-      if(!map[r.ps]) map[r.ps]={ps:r.ps,count:0,uks:new Set(),progs:[],narasis:[],pens:[],risks:[],mitis:[]};
-      const g=map[r.ps];
-      g.count++; g.uks.add(r.uk); g.progs.push(r.prog);
-      if(r.narasi) g.narasis.push(r.narasi);
-      if(r.pen)    g.pens.push(r.pen);
-      if(r.risk)   g.risks.push(r.risk);
-      if(r.miti)   g.mitis.push(r.miti);
-    });
-    return Object.values(map).sort((a,b)=>a.ps-b.ps);
-  };
-
-  const avgProgs=g=>g.progs.reduce((s,x)=>s+x,0)/g.progs.length;
-
-  // Shared row renderer for both sections
-  const renderRow=(g,i,total,isAcc)=>{
-    const avg=avgProgs(g);
-    const isHigh=!isAcc&&avg<0.15;
-    const badgeColor=isAcc?'#059669':(isHigh?'#DC2626':'#F59E0B');
-    const sep=i<total-1?'border-bottom:1px solid #E2E8F0;':'';
-    const uid='ps'+g.ps+'_'+per.replace('-','')+'_'+(isAcc?'acc':'na');
-
-    // Narasi targets
-    const narasis=uniq(g.narasis).slice(0,4);
-    const narasisShort=narasis.slice(0,1).map(n=>n.slice(0,100)+(n.length>100?'\u2026':'')).join('');
-    const narasisFull=narasis.map((n,i)=>'<div style="margin-bottom:3px;">'+(narasis.length>1?'<span style="color:'+badgeColor+';font-weight:700;">'+(i+1)+'. </span>':'')+n+'</div>').join('');
-
-    // Extra detail (pen for acc, risk+miti for na)
-    let extraFull='';
-    if(isAcc){
-      const pens=uniq(g.pens).slice(0,2).join(' | ');
-      if(pens) extraFull+='<div style="margin-top:6px;"><span style="font-weight:600;color:#065F46;">Realisasi:</span> '+pens+'</div>';
-    } else {
-      const risk=uniq(g.risks).slice(0,1).join('');
-      const miti=uniq(g.mitis).slice(0,1).join('');
-      if(risk) extraFull+='<div style="margin-top:6px;"><span style="font-weight:600;color:#991B1B;">Kendala:</span> '+risk+'</div>';
-      if(miti) extraFull+='<div style="margin-top:4px;"><span style="font-weight:600;color:#92400E;">Mitigasi:</span> '+miti+'</div>';
-    }
-
-    const hasMore=(narasis.length>1)||(narasisShort!==narasisFull.replace(/<[^>]+>/g,''))||extraFull;
-
-    return '<div style="padding:10px 0;'+sep+'">'
-      // Header: badge + uk + count + avg
-      +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:6px;">'
-        +'<span style="background:'+badgeColor+';color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0;">PS '+g.ps+'</span>'
-        +'<span style="font-size:11px;font-weight:600;color:#374151;">'
-          +[...g.uks].join(', ')
-          +' <span style="color:#6B7280;font-weight:400;">\u2014 '+g.count+' Sub-ICK, avg </span>'
-          +'<span style="font-weight:700;color:'+badgeColor+';">'+pc(avg,1)+'</span>'
-        +'</span>'
-        +(isHigh?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:1px 6px;border-radius:20px;font-weight:700;margin-left:2px;">\u26A0 Berisiko Tinggi</span>':'')
-      +'</div>'
-      // Narasi target label
-      +(narasis.length?'<div style="font-size:9px;font-weight:700;color:'+badgeColor+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'
-        +(isAcc?'\uD83C\uDFAF Narasi Target yang Tercapai':'\uD83C\uDFAF Narasi Target yang Perlu Diakselerasi')+'</div>':'')
-      // Short + read more
-      +(narasis.length||extraFull ? mkReadMore(uid, narasisShort, narasisFull+extraFull, badgeColor) : '')
-    +'</div>';
-  };
-
-  // ── ACCELERATED ──
-  const renderAcc=()=>{
-    if(!doneSub.length){
-      set('ps-acc-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Belum ada Sub-ICK yang mencapai 100%</div>');
-      return;
-    }
-    const groups=groupByPS(doneSub);
-    const avgAll=doneSub.reduce((s,r)=>s+r.prog,0)/doneSub.length;
-    const psLabels=groups.map(g=>'PS '+g.ps).join(', ');
-    const topPS=[...groups].sort((a,b)=>b.count-a.count)[0];
-    const narrative='Hingga '+m.lbl+', terdapat <strong>'+doneSub.length+' Sub-ICK</strong> yang telah terselesaikan '
-      +'dengan rata-rata progress <strong>'+pc(avgAll,1)+'</strong>, tersebar di '+groups.length+' Program Strategis '
-      +'('+psLabels+'). '
-      +(topPS?'PS '+topPS.ps+' memberikan kontribusi terbesar dengan <strong>'+topPS.count+' Sub-ICK</strong> selesai oleh unit kerja '+[...topPS.uks].join(' dan ')+'.':'');
-
-    set('ps-acc-list',
-      '<div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
-        +'<div style="font-size:12px;color:#065F46;line-height:1.8;">'+narrative+'</div>'
-      +'</div>'
-      +'<div style="padding:0 2px;">'
-        +groups.map((g,i)=>renderRow(g,i,groups.length,true)).join('')
-      +'</div>'
-    );
-  };
-
-  // ── NEED ACCELERATE ──
-  const renderNA=()=>{
-    if(!naSub.length){
-      set('ps-na-list','<div style="padding:16px;font-size:12px;color:var(--s5);font-style:italic;text-align:center;">Semua Sub-ICK on track! \uD83C\uDF89</div>');
-      return;
-    }
-    const groups=groupByPS(naSub);
-    const sorted=[...groups].sort((a,b)=>avgProgs(a)-avgProgs(b));
-    const avgAll=naSub.reduce((s,r)=>s+r.prog,0)/naSub.length;
-    const psLabels=sorted.map(g=>'PS '+g.ps).join(', ');
-    const atRisk=sorted[0];
-    const narrative='Hingga '+m.lbl+', terdapat <strong>'+naSub.length+' Sub-ICK</strong> yang memerlukan akselerasi '
-      +'dengan rata-rata progress <strong>'+pc(avgAll,1)+'</strong> (di bawah threshold '+pc(thr,1)+'), '
-      +'tersebar di '+groups.length+' Program Strategis ('+psLabels+'). '
-      +'PS '+atRisk.ps+' menjadi perhatian utama dengan progress rata-rata hanya <strong>'+pc(avgProgs(atRisk),1)+'</strong>.';
-
-    set('ps-na-list',
-      '<div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
-        +'<div style="font-size:12px;color:#991B1B;line-height:1.8;">'+narrative+'</div>'
-      +'</div>'
-      +'<div style="padding:0 2px;">'
-        +sorted.map((g,i)=>renderRow(g,i,sorted.length,false)).join('')
-      +'</div>'
-    );
-  };
-
-  renderAcc();
-  renderNA();
+// renderPSSummary unified function defined above — duplicate removed
+function _removedDuplicateRenderPSSummary_NOOP(){
+  // dead placeholder — real implementation is above
+  void 0;
 }
 
 function restoreSheetUrl(){
@@ -2162,5 +2182,6 @@ function restoreSheetUrl(){
 })();
 
 </script>
-</body>
-</html>
+
+
+<div id="platstack_root" style="position: fixed; top: 10px; right: 10px; z-index: 2147483647;"></div><platstack-highlight-options style="position: fixed; z-index: 2147483647;"></platstack-highlight-options></body></html>
