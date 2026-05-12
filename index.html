@@ -858,11 +858,13 @@ function renderOverview(){
   const ickNa=ickRows.filter(r=>r.avg_prog<thresh).length;
 
   // ── Sub ICK-level stats ──
+  // Gunakan r.st (sama persis dengan tab Need Attention/Done/On Track)
+  // agar angka selalu konsisten di semua tab.
   const subCount=rows.length;
   const subAvg=subCount?rows.reduce((s,r)=>s+r.prog,0)/subCount:0;
-  const subAcc=rows.filter(r=>r.prog>=1).length;
-  const subOt=rows.filter(r=>r.prog>=thresh&&r.prog<1).length;
-  const subNa=rows.filter(r=>r.prog<thresh).length;
+  const subAcc=rows.filter(r=>r.st==='done').length;
+  const subOt=rows.filter(r=>r.st==='on_track').length;
+  const subNa=rows.filter(r=>r.st==='need_attention').length;
 
   // ── Delta vs previous period ──
   const modes=Object.values(CFG.MODES);
@@ -897,9 +899,9 @@ function renderOverview(){
   const prevIckOt=prevMode?prevIck.filter(r=>r.avg_prog>=(curIdx>0?modes[curIdx-1].bln/12:thresh)&&r.avg_prog<1).length:null;
   const prevIckNa=prevMode?prevIck.filter(r=>r.avg_prog<(curIdx>0?modes[curIdx-1].bln/12:thresh)).length:null;
   const prevSubCount=prevRows.length||null;
-  const prevSubAcc=prevMode?prevRows.filter(r=>r.prog>=1).length:null;
-  const prevSubOt=prevMode?prevRows.filter(r=>r.prog>=(curIdx>0?modes[curIdx-1].bln/12:thresh)&&r.prog<1).length:null;
-  const prevSubNa=prevMode?prevRows.filter(r=>r.prog<(curIdx>0?modes[curIdx-1].bln/12:thresh)).length:null;
+  const prevSubAcc=prevMode?prevRows.filter(r=>r.st==='done').length:null;
+  const prevSubOt=prevMode?prevRows.filter(r=>r.st==='on_track').length:null;
+  const prevSubNa=prevMode?prevRows.filter(r=>r.st==='need_attention').length:null;
 
   // ICK KPI cards
   set('ki-count',ickCount+deltaCountHtml(ickCount,prevIckCount));
@@ -950,11 +952,25 @@ function renderEval(){
       probs.push('<span style="color:#DC2626;font-weight:600;">Realisasi kosong</span> — wajib diisi jika progress 100%');
     }
     // Rule 3: Progress 100% → realisasi >= target
+    // Bug fix: target bisa berupa rasio desimal (0.85 = skala 0-1) atau angka besar (100 kegiatan).
+    // Dulu: replace(/\./g,'') menghapus titik desimal → "0.85" jadi 85 → false positive.
+    // Sekarang: parse format Indonesia (1.234,56) dengan benar, skip jika target ≤ 1.5 (rasio/indeks).
     if(r.prog>=0.999&&r.real&&r.real>0&&r.tgt){
       try{
-        const tStr=String(r.tgt).replace(/[Rp±<>\s]/g,'').replace(/\./g,'').replace(',','.');
-        const tNum=parseFloat(tStr);
-        if(!isNaN(tNum)&&r.real<tNum*0.99){
+        let tStr=String(r.tgt).replace(/[Rp±<>%\s]/g,'').trim();
+        const hasComma=tStr.includes(',');
+        const hasDot=tStr.includes('.');
+        let tNum;
+        if(hasComma&&hasDot){
+          // Format Indonesia: 1.234,56 → hapus titik ribuan, ganti koma jadi titik desimal
+          tNum=parseFloat(tStr.replace(/\./g,'').replace(',','.'));
+        } else if(hasComma&&!hasDot){
+          tNum=parseFloat(tStr.replace(',','.'));
+        } else {
+          tNum=parseFloat(tStr);
+        }
+        // Hanya flag jika target adalah angka besar (>1.5), bukan rasio/indeks (0-1)
+        if(!isNaN(tNum)&&tNum>1.5&&r.real<tNum*0.99){
           probs.push('<span style="color:#DC2626;font-weight:600;">Realisasi ('+fmtNum(r.real)+') &lt; Target ('+r.tgt+')</span> — tidak konsisten dengan progress 100%');
         }
       }catch(e){}
