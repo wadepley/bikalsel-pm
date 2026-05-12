@@ -1147,28 +1147,32 @@ function renderPSSummary(){
       ?'<span style="font-size:9px;color:#94A3B8;margin-left:5px;font-weight:600;">\u2194 stabil</span>'
       :'<span style="font-size:9px;font-weight:700;color:'+(dPS>0?'#059669':'#DC2626')+';margin-left:5px;">'+(dPS>0?'\u25b2':'\u25bc')+pc(Math.abs(dPS),1)+'</span>';
 
-    return '<div style="padding:10px 0;'+sep+'">'
-      // Header row: PS badge | UKs count | avg% + delta | risk badge
-      +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">'
-        +'<span style="background:'+badgeColor+';color:#fff;font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;flex-shrink:0;letter-spacing:.2px;">PS '+g.ps+'</span>'
-        +'<span style="font-size:11px;font-weight:600;color:#374151;flex:1;min-width:0;">'
-          +[...g.uks].join(', ')
-          +' <span style="color:#9CA3AF;font-weight:400;">('+g.count+' Sub-ICK)</span>'
-        +'</span>'
-        // Avg pill
-        +'<span style="background:'+badgeColor+'18;border:1px solid '+badgeColor+'44;border-radius:8px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;">'
-          +'<span style="font-size:12px;font-weight:800;color:'+badgeColor+';">'+pc(avg,1)+'</span>'
-          +dPSHtml
-        +'</span>'
-        +(isHigh?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;font-weight:700;flex-shrink:0;">\u26A0 Risiko Tinggi</span>':'')
-      +'</div>'
-      // UK chips row
-      +(ukChips?'<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:7px;padding-left:2px;">'+ukChips+'</div>':'')
-      // Narasi label + read more
+    // Detail (chips + narasi) — collapsed by default
+    const detailHtml=''
+      +(ukChips?'<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:7px;">'+ukChips+'</div>':'')
       +(narasis.length?'<div style="font-size:9px;font-weight:700;color:'+badgeColor+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'
         +(isAcc?'\uD83C\uDFAF Narasi Target yang Tercapai':'\uD83C\uDFAF Narasi Target yang Perlu Diakselerasi')+'</div>':'')
-      +(narasis.length||extraFull ? mkReadMore(uid, narasisShort, narasisFull+extraFull, badgeColor) : '')
-    +'</div>';
+      +(narasis.length||extraFull ? mkReadMore(uid, narasisShort, narasisFull+extraFull, badgeColor) : '');
+
+    return ''
+      +'<div style="border-left:3px solid '+badgeColor+';border-radius:0 8px 8px 0;background:#fff;margin-bottom:8px;box-shadow:0 1px 3px rgba(0,0,0,.05);">'
+        // Header — selalu tampil, klik untuk expand
+        +'<div onclick="togglePSCard(''+uid+'')" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;cursor:pointer;user-select:none;border-radius:0 8px 8px 0;" onmouseover="this.style.background=''+badgeColor+'0A'" onmouseout="this.style.background='#fff'">'
+          +'<span style="background:'+badgeColor+';color:#fff;font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;flex-shrink:0;letter-spacing:.2px;">PS '+g.ps+'</span>'
+          +'<span style="font-size:11px;font-weight:600;color:#374151;flex:1;min-width:0;">'
+            +[...g.uks].join(', ')
+            +' <span style="color:#9CA3AF;font-weight:400;">('+g.count+' Sub-ICK)</span>'
+          +'</span>'
+          +(isHigh?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;font-weight:700;flex-shrink:0;">\u26A0 Risiko Tinggi</span>':'')
+          +'<span style="background:'+badgeColor+'18;border:1px solid '+badgeColor+'44;border-radius:8px;padding:3px 10px;display:inline-flex;align-items:center;gap:4px;flex-shrink:0;">'
+            +'<span style="font-size:12px;font-weight:800;color:'+badgeColor+';">'+pc(avg,1)+'</span>'
+            +dPSHtml
+          +'</span>'
+          +'<span id="psarr-'+uid+'" style="font-size:9px;color:#94A3B8;flex-shrink:0;display:inline-block;transition:transform .2s;">&#9660;</span>'
+        +'</div>'
+        // Detail — hidden by default
+        +(detailHtml?'<div id="psbd-'+uid+'" style="display:none;padding:0 12px 10px;border-top:1px solid #F1F5F9;">'+detailHtml+'</div>':'')
+      +'</div>';
   };
 
   // Accelerated
@@ -1187,7 +1191,11 @@ function renderPSSummary(){
       '<div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
         +'<div style="font-size:12px;color:#065F46;line-height:1.8;">'+narrative+'</div>'
       +'</div>'
-      +'<div style="padding:0 2px;">'
+      +'<button onclick="togglePSList(this,'ps-acc-cards')" style="display:flex;align-items:center;gap:5px;margin-bottom:10px;padding:5px 12px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:#059669;font-family:inherit;">'
+        +'<span style="display:inline-block;transition:transform .2s;" id="ps-acc-arr">&#9660;</span>'
+        +'&nbsp;Lihat Detail per PS ('+doGroups.length+')'
+      +'</button>'
+      +'<div id="ps-acc-cards" style="display:none;">'
         +doGroups.map((g,i)=>renderRow(g,i,doGroups.length,true)).join('')
       +'</div>'
     );
@@ -1211,7 +1219,11 @@ function renderPSSummary(){
       '<div style="background:#FFF5F5;border:1px solid #FECACA;border-radius:10px;padding:14px 16px;margin-bottom:12px;">'
         +'<div style="font-size:12px;color:#991B1B;line-height:1.8;">'+narrative+'</div>'
       +'</div>'
-      +'<div style="padding:0 2px;">'
+      +'<button onclick="togglePSList(this,'ps-na-cards')" style="display:flex;align-items:center;gap:5px;margin-bottom:10px;padding:5px 12px;background:#FFF5F5;border:1px solid #FECACA;border-radius:7px;cursor:pointer;font-size:11px;font-weight:600;color:#DC2626;font-family:inherit;">'
+        +'<span style="display:inline-block;transition:transform .2s;" id="ps-na-arr">&#9660;</span>'
+        +'&nbsp;Lihat Detail per PS ('+sorted.length+')'
+      +'</button>'
+      +'<div id="ps-na-cards" style="display:none;">'
         +sorted.map((g,i)=>renderRow(g,i,sorted.length,false)).join('')
       +'</div>'
     );
@@ -1819,14 +1831,7 @@ function showUploadStatus(type, msg){
 }
 
 function downloadBackup(){
-  // Create a full HTML backup with current embedded data
-  const currentHtml = document.documentElement.outerHTML;
-  const blob = new Blob([currentHtml], {type:'text/html;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'Dashboard_EKB_BI_Kalsel_'+new Date().toISOString().slice(0,10)+'.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
+  // Versi duplikat dihapus — fungsi aktif ada di bawah
 }
 
 // ══════════════════════════════
@@ -2111,15 +2116,36 @@ function showUploadStatus(type,msg){
 }
 
 function downloadBackup(){
-  const html=document.documentElement.outerHTML;
+  // Ambil HTML terkini termasuk data & state yang sudah ter-render
+  const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  const fname='EKB_Monitor_'+new Date().toISOString().slice(0,10)+'.html';
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
-  a.download='EKB_Monitor_'+new Date().toISOString().slice(0,10)+'.html';
-  a.click();URL.revokeObjectURL(a.href);
+  a.href=URL.createObjectURL(blob);
+  a.download=fname;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(a.href);},100);
 }
 
 // ── Read More helper ──
 var _rmState={};
+function togglePSCard(uid){
+  var bd=document.getElementById('psbd-'+uid);
+  var arr=document.getElementById('psarr-'+uid);
+  if(!bd) return;
+  var open=bd.style.display==='none';
+  bd.style.display=open?'block':'none';
+  if(arr) arr.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+}
+function togglePSList(btn,id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  var open=el.style.display==='none';
+  el.style.display=open?'block':'none';
+  var arr=btn.querySelector('span');
+  if(arr) arr.style.transform=open?'rotate(180deg)':'rotate(0deg)';
+}
 function toggleReadMore(id){
   _rmState[id]=!_rmState[id];
   var sh=document.getElementById('rms-'+id);
