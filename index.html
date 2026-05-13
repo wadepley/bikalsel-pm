@@ -269,6 +269,11 @@ tbody tr:hover td{background:#FAFBFE;}
 
 /* Mobile overlay sidebar */
 @media(max-width:768px){
+  /* Chart grid: stack vertically on mobile */
+  .chart-grid{
+    grid-template-columns:1fr!important;
+  }
+
   /* Sidebar: slide-in drawer on mobile */
   .sb{
     position:fixed;top:0;left:0;height:100vh;z-index:200;
@@ -627,7 +632,7 @@ thead th{background:var(--surf);}
         <div class="kpi" style="--ac:#0891B2;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#ECFEFF;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div><div class="kpi-num" id="ks-ot">14<span style="font-size:10px;font-weight:600;color:#DC2626;margin-left:4px;">▼43</span></div><div class="kpi-lbl">Sub ICK On Track</div><div class="kpi-sub" id="ks-ot-s" style="font-size:10px;">≥ 33.3% &amp; &lt;100%</div></div>
         <div class="kpi" style="--ac:#E11D48;padding:11px 13px;"><div class="kpi-ac"></div><div class="kpi-ico" style="width:28px;height:28px;top:10px;right:10px;background:#FFF1F2;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E11D48" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line></svg></div><div class="kpi-num" id="ks-na">61<span style="font-size:10px;font-weight:600;color:#059669;margin-left:4px;">▲55</span></div><div class="kpi-lbl">Sub ICK Need Accelerate</div><div class="kpi-sub" id="ks-na-s" style="font-size:10px;">&lt; 33.3%</div></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="chart-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <!-- Bar chart: by Unit Kerja -->
         <div class="card" style="margin-bottom:0;">
           <div class="card-hd" style="padding:12px 16px;">
@@ -636,7 +641,7 @@ thead th{background:var(--surf);}
               <div class="card-sub" id="uk-bar-sub">Apr'26 vs Mar'26</div>
             </div>
           </div>
-          <div style="padding:8px 14px 12px;position:relative;height:310px;">
+          <div id="uk-bar-wrap" style="padding:8px 14px 12px;position:relative;height:310px;">
             <canvas id="uk-bar-chart"></canvas>
           </div>
         </div>
@@ -648,7 +653,7 @@ thead th{background:var(--surf);}
               <div class="card-sub" id="ps-bar-sub">Apr'26 vs Mar'26</div>
             </div>
           </div>
-          <div style="padding:8px 14px 12px;position:relative;height:310px;">
+          <div id="ps-bar-wrap" style="padding:8px 14px 12px;position:relative;height:310px;">
             <canvas id="ps-bar-chart"></canvas>
           </div>
         </div>
@@ -1460,6 +1465,9 @@ function renderBarCharts(){
   const makeChart=(canvasId,labels,curData,prevData)=>{
     const plugins=[thresholdPlugin];
     if(prevData) plugins.push(deltaPlugin);
+    const isMob=window.innerWidth<=768;
+    const tickFontSize=isMob?10:11;
+    const rightPad=prevData?(isMob?52:62):12;
 
     const chart=new Chart($(canvasId),{
       type:'bar',
@@ -1481,7 +1489,7 @@ function renderBarCharts(){
         indexAxis:'y',
         responsive:true,
         maintainAspectRatio:false,
-        layout:{padding:{top:18, right:prevData?62:12, bottom:4, left:4}},
+        layout:{padding:{top:18, right:rightPad, bottom:4, left:4}},
         plugins:{
           legend:{display:false},
           datalabels:{
@@ -1534,10 +1542,9 @@ function renderBarCharts(){
             grid:{color:'#F1F5F9'},border:{display:false}},
           y:{
             ticks:{
-              font:{size:11,family:'"DM Sans",sans-serif'},
+              font:{size:tickFontSize,family:'"DM Sans",sans-serif'},
               color:'#334155',
               padding:6,
-              // Ensure label always shows even if bar is tiny
               autoSkip:false,
             },
             grid:{display:false},
@@ -1552,6 +1559,21 @@ function renderBarCharts(){
 
   S.charts.ukBar=makeChart('uk-bar-chart',uksCur,ukDataCur,ukDataPrev);
   S.charts.psBar=makeChart('ps-bar-chart',CFG.PSS.map(p=>'PS '+p),psDataCur,psDataPrev);
+
+  // ── Responsive chart height: per-item height × count ──
+  (function resizeCharts(){
+    const isMob=window.innerWidth<=768;
+    const perItem=isMob?34:26;
+    const minH=isMob?220:260;
+    const ukH=Math.max(minH, uksCur.length*perItem+60);
+    const psH=Math.max(minH, CFG.PSS.length*perItem+60);
+    const ukWrap=document.getElementById('uk-bar-wrap');
+    const psWrap=document.getElementById('ps-bar-wrap');
+    if(ukWrap) ukWrap.style.height=ukH+'px';
+    if(psWrap) psWrap.style.height=psH+'px';
+    if(S.charts.ukBar) S.charts.ukBar.resize();
+    if(S.charts.psBar) S.charts.psBar.resize();
+  })();
 }
 
 // ── ICK Detail (in overview, with sub-tabs + UK filter) ──
@@ -2454,9 +2476,17 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMobSB()
     var btn=document.getElementById('mob-menu-btn');
     if(btn) btn.style.display=isMob?'flex':'none';
     if(!isMob) closeMobSB(); // auto-close when resized to desktop
+    // Re-render bar charts on resize (handles orientation change)
+    if(typeof renderBarCharts==='function'){
+      try{ renderBarCharts(); }catch(e){}
+    }
   }
   check();
-  window.addEventListener('resize',check);
+  var resizeTimer;
+  window.addEventListener('resize',function(){
+    clearTimeout(resizeTimer);
+    resizeTimer=setTimeout(check,200);
+  });
 })();
 </script>
 
