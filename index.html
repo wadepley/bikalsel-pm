@@ -263,6 +263,134 @@ tbody tr:hover td{background:#FAFBFE;}
 @media(max-width:960px){.kpi-r4{grid-template-columns:repeat(2,1fr);}.g2{grid-template-columns:1fr;}}
 @media(max-width:640px){.kpi-r3{grid-template-columns:1fr;}.kpi-r4{grid-template-columns:1fr 1fr;}.content{padding:12px;}}
 
+/* ══════════════════════════════════════
+   MOBILE RESPONSIVE — iPhone & Samsung
+   ══════════════════════════════════════ */
+
+/* Mobile overlay sidebar */
+@media(max-width:768px){
+  /* Sidebar: slide-in drawer on mobile */
+  .sb{
+    position:fixed;top:0;left:0;height:100vh;z-index:200;
+    transform:translateX(-100%);
+    width:280px!important;min-width:280px!important;
+    transition:transform .28s cubic-bezier(.4,0,.2,1);
+    box-shadow:4px 0 24px rgba(0,0,0,.18);
+  }
+  .sb.mob-open{transform:translateX(0);}
+  .sb.mini{width:280px!important;min-width:280px!important;transform:translateX(-100%);}
+  .sb.mini.mob-open{transform:translateX(0);}
+  /* Show all sidebar content on mobile when open */
+  .sb.mini .hide{display:block!important;}
+  .sb.mini .uk-lbl,.sb.mini .uk-cnt{display:inline!important;}
+  .sb.mini .uk-row{justify-content:flex-start;padding:5px 6px;}
+  .sb.mini .sb-mini-tab{display:none!important;}
+  /* Mobile sidebar backdrop */
+  #mob-backdrop{
+    display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);
+    z-index:199;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+  }
+  #mob-backdrop.show{display:block;}
+
+  /* Main takes full width */
+  .main{width:100%;min-width:0;}
+  .app{flex-direction:column;}
+
+  /* Topbar — compact for mobile */
+  .topbar{padding:10px 12px;gap:8px;flex-wrap:nowrap;}
+  .page-title{font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .srch-wrap{display:none;} /* hide search on mobile to save space */
+  #screenshot-btn-wrap{display:none!important;} /* hide screenshot on mobile */
+
+  /* Hamburger menu button */
+  #mob-menu-btn{
+    display:flex!important;align-items:center;justify-content:center;
+    width:34px;height:34px;border:1px solid var(--border);border-radius:8px;
+    background:var(--surf);cursor:pointer;flex-shrink:0;color:var(--s3);
+  }
+
+  /* Period bar — horizontal scroll */
+  .period-bar{
+    padding:8px 12px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;flex-wrap:nowrap;
+    position:sticky;top:53px;z-index:19;
+  }
+  .period-bar::-webkit-scrollbar{display:none;}
+  .period-btns{flex-wrap:nowrap;}
+  .pbtn{padding:6px 11px;font-size:11px;}
+  .period-bar-lbl{display:none;} /* hide label to save space */
+
+  /* Tab bar — horizontal scroll */
+  .tabbar{
+    overflow-x:auto;-webkit-overflow-scrolling:touch;
+    scrollbar-width:none;padding:0 8px;
+    position:sticky;top:95px;z-index:18;
+  }
+  .tabbar::-webkit-scrollbar{display:none;}
+  .tab{padding:10px 10px;font-size:12px;gap:4px;flex-shrink:0;}
+
+  /* Content area */
+  .content{padding:10px 10px;}
+
+  /* KPI cards: 2 col on medium mobile, 1 col on small */
+  .kpi-r3,.kpi-r4{grid-template-columns:1fr 1fr!important;}
+  .kpi-row{gap:7px;}
+  .kpi{padding:9px 10px;}
+  .kpi-num{font-size:22px;}
+  .kpi-num-sm{font-size:16px;}
+  .kpi-ico{width:22px!important;height:22px!important;top:8px!important;right:8px!important;}
+
+  /* Overview 5-col grids → 2 col */
+  div[style*="grid-template-columns:repeat(5,1fr)"]{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:7px!important;
+  }
+
+  /* g2 two-col → single col */
+  .g2{grid-template-columns:1fr!important;gap:10px;}
+
+  /* Tables: horizontal scroll */
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-height:none;}
+  table{min-width:600px;}
+
+  /* Cards */
+  .card-hd{padding:11px 12px;}
+  .card-title{font-size:12px;}
+
+  /* Filter bar wraps nicely */
+  .fbar{padding:7px 10px;gap:5px;}
+
+  /* Sticky topbar height offset for tabbar & period-bar */
+  /* topbar ~53px, period-bar ~42px = 95px for tabbar top */
+}
+
+/* Very small phones (iPhone SE, Galaxy A series) */
+@media(max-width:390px){
+  .kpi-r3,.kpi-r4{grid-template-columns:1fr!important;}
+  div[style*="grid-template-columns:repeat(5,1fr)"]{
+    grid-template-columns:1fr!important;
+  }
+  .page-title{font-size:12px;max-width:130px;}
+  .tab{font-size:11px;padding:9px 8px;}
+  .pbtn{font-size:10px;padding:5px 9px;}
+  .content{padding:8px;}
+}
+
+/* Safe area for iPhone notch / Dynamic Island / home indicator */
+@supports(padding-top:env(safe-area-inset-top)){
+  .topbar{padding-top:calc(10px + env(safe-area-inset-top));}
+  .sb{padding-top:env(safe-area-inset-top);}
+  .content{padding-bottom:calc(10px + env(safe-area-inset-bottom));}
+}
+
+/* Touch-friendly tap targets */
+@media(hover:none) and (pointer:coarse){
+  .tab,.pbtn,.fchip,.pg-btn,.uk-row{min-height:40px;display:flex;align-items:center;}
+  .fchip{padding:7px 12px;}
+  .pbtn{padding:8px 14px;}
+}
+
 thead th{background:var(--surf);}
 
 /* ── Tooltip (JS-powered, fixed position) ── */
@@ -421,6 +549,10 @@ thead th{background:var(--surf);}
 <div class="main">
   <div class="topbar">
     <div class="topbar-l">
+      <!-- Mobile hamburger — only visible on phones -->
+      <button id="mob-menu-btn" style="display:none;" onclick="toggleMobSB()" aria-label="Menu">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
       <div class="page-title" id="page-title">Evaluasi Kinerja Bulanan BI Kalsel</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
@@ -1106,6 +1238,8 @@ function renderPSSummary(){
     const isHigh=!isAcc&&avg<0.15;
     const badgeColor=isAcc?'#059669':(isHigh?'#DC2626':'#F59E0B');
     const sep=i<total-1?'border-bottom:1px solid #E2E8F0;':'';
+    const uid='ps'+g.ps+'_'+m.per.replace('-','')+'_'+(isAcc?'acc':'na');
+    const detailId='psdet_'+uid;
 
     // UK compact chips with value + delta
     const ukList=[...g.uks].sort();
@@ -1139,7 +1273,6 @@ function renderPSSummary(){
       if(risk) extraFull+='<div style="margin-top:6px;"><span style="font-weight:600;color:#991B1B;">Kendala:</span> '+risk+'</div>';
       if(miti) extraFull+='<div style="margin-top:4px;"><span style="font-weight:600;color:#92400E;">Mitigasi:</span> '+miti+'</div>';
     }
-    const uid='ps'+g.ps+'_'+m.per.replace('-','')+'_'+(isAcc?'acc':'na');
 
     // Delta badge for PS avg
     const dPS=prevAvg!==null?(avg-prevAvg):null;
@@ -1147,9 +1280,16 @@ function renderPSSummary(){
       ?'<span style="font-size:9px;color:#94A3B8;margin-left:5px;font-weight:600;">\u2194 stabil</span>'
       :'<span style="font-size:9px;font-weight:700;color:'+(dPS>0?'#059669':'#DC2626')+';margin-left:5px;">'+(dPS>0?'\u25b2':'\u25bc')+pc(Math.abs(dPS),1)+'</span>';
 
+    // Detail section (hidden by default)
+    const detailHtml=
+      (ukChips?'<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:7px;padding-left:2px;">'+ukChips+'</div>':'')
+      +(narasis.length?'<div style="font-size:9px;font-weight:700;color:'+badgeColor+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'
+        +(isAcc?'\uD83C\uDFAF Narasi Target yang Tercapai':'\uD83C\uDFAF Narasi Target yang Perlu Diakselerasi')+'</div>':'')
+      +(narasis.length||extraFull ? mkReadMore(uid, narasisShort, narasisFull+extraFull, badgeColor) : '');
+
     return '<div style="padding:10px 0;'+sep+'">'
-      // Header row: PS badge | UKs count | avg% + delta | risk badge
-      +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;">'
+      // ── Summary row (always visible) ──
+      +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'
         +'<span style="background:'+badgeColor+';color:#fff;font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;flex-shrink:0;letter-spacing:.2px;">PS '+g.ps+'</span>'
         +'<span style="font-size:11px;font-weight:600;color:#374151;flex:1;min-width:0;">'
           +[...g.uks].join(', ')
@@ -1161,13 +1301,20 @@ function renderPSSummary(){
           +dPSHtml
         +'</span>'
         +(isHigh?'<span style="font-size:9px;background:#FEE2E2;color:#991B1B;padding:2px 7px;border-radius:20px;font-weight:700;flex-shrink:0;">\u26A0 Risiko Tinggi</span>':'')
+        // Toggle button
+        +'<button onclick="togglePSDetail(\''+detailId+'\',this,\''+badgeColor+'\')" '
+          +'style="font-size:10px;color:'+badgeColor+';background:'+badgeColor+'12;border:1px solid '+badgeColor+'33;'
+          +'border-radius:6px;padding:3px 9px;cursor:pointer;font-weight:600;flex-shrink:0;font-family:inherit;'
+          +'display:inline-flex;align-items:center;gap:4px;transition:all .15s;white-space:nowrap;">'
+          +'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>'
+          +'Detail'
+        +'</button>'
       +'</div>'
-      // UK chips row
-      +(ukChips?'<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:7px;padding-left:2px;">'+ukChips+'</div>':'')
-      // Narasi label + read more
-      +(narasis.length?'<div style="font-size:9px;font-weight:700;color:'+badgeColor+';text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">'
-        +(isAcc?'\uD83C\uDFAF Narasi Target yang Tercapai':'\uD83C\uDFAF Narasi Target yang Perlu Diakselerasi')+'</div>':'')
-      +(narasis.length||extraFull ? mkReadMore(uid, narasisShort, narasisFull+extraFull, badgeColor) : '')
+      // ── Detail panel (hidden) ──
+      +'<div id="'+detailId+'" style="display:none;margin-top:9px;padding:10px 12px;'
+        +'background:'+badgeColor+'08;border:1px solid '+badgeColor+'22;border-radius:9px;">'
+        +detailHtml
+      +'</div>'
     +'</div>';
   };
 
@@ -2111,11 +2258,34 @@ function showUploadStatus(type,msg){
 }
 
 function downloadBackup(){
-  const html=document.documentElement.outerHTML;
+  // Capture the LIVE DOM — includes all rendered data, charts state, and current period
+  const html='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));
-  a.download='EKB_Monitor_'+new Date().toISOString().slice(0,10)+'.html';
-  a.click();URL.revokeObjectURL(a.href);
+  a.href=url;
+  const ts=new Date().toISOString().replace('T','_').slice(0,16).replace(':','-');
+  a.download='EKB_Monitor_'+ts+'.html';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
+  showToast('✅ HTML terkini berhasil didownload!');
+}
+
+// ── PS Detail Show/Hide toggle ──
+function togglePSDetail(detailId, btn, color){
+  var el=document.getElementById(detailId);
+  if(!el) return;
+  var isOpen=el.style.display!=='none';
+  if(isOpen){
+    el.style.display='none';
+    btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>Detail';
+    btn.style.background=color+'12';
+  } else {
+    el.style.display='block';
+    btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="18 15 12 9 6 15"/></svg>Sembunyikan';
+    btn.style.background=color+'22';
+  }
 }
 
 // ── Read More helper ──
@@ -2250,5 +2420,44 @@ function restoreSheetUrl(){
 
 </script>
 
+
+<!-- Mobile sidebar backdrop -->
+<div id="mob-backdrop" onclick="closeMobSB()"></div>
+
+<script>
+/* ── Mobile sidebar toggle ── */
+function toggleMobSB(){
+  var sb=document.getElementById('sb');
+  var bd=document.getElementById('mob-backdrop');
+  var isOpen=sb.classList.contains('mob-open');
+  if(isOpen){closeMobSB();}else{
+    sb.classList.add('mob-open');
+    bd.classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+}
+function closeMobSB(){
+  var sb=document.getElementById('sb');
+  var bd=document.getElementById('mob-backdrop');
+  sb.classList.remove('mob-open');
+  bd.classList.remove('show');
+  document.body.style.overflow='';
+}
+
+/* Close sidebar on escape key */
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeMobSB();});
+
+/* Detect mobile and show hamburger */
+(function detectMobile(){
+  function check(){
+    var isMob=window.innerWidth<=768;
+    var btn=document.getElementById('mob-menu-btn');
+    if(btn) btn.style.display=isMob?'flex':'none';
+    if(!isMob) closeMobSB(); // auto-close when resized to desktop
+  }
+  check();
+  window.addEventListener('resize',check);
+})();
+</script>
 
 <div id="platstack_root" style="position: fixed; top: 10px; right: 10px; z-index: 2147483647;"></div><platstack-highlight-options style="position: fixed; z-index: 2147483647;"></platstack-highlight-options></body></html>
